@@ -43,5 +43,42 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## 1.3 Tools for Golem Engineering
 
+* Bayesian data analysis
+* Model comparison
+* Multilevel models
+* Graphical causal models
 
+### 1.3.1 Bayesian Data Analysis
+
+* Basically, just counting the number of ways the data *could* happen, according to our assumptions
+* Even when Bayesian/frequentist procedures give the same answer, Bayesian procedures don't justify inferences with "imagined repeat sampling." Randomness is a property of information, not the world. For a coin flip, if we had perfect information, the flip wouldn't appear random, but because we have limited information, it appears "random"
+* Many folks interpret non-Baysian results in Bayesian terms! (p-values!!!)
+
+### 1.3.2 Model Comparison and Prediction
+
+* Can use *cross-validation* and *information criteria* to compare models by predictive accuracy
+* Want to avoid overfitting!
+
+### 1.3.3 Multilevel Models
+
+* Partial pooling can actually help with overfitting!
+* Contexts for partial pooling:
+  1. Adjust estimates for repeat sampling
+  2. Adjust estimates for imbalance in sampling
+  3. Study variation
+  4. Avoid averaging!
+  
+### 1.3.4 Graphical Causal Models
+
+* Associations are not inherently causal and statistical models do not infer causality
+* Simplest graphical causal model is a Directed Acyclic Graph (DAG)
+
+## 1.4 Summary
+
+* Don't choose black-box tools, build up from axioms
+* Chapters 2-3: Foundational
+* Chapters 4-8: Bayesian flavor of linear regression
+* Chapters 9-12: MCMC & GLMs
+* Chapters 13-16: Multilevel models, missing data, measurement error, etc.
+* Chapter 17: Return to some issues raised in chapter 1
 
