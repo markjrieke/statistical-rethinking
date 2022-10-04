@@ -1,0 +1,116 @@
+Small Worlds and Large Worlds
+================
+
+## 2.1 The garden of forking data
+
+-   Bayesian analysis is a “garden of forking data”
+-   In order to make good inference about what happened, it helps to
+    consider everything that *could* have happened.
+
+### 2.1.1 Counting possibilities
+
+-   Walk through example of pulling marbles from a bag
+
+### 2.1.2 Combining other information
+
+-   Use prior counts from previous example as a *prior*
+-   Multiply likelihood of observed data by prior to get new prior
+    (yeehaw)
+-   This book does not endorse “ignorant” priors.
+
+### 2.1.3 From counts to probability
+
+-   Easier to work with probabilities rather than counts:
+
+``` r
+ways <- c(0, 3, 8, 9, 0)
+ways/sum(ways)
+```
+
+    ## [1] 0.00 0.15 0.40 0.45 0.00
+
+-   Conjecture of values that influence outcome — **parameter**
+-   Relative number of ways that the parameters can produce the data is
+    the **likelihood**
+-   Prior plausibility of any specific parameter/distribution is the
+    **prior**
+-   The new updated plausibility of any specific parameter/distribution
+    is the **posterior**
+
+## 2.2 Building a model
+
+### 2.2.1 A data story
+
+-   Describe the data generating process with a data story
+-   For example, “it’s more likely to rain on warm days”
+
+### 2.2.2 Bayesian updating
+
+-   As data comes in, the posterior always tightens
+-   Final posterior is indifferent to the order of the data
+
+### 2.2.3 Evaluate
+
+-   A model can be misleadingly confident about an inference, because
+    inferences are conditional on the model.
+-   Models can’t be checked for truth, but can be checked for some
+    specific-purpose.
+
+## 2.3 Components of the model
+
+1.  The number of ways each conjecture could produce an observation
+2.  The accumulated number of ways each conjecture could produce the
+    entire data
+3.  The initial plausibility of each conjectured cause of the data
+
+### 2.3.1 Variables
+
+-   Observed variables are generally *variables*
+-   Unobserved variables are generally *parameters*
+
+### 2.3.2 Definitions
+
+#### 2.3.2.1 Observed variables
+
+-   Likelihood — distribution function assigned to an observed variable.
+-   Here’s an exmaple the likelihood of seeing 6 heads in a series of 9
+    coin flips
+
+``` r
+dbinom(6, size = 9, prob = 0.5)
+```
+
+    ## [1] 0.1640625
+
+#### 2.3.2.2 Unobserved variables
+
+Some examples:
+
+1.  What is the average difference between treatment groups?
+2.  How strong is the association between a treatment and an outcome?
+3.  Does the effect of the treatment depend upon a covariate?
+4.  How much variation is there among groups?
+
+-   For every parameter you must provide a prior
+-   You *can* massage priors to get any output you want, but because
+    priors are explicitly stated, you can’t hide from this!
+
+### 2.3.3 A model is born
+
+Let’s make a really simple model:
+
+![
+\\begin{align\*}
+W \\sim Binomial(N, p) \\\\
+\\\\
+p \\sim Uniform(0, 1)\\\\
+\\end{align\*}
+](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cbegin%7Balign%2A%7D%0AW%20%5Csim%20Binomial%28N%2C%20p%29%20%5C%5C%0A%5C%5C%0Ap%20%5Csim%20Uniform%280%2C%201%29%5C%5C%0A%5Cend%7Balign%2A%7D%0A "
+\begin{align*}
+W \sim Binomial(N, p) \\
+\\
+p \sim Uniform(0, 1)\\
+\end{align*}
+")
+
+## 2.4 Making the model go
