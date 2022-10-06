@@ -13,17 +13,6 @@ knitr::opts_chunk$set(
   fig.width = 9,
   fig.height = 6
 )
-
-sysfonts::font_add_google("Roboto Slab")
-showtext::showtext_auto()
-ggplot2::theme_set(
-  ggplot2::theme_minimal(base_family = "Roboto Slab", 
-                         base_size = 14) +
-    ggplot2::theme(plot.title.position = "plot",
-                   plot.background = ggplot2::element_rect(fill = "white", color = "white"),
-                   plot.title = ggtext::element_markdown(),
-                   plot.subtitle = ggtext::element_markdown())
-)
 ```
 
 ## 2.1 The garden of forking data
@@ -119,4 +108,135 @@ p \sim Uniform(0, 1)\\
 $$
 
 ## 2.4 Making the model go
+
+* For every unique combination of data, likelihood, parameters, and prior, there is a unique posterior distribution. 
+
+### 2.4.1 Bayes' theorem
+
+* Bayes' theorem is really just counting.
+* Posterior = (Prior * Likelihood)/(Average probability of data)
+* "Average probability of data" is really just a normalizing factor
+
+### 2.4.2 Motors
+
+* Most interesting models in contemporary science cannot be expressed formally, so there are various numerical techniques to approximate the mathematics that follows from the definition of Bayes' theorem:
+
+1. Grid approximation
+2. Quadratic approximation
+3. Markov chain Monte Carlo (MCMC)
+
+* Stan uses Hamiltonian Monte Carlo (HMC), I believe
+* How you fit the model is a part of the model
+
+### 2.4.3 Grid approximation
+
+* One of the simplest conditioning techniques
+* Useful for pedagogy, but not used a whole lot in practice (scales poorly)
+
+```{r}
+# define grid
+p_grid <- seq(from = 0, to = 1, length.out = 20)
+
+# define prior
+prior <- rep(1, 20)
+
+plot_posterior <- function(prior) {
+  
+  # compute likelihood at each value in the grid
+  # (from seeing 6/9 positives)
+  likelihood <- dbinom(6, size = 9, prob = p_grid)
+  
+  # product of likelihood/prior
+  unstd.posterior <- likelihood * prior
+  
+  # standardize the posterior so it sums to 1
+  posterior <- unstd.posterior / sum(unstd.posterior)
+  
+  plot(p_grid, posterior, type = "b")
+  
+}
+
+plot_posterior(prior)
+
+```
+
+If we change the prior, we get differnt posteriors.
+
+```{r}
+prior <- ifelse(p_grid < 0.5, 0, 1)
+plot_posterior(prior)
+
+prior <- exp(-5*abs(p_grid - 0.5))
+plot_posterior(prior)
+```
+
+### 2.4.4 Quadratic approximation
+
+* Under quite general conditions, the region near the peak of the posterior will be nearly gaussian and can therefore be approximated by a normal distribution.
+* Called quadratic approximation because the logarithm of the normal distribution is a parabola
+
+```{r}
+library(rethinking)
+
+globe.qa <- 
+  quap(
+    alist(
+      W ~ dbinom(W + L, p), # binomial likelihood
+      p ~ dunif(0, 1) # uniform prior
+    ),
+    data = list(W = 6, L = 3)
+  )
+
+# display summary of quadratic approximation
+precis(globe.qa)
+```
+
+How does `quap()`'s approximation compare with the analytical solution?
+
+```{r}
+# analytical calculation
+W <- 6
+L <- 3
+curve(dbeta(x, W + 1, L + 1), from = 0, to = 1)
+
+# quap
+curve(dnorm(x, 0.67, 0.16), lty = 2, add = TRUE)
+```
+
+* Quadratic approximation improves as more data is gathered. However, the rate of improvement varies greatly depending on the details. In some models, quadratic approximation remains terrible even with thousands of samples.
+
+### 2.4.5 Markov Chain Monte Carlo
+
+* For many models, neither grid approximation nor quadratic approximation are satisfactory. 
+* MCMC allows for exploration by drawing samples of the posterior, rather than actually computing it.
+
+```{r}
+# really basic mcmc
+n_samples <- 1000
+p <- rep(NA, n_samples)
+p[1] <- 0.5
+W <- 6
+L <- 3
+
+for (i in 2:n_samples) {
+  
+  p_new <- rnorm(1, p[i - 1], 0.1)
+  if (p_new < 0) p_new <- abs(p_new)
+  if (p_new > 1) p_new <- 2 - p_new
+  q0 <- dbinom(W, W + L, p[i - 1])
+  q1 <- dbinom(W, W + L, p_new)
+  p[i] <- ifelse(runif(1) < q1/q0, p_new, p[i - 1])
+  
+}
+
+dens(p, xlim = c(0, 1))
+```
+
+
+
+
+
+
+
+
 
