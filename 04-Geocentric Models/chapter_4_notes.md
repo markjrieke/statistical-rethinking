@@ -1,0 +1,131 @@
+Geocentric Models
+================
+
+-   Ptolomey’s geocentric model of the solar system using epicycles
+    could provide useful information about the future location of the
+    planets, but was wrong.
+-   *Linear regression* is our geocentric golem — it’s often not
+    necessarily correct, but can be useful.
+
+## 4.1 Why normal distributions are normal
+
+### 4.1.1 Normal by addition
+
+-   Let’s simulate 16 random steps forward/backward for 1000 people.
+-   Even though these are effectively coin flips, we’ll end up with a
+    normal-ish distribution of of final position at step 16 for these
+    1000 people.
+
+``` r
+pos <- replicate(1000, sum(runif(16, -1, 1)))
+
+hist(pos)
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
+
+``` r
+plot(density(pos))
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-1-2.png)<!-- -->
+
+-   Any process that adds together random values from the same
+    distribution converges to a normal distribution.
+
+### 4.1.2 Normal by multiplication
+
+-   Let’s the growth rate of an organism is determined by a a dozen loci
+    that interact, such that each increase growth by a percentage. This
+    means the effects multiply. Here’s an example of 1:
+
+``` r
+prod(1 + runif(12, 0, 0.1))
+```
+
+    ## [1] 2.093885
+
+-   Now let’s repeat this for 10,000 organisms:
+
+``` r
+growth <- replicate(10000, prod(1 + runif(12, 0, 0.1)))
+rethinking::dens(growth, norm.comp = TRUE)
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-3-1.png)<!-- -->
+
+-   This is because small multiplications are approximately additive
+    (e.g., 1.1 \* 1.1 = 1.21)
+
+``` r
+big <- replicate(10000, prod(1 + runif(12, 0, 0.5)))
+small <- replicate(10000, prod(1 + runif(12, 0, 0.01)))
+
+rethinking::dens(big)
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+``` r
+rethinking::dens(small)
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-4-2.png)<!-- -->
+
+### 4.1.3 Normal by log-multiplication
+
+-   Large deviates that are multiplied together don’t produce gaussian
+    distributions, but they do generate log-normal distributions
+
+``` r
+log.big <- replicate(10000, log(prod(1 + runif(12, 0, 0.5))))
+rethinking::dens(log.big)
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+### 4.1.4 Using Gaussian distributions
+
+-   There are two justifications for using Gaussian distributions:
+    -   **Ontological**: The world is full of Gaussian distributions.
+        Other members of the *Exponential Family* of distributions
+        (Gamma, Poisson) also arise in nature.
+    -   **Epistemological**: When all we know or are willing to say
+        about a distribution is their mean and variance, then ghe
+        Gaussian is the most natural way to express this. This is also
+        justified with information theory via measures of *maximum
+        entropy*.
+
+## 4.2 A language for describing models
+
+1.  We have a set of variables to work with. Some of these are
+    observable — we call these *data*. Others are unobservable — we call
+    these *parameters*.
+2.  We define each variable either in terms of other variables or in
+    terms of a probability distribution.
+3.  The combination of variables and their probability distributions
+    defines a *joint generative model*.
+
+-   The biggest difficulty in working with this framework is the subject
+    matter — which variables matter and how does theory tell us to
+    connect them?
+
+### 4.2.1 Re-describing the globe tossing model
+
+![
+\\begin{align\*}
+W \\sim Binomial(N, p) \\\\
+\\\\
+p \\sim Uniform(0, 1)\\\\
+\\end{align\*}
+](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cbegin%7Balign%2A%7D%0AW%20%5Csim%20Binomial%28N%2C%20p%29%20%5C%5C%0A%5C%5C%0Ap%20%5Csim%20Uniform%280%2C%201%29%5C%5C%0A%5Cend%7Balign%2A%7D%0A "
+\begin{align*}
+W \sim Binomial(N, p) \\
+\\
+p \sim Uniform(0, 1)\\
+\end{align*}
+")
+
+-   Both lines in the above model are *stochastic* — that is no single
+    variable on the left is known with certainty, but rather is
+    described probabilistically.
