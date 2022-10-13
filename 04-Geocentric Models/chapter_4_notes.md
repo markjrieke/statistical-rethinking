@@ -43,7 +43,7 @@ plot(density(pos))
 prod(1 + runif(12, 0, 0.1))
 ```
 
-    ## [1] 1.778687
+    ## [1] 1.872262
 
 -   Now let’s repeat this for 10,000 organisms:
 
@@ -376,7 +376,7 @@ dens(sample2.sigma, norm.comp = TRUE)
 
 ![](chapter_4_notes_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
-### Finding the posterior distribution with `quap`
+### 4.3.5 Finding the posterior distribution with `quap`
 
 -   `quap()` will allow us to make a *quadratic approximation* of the
     posterior.
@@ -416,7 +416,7 @@ precis(m4.1)
 ```
 
     ##             mean        sd       5.5%      94.5%
-    ## mu    154.607023 0.4119947 153.948576 155.265471
+    ## mu    154.607024 0.4119947 153.948576 155.265471
     ## sigma   7.731333 0.2913860   7.265642   8.197024
 
 -   The table from `precis()` provides the Gaussian approximations for
@@ -467,7 +467,7 @@ precis(m4.2)
 
     ##            mean        sd      5.5%     94.5%
     ## mu    177.86375 0.1002354 177.70356 178.02395
-    ## sigma  24.51757 0.9289235  23.03297  26.00216
+    ## sigma  24.51755 0.9289220  23.03295  26.00215
 
 -   Strong priors regularize *a lot* so the estimate for
     ![\\mu](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu "\mu")
@@ -478,7 +478,7 @@ precis(m4.2)
     ![\\sigma](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Csigma "\sigma")
     has *had* to move quite a bit to compensate.
 
-### Sampling from a `quap`
+### 4.3.6 Sampling from a `quap`
 
 -   Quadratic approximation is just a multidimensional gaussian
     (![\\mu](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu "\mu")
@@ -534,23 +534,191 @@ head(post)
 ```
 
     ##         mu    sigma
-    ## 1 154.5244 7.615981
-    ## 2 154.0182 7.378466
-    ## 3 154.6389 7.989458
-    ## 4 154.4539 7.440086
-    ## 5 154.3570 7.631010
-    ## 6 154.0491 7.927478
+    ## 1 155.1244 8.373928
+    ## 2 154.2755 7.487040
+    ## 3 154.4687 7.709748
+    ## 4 155.8009 7.903479
+    ## 5 154.6217 7.518115
+    ## 6 154.3780 8.320202
 
 ``` r
 precis(post)
 ```
 
-    ##             mean        sd       5.5%      94.5%    histogram
-    ## mu    154.606341 0.4103068 153.951198 155.259775     ▁▁▁▅▇▂▁▁
-    ## sigma   7.733327 0.2899071   7.277119   8.199067 ▁▁▁▂▅▇▇▃▁▁▁▁
+    ##             mean        sd       5.5%      94.5%   histogram
+    ## mu    154.606401 0.4069266 153.951643 155.258265     ▁▁▅▇▂▁▁
+    ## sigma   7.728902 0.2871766   7.267613   8.192042 ▁▁▁▂▅▇▇▃▁▁▁
 
 ``` r
 plot(post)
 ```
 
 ![](chapter_4_notes_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
+
+## 4.4 Linear prediction
+
+-   Thus far, we’ve only modeled height. Oftentimes, we want measure how
+    an outcome is related to some other variable (e.g., predictors).
+-   For example, height and weight are positvely associated:
+
+``` r
+plot(d2$height ~ d2$weight)
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
+
+### 4.4.1 The linear model strategy
+
+-   The strategy is to make the parameter for the mean int oa linear
+    function of the predictor(s).
+-   For our height example:
+
+![
+h_i \\sim Normal(\\mu_i, \\sigma) \\\\
+\\mu_i = \\alpha + \\beta(x_i - \\overline{x}) \\\\
+\\alpha \\sim Normal(178, 20) \\\\
+\\beta \\sim Normal(0, 10) \\\\
+\\sigma \\sim Uniform(0, 50)
+](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0Ah_i%20%5Csim%20Normal%28%5Cmu_i%2C%20%5Csigma%29%20%5C%5C%0A%5Cmu_i%20%3D%20%5Calpha%20%2B%20%5Cbeta%28x_i%20-%20%5Coverline%7Bx%7D%29%20%5C%5C%0A%5Calpha%20%5Csim%20Normal%28178%2C%2020%29%20%5C%5C%0A%5Cbeta%20%5Csim%20Normal%280%2C%2010%29%20%5C%5C%0A%5Csigma%20%5Csim%20Uniform%280%2C%2050%29%0A "
+h_i \sim Normal(\mu_i, \sigma) \\
+\mu_i = \alpha + \beta(x_i - \overline{x}) \\
+\alpha \sim Normal(178, 20) \\
+\beta \sim Normal(0, 10) \\
+\sigma \sim Uniform(0, 50)
+")
+
+#### 4.4.1.1 Probability of the data
+
+-   Read
+    ![h_i](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;h_i "h_i")
+    and
+    ![\\mu_i](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu_i "\mu_i")
+    as “each
+    ![h](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;h "h")”
+    and “each
+    ![\\mu](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu "\mu").
+-   The mean of each now depends on unique values on each row
+    ![i](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;i "i").
+
+#### 4.4.1.2 Linear model
+
+-   ![\\mu_i](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu_i "\mu_i")
+    is now *deterministic*, because it described by other parameters.
+-   We’re asking two things in this regression:
+
+1.  What is the expected height when
+    ![x_i = \\overline{x}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;x_i%20%3D%20%5Coverline%7Bx%7D "x_i = \overline{x}")?
+    The parameter
+    ![\\alpha](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Calpha "\alpha")
+    answers this question — in this case
+    ![\\alpha](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Calpha "\alpha")
+    is a centered intercept.
+2.  What is the change in expected height when
+    ![x_i](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;x_i "x_i")
+    changes by 1 unit? The parameter
+    ![\\beta](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cbeta "\beta")
+    answers this question — in this case the slope.
+
+#### 4.4.1.3 Priors
+
+-   Let’s check if the priors are reasonable:
+
+``` r
+set.seed(2971)
+N <- 100
+a <- rnorm(N, 178, 20)
+b <- rnorm(N, 0, 10)
+
+plot(NULL,
+     xlim = range(d2$weight),
+     ylim = c(-100, 400),
+     xlab = "weight", ylab = "height")
+
+abline(h = 0, lty = 2)
+abline(h = 272, lty = 1, lwd = 0.5)
+mtext("b ~ dnorm(0, 10)")
+xbar <- mean(d2$weight)
+for (i in 1:N) curve(a[i] + b[i]*(x - xbar),
+                     from = min(d2$weight),
+                     to = max(d2$weight),
+                     add = TRUE,
+                     col = col.alpha("black", 0.2))
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
+
+-   This is an unreasonable prior!
+-   No one is shorter than 0 cm and there are not so many people who are
+    taller than the world’s tallest person (272 cm).
+-   A log-normal prior may be more reasonable.
+
+``` r
+b <- rlnorm(1e4, 0, 1)
+dens(b, xlim = c(0, 5), adj = 0.1)
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
+
+``` r
+set.seed(2971)
+N <- 100
+a <- rnorm(N, 178, 20)
+b <- rlnorm(N, 0, 1)
+
+plot(NULL,
+     xlim = range(d2$weight),
+     ylim = c(-100, 400),
+     xlab = "weight", ylab = "height")
+
+abline(h = 0, lty = 2)
+abline(h = 272, lty = 1, lwd = 0.5)
+mtext("b ~ dnorm(0, 10)")
+xbar <- mean(d2$weight)
+for (i in 1:N) curve(a[i] + b[i]*(x - xbar),
+                     from = min(d2$weight),
+                     to = max(d2$weight),
+                     add = TRUE,
+                     col = col.alpha("black", 0.2))
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
+
+-   This is a much more reasonable prior.
+-   One thing to note — adjusting a prior in light of the observed
+    sample just to get some desired result is the Bayesian equivalent of
+    p-hacking.
+-   In this example, we didn’t set a prior based on comparing to the
+    data, but rather used our *prior knowledge* about what reasonable
+    height/weight relationships might look like.
+
+### 4.4.2 Finding the posterior distribution.
+
+-   An update to the model:
+
+![
+h_i \\sim Normal(\\mu_i, \\sigma)\\\\
+\\mu_i = \\alpha + \\beta(x_i - \\overline{x}) \\\\
+\\alpha \\sim Normal(178, 20) \\\\
+\\beta \\sim LogNormal(0, 1) \\\\
+\\sigma \\sim Uniform(0, 50)
+](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0Ah_i%20%5Csim%20Normal%28%5Cmu_i%2C%20%5Csigma%29%5C%5C%0A%5Cmu_i%20%3D%20%5Calpha%20%2B%20%5Cbeta%28x_i%20-%20%5Coverline%7Bx%7D%29%20%5C%5C%0A%5Calpha%20%5Csim%20Normal%28178%2C%2020%29%20%5C%5C%0A%5Cbeta%20%5Csim%20LogNormal%280%2C%201%29%20%5C%5C%0A%5Csigma%20%5Csim%20Uniform%280%2C%2050%29%0A "
+h_i \sim Normal(\mu_i, \sigma)\\
+\mu_i = \alpha + \beta(x_i - \overline{x}) \\
+\alpha \sim Normal(178, 20) \\
+\beta \sim LogNormal(0, 1) \\
+\sigma \sim Uniform(0, 50)
+")
+
+``` r
+m4.3 <-
+  quap(
+    alist(
+      height ~ dnorm(mu, sigma),
+      mu <- a + b*(weight - xbar),
+      a ~ dnorm(178, 20),
+      b ~ dlnorm(0, 1),
+      sigma ~ dunif(0, 50)
+    ),
+    data = d2
+  )
+```
