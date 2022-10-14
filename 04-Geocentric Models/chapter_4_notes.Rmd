@@ -492,12 +492,124 @@ m4.3 <-
   )
 ```
 
+### 4.4.3 Interpreting the posterior distribution
 
+* There are two broad categories of processing the posterior:
+  1. Reading tables
+  2. Plotting simulations
+* Most models are very hard to understand from tables of numbers alone.
+* Plotting allows you to inquire about things that are hard to learn from tables:
+  1. Whether or not the model fitting process worked correctly
+  2. The *absolute* magnitude (rather than the *relative* magnitude) of a relationship between an outcome and predictor.
+  3. The uncertainty surrounding an average relationship.
+  4. The uncertainty surrounding the implied predictions of the model.
 
+#### 4.4.3.1 Tables of marginal distributions
 
+```{r}
+precis(m4.3)
+```
 
+* Look at `b` --- this can be read as *a person 1 kg heavier is expected to be 0.90 cm taller*. 
+* 89% of the posterior probability lies between 0.84 and 0.97 --- a relationship close to 0 or above 1 is highly implausible given these data and this model.
+* In this case, there is very little correlation amongst the parameters:
 
+```{r}
+round(vcov(m4.3), 3)
+pairs(m4.3)
+```
 
+#### 4.4.3.2 Plotting posterior inference against the data
 
+* Plotting against the data helps interpret the posterior and provides an informal check on model assumptions.
+
+```{r}
+plot(height ~ weight, data = d2, col = rangi2)
+
+# get maximum a posteriri estimates for a/b
+post <- extract.samples(m4.3)
+a_map <- mean(post$a)
+b_map <- mean(post$b)
+
+# add map line ot plot
+curve(a_map + b_map*(x - xbar), add = TRUE)
+```
+
+#### 4.4.3.3 Adding uncertainty around the mean
+
+* The above plot is a single line defined by $\alpha$ & $\beta$. Let's add more
+
+```{r}
+post[1:5, ]
+```
+
+```{r}
+plot_n_samples <- function(N) {
+  
+  # filter to just the first N samples in d2
+  dN <- d2[1:N, ]
+  
+  # create a new model
+  mN <- 
+    quap(
+      alist(height ~ dnorm(mu, sigma),
+            mu <- a + b*(weight - mean(weight)),
+            a ~ dnorm(178, 20),
+            b ~ dlnorm(0, 1),
+            sigma ~ dunif(0, 50)),
+      data = dN
+    )
+  
+  # extract 20 samples from the posterior
+  post <- extract.samples(mN, n = 20)
+  
+  # display raw data & sample size
+  plot(dN$weight,
+       dN$height,
+       xlim = range(d2$weight),
+       ylim = range(d2$height),
+       col = rangi2,
+       xlab = "weight",
+       ylab = "height")
+  
+  mtext(concat("N = ", N))
+  
+  # plot the lines with transparency
+  for (i in 1:20)
+    curve(post$a[i] + post$b[i] * (x - mean(dN$weight)),
+          col = col.alpha("black", 0.3),
+          add = TRUE)
+  
+}
+
+plot_n_samples(10)
+plot_n_samples(50)
+plot_n_samples(150)
+plot_n_samples(352)
+```
+
+#### 4.4.3.4 Plotting regression intervals and contours
+
+* We can also plot uncertainty around the mean estimate for individual points (here's a weight of 50kg as an example):
+
+```{r}
+# get posterior estimates of mean height based on a weight of 50kg
+mu_at_50 <- post$a + post$b * (50 - xbar)
+
+# plot posterior
+dens(mu_at_50, 
+     col = rangi2,
+     lwd = 2,
+     xlab = "mu | weight = 50")
+
+PI(mu_at_50)
+```
+
+* For all points, we can use `link()`:
+
+```{r}
+mu <- link(m4.3)
+str(mu)
+```
 
 

@@ -43,7 +43,7 @@ plot(density(pos))
 prod(1 + runif(12, 0, 0.1))
 ```
 
-    ## [1] 1.872262
+    ## [1] 1.946677
 
 -   Now let’s repeat this for 10,000 organisms:
 
@@ -416,8 +416,8 @@ precis(m4.1)
 ```
 
     ##             mean        sd       5.5%      94.5%
-    ## mu    154.607024 0.4119947 153.948576 155.265471
-    ## sigma   7.731333 0.2913860   7.265642   8.197024
+    ## mu    154.607070 0.4119836 153.948640 155.265499
+    ## sigma   7.731124 0.2913664   7.265464   8.196784
 
 -   The table from `precis()` provides the Gaussian approximations for
     each parameter’s *marginal* distribution.
@@ -467,7 +467,7 @@ precis(m4.2)
 
     ##            mean        sd      5.5%     94.5%
     ## mu    177.86375 0.1002354 177.70356 178.02395
-    ## sigma  24.51755 0.9289220  23.03295  26.00215
+    ## sigma  24.51756 0.9289235  23.03297  26.00216
 
 -   Strong priors regularize *a lot* so the estimate for
     ![\\mu](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu "\mu")
@@ -534,20 +534,20 @@ head(post)
 ```
 
     ##         mu    sigma
-    ## 1 155.1244 8.373928
-    ## 2 154.2755 7.487040
-    ## 3 154.4687 7.709748
-    ## 4 155.8009 7.903479
-    ## 5 154.6217 7.518115
-    ## 6 154.3780 8.320202
+    ## 1 155.0372 7.637096
+    ## 2 155.2333 7.376481
+    ## 3 154.8632 7.590144
+    ## 4 155.0339 7.101350
+    ## 5 154.1405 7.314531
+    ## 6 154.2994 7.516362
 
 ``` r
 precis(post)
 ```
 
-    ##             mean        sd       5.5%      94.5%   histogram
-    ## mu    154.606401 0.4069266 153.951643 155.258265     ▁▁▅▇▂▁▁
-    ## sigma   7.728902 0.2871766   7.267613   8.192042 ▁▁▁▂▅▇▇▃▁▁▁
+    ##             mean        sd     5.5%      94.5%    histogram
+    ## mu    154.602100 0.4115029 153.9426 155.257751     ▁▁▁▅▇▂▁▁
+    ## sigma   7.727462 0.2919134   7.2630   8.196599 ▁▁▁▂▅▇▇▃▁▁▁▁
 
 ``` r
 plot(post)
@@ -722,3 +722,187 @@ m4.3 <-
     data = d2
   )
 ```
+
+### 4.4.3 Interpreting the posterior distribution
+
+-   There are two broad categories of processing the posterior:
+    1.  Reading tables
+    2.  Plotting simulations
+-   Most models are very hard to understand from tables of numbers
+    alone.
+-   Plotting allows you to inquire about things that are hard to learn
+    from tables:
+    1.  Whether or not the model fitting process worked correctly
+    2.  The *absolute* magnitude (rather than the *relative* magnitude)
+        of a relationship between an outcome and predictor.
+    3.  The uncertainty surrounding an average relationship.
+    4.  The uncertainty surrounding the implied predictions of the
+        model.
+
+#### 4.4.3.1 Tables of marginal distributions
+
+``` r
+precis(m4.3)
+```
+
+    ##              mean         sd        5.5%       94.5%
+    ## a     154.6013671 0.27030766 154.1693633 155.0333710
+    ## b       0.9032807 0.04192363   0.8362787   0.9702828
+    ## sigma   5.0718809 0.19115478   4.7663786   5.3773831
+
+-   Look at `b` — this can be read as *a person 1 kg heavier is expected
+    to be 0.90 cm taller*.
+-   89% of the posterior probability lies between 0.84 and 0.97 — a
+    relationship close to 0 or above 1 is highly implausible given these
+    data and this model.
+-   In this case, there is very little correlation amongst the
+    parameters:
+
+``` r
+round(vcov(m4.3), 3)
+```
+
+    ##           a     b sigma
+    ## a     0.073 0.000 0.000
+    ## b     0.000 0.002 0.000
+    ## sigma 0.000 0.000 0.037
+
+``` r
+pairs(m4.3)
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
+
+#### 4.4.3.2 Plotting posterior inference against the data
+
+-   Plotting against the data helps interpret the posterior and provides
+    an informal check on model assumptions.
+
+``` r
+plot(height ~ weight, data = d2, col = rangi2)
+
+# get maximum a posteriri estimates for a/b
+post <- extract.samples(m4.3)
+a_map <- mean(post$a)
+b_map <- mean(post$b)
+
+# add map line ot plot
+curve(a_map + b_map*(x - xbar), add = TRUE)
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-36-1.png)<!-- -->
+
+#### 4.4.3.3 Adding uncertainty around the mean
+
+-   The above plot is a single line defined by
+    ![\\alpha](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Calpha "\alpha")
+    &
+    ![\\beta](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cbeta "\beta").
+    Let’s add more
+
+``` r
+post[1:5, ]
+```
+
+    ##          a         b    sigma
+    ## 1 154.2172 0.8589918 4.506438
+    ## 2 154.4955 0.8845459 5.030822
+    ## 3 154.5208 0.8393668 4.995964
+    ## 4 154.8405 0.8407996 5.016383
+    ## 5 154.5813 0.9485057 5.143586
+
+``` r
+plot_n_samples <- function(N) {
+  
+  # filter to just the first N samples in d2
+  dN <- d2[1:N, ]
+  
+  # create a new model
+  mN <- 
+    quap(
+      alist(height ~ dnorm(mu, sigma),
+            mu <- a + b*(weight - mean(weight)),
+            a ~ dnorm(178, 20),
+            b ~ dlnorm(0, 1),
+            sigma ~ dunif(0, 50)),
+      data = dN
+    )
+  
+  # extract 20 samples from the posterior
+  post <- extract.samples(mN, n = 20)
+  
+  # display raw data & sample size
+  plot(dN$weight,
+       dN$height,
+       xlim = range(d2$weight),
+       ylim = range(d2$height),
+       col = rangi2,
+       xlab = "weight",
+       ylab = "height")
+  
+  mtext(concat("N = ", N))
+  
+  # plot the lines with transparency
+  for (i in 1:20)
+    curve(post$a[i] + post$b[i] * (x - mean(dN$weight)),
+          col = col.alpha("black", 0.3),
+          add = TRUE)
+  
+}
+
+plot_n_samples(10)
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
+
+``` r
+plot_n_samples(50)
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-38-2.png)<!-- -->
+
+``` r
+plot_n_samples(150)
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-38-3.png)<!-- -->
+
+``` r
+plot_n_samples(352)
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-38-4.png)<!-- -->
+
+#### 4.4.3.4 Plotting regression intervals and contours
+
+-   We can also plot uncertainty around the mean estimate for individual
+    points (here’s a weight of 50kg as an example):
+
+``` r
+# get posterior estimates of mean height based on a weight of 50kg
+mu_at_50 <- post$a + post$b * (50 - xbar)
+
+# plot posterior
+dens(mu_at_50, 
+     col = rangi2,
+     lwd = 2,
+     xlab = "mu | weight = 50")
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-39-1.png)<!-- -->
+
+``` r
+PI(mu_at_50)
+```
+
+    ##       5%      94% 
+    ## 158.5755 159.6733
+
+-   For all points, we can use `link()`:
+
+``` r
+mu <- link(m4.3)
+str(mu)
+```
+
+    ##  num [1:1000, 1:352] 157 157 157 158 157 ...
