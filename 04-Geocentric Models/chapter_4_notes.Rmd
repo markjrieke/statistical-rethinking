@@ -612,4 +612,205 @@ mu <- link(m4.3)
 str(mu)
 ```
 
+```{r}
+# define a sequence of weights to compute predictions for
+# these values will be on the horizontal axis
+weight.seq <- seq(from = 25, to = 70, by = 1)
+
+# use link to compute mu
+# for each sample from the posterior
+# and for each weight in weight.seq
+mu <- 
+  link(
+    m4.3,
+    data = data.frame(weight = weight.seq)
+  )
+
+str(mu)
+```
+
+```{r}
+plot(height ~ weight, d2, type = "n")
+
+# loop over samples and plot each mu value
+for (i in 1:100) points(weight.seq, mu[i,], pch = 16, col = col.alpha(rangi2, 0.1))
+```
+
+* Instead of plotting the raw mu values at each weight, we can summarise with an uncertainty interval.
+
+```{r}
+# summarise the distribution of mu
+# "compute the mean of each column (dimenstion 2)
+mu.mean <- apply(mu, 2, mean)
+mu.PI <- apply(mu, 2, PI, prob = 0.89)
+
+# plot the summary on top of data
+plot(height ~ weight, data = d2, col = col.alpha(rangi2, 0.5))
+lines(weight.seq, mu.mean)
+shade(mu.PI, weight.seq)
+```
+
+* To summarise, here's the `rethinking` approach to generating predictions and intervals from the posterior fit of a model:
+  1. Use `link()` to generate posterior values for $\mu$ (`link()` uses the original data by default or you can pass new data).
+  2. Use summary functions (like `mean()` or `PI()`) to find averages, lower, and upper bounds for each value.
+  3. Use plotting functions like `lines()` and `shade()` to draw the lines and intervals.
+  
+#### 4.4.3.5 Prediction intervals
+
+* What we've done so far is generate the uncertainty around $\mu_i$, the mean.
+* Actual predictions of height also depends on the distribution (e.g., $\sigma$). 
+* `rethinking::sim()` handles this for us.
+
+```{r}
+# simulate plausible heights for weights in weight.seq under this model 
+sim.height <- sim(m4.3, data = list(weight = weight.seq))
+str(sim.height)
+
+# summarise the distribution of plausible heights
+height.PI <- apply(sim.height, 2, PI, prob = 0.89)
+
+# plot raw data
+plot(height ~ weight, d2, col = col.alpha(rangi2, 0.5))
+
+# draw MAP line
+lines(weight.seq, mu.mean)
+
+# draw PI around mu
+shade(mu.PI, weight.seq)
+
+# draw PI around height
+shade(height.PI, weight.seq)
+```
+
+* Increasing the number of samples will smooth out some of the roughness in the shaded areas
+
+## 4.5 Curves from lines
+
+* Two commonplace methods that use linear regression to build curves are *polynomial regression* and *B-splines*.
+* Both work by transforming a single predictor into several synthetic variables, but splines have some clear advantages.
+
+### 4.5.1 Polynomial regression
+
+* Use powers of variables (eg, squares, cubes) as extra predictors.
+
+```{r}
+# the full export of the Howell1 dataset shows a clear curved relationship when
+# lower weights (from non-adults) are included
+plot(height ~ weight, d)
+```
+
+* A basic linear model doesn't do great here!
+
+```{r}
+# extend weight seq for plotting
+weight.seq <- seq(from = 1, to = 70, by = 1)
+
+# update linear model
+mu <- link(m4.3, data = data.frame(weight = weight.seq))
+mu.mean <- apply(mu, 2, mean)
+mu.PI <- apply(mu, 2, PI, prob = 0.89)
+
+# model height
+sim.height <- sim(m4.3, data = data.frame(weight = weight.seq))
+height.PI <- apply(sim.height, 2, PI, prob = 0.89)
+
+# plot
+plot(height ~ weight, d, col = col.alpha(rangi2, 0.5))
+lines(weight.seq, mu.mean)
+shade(mu.PI, weight.seq)
+shade(height.PI, weight.seq)
+```
+
+
+* We can model this with a *second order* polynomial by changing the equation for $\mu_i$ to: $\mu_i = \alpha + \beta_1 x_i + \beta_2 x^2_i$
+* Fitting this model is easy --- interpreting it is hard. 
+* First thing to do is standardize the predictor
+
+```{r}
+# standardize the weight & then square it
+d$weight_s <- (d$weight - mean(d$weight))/sd(d$weight)
+d$weight_s2 <- d$weight_s^2
+
+# model using the standardized weight
+m4.5 <-
+  quap(
+    alist(height ~ dnorm(mu, sigma),
+          mu <- a + b1*weight_s + b2*weight_s2,
+          a ~ dnorm(178, 20),
+          b1 ~ dlnorm(0, 1),
+          b2 ~ dnorm(0, 1),
+          sigma ~ dunif(0, 50)),
+    data = d
+  )
+
+precis(m4.5)
+```
+
+* a is still the intercept, so it tells us the expected value of height when weight is at it's mean value (0 when on the standardized scale).
+* B1/B2 are the linear/square components of the curve --- graphing makes this a bit more transparent:
+
+```{r}
+# define a new weight sequence on the standardized scale
+weight.seq <- seq(from = -2.2, to = 2, length.out = 30)
+
+# new data to pass to model
+pred_dat <- 
+  list(weight_s = weight.seq,
+       weight_s2 = weight.seq^2)
+
+# model mu
+mu <- link(m4.5, data = pred_dat)
+mu.mean <- apply(mu, 2, mean)
+mu.PI <- apply(mu, 2, PI, prob = 0.89)
+
+# model height
+sim.height <- sim(m4.5, data = pred_dat)
+height.PI <- apply(sim.height, 2, PI, prob = 0.89)
+
+# plot
+plot(height ~ weight_s, d, col = col.alpha(rangi2, 0.5))
+lines(weight.seq, mu.mean)
+shade(mu.PI, weight.seq)
+shade(height.PI, weight.seq)
+```
+
+* This is better, but a cubic is *even better*:
+
+```{r}
+# model add a cubic term & model
+d$weight_s3 <- d$weight_s^3
+m4.6 <-
+  quap(
+    alist(height ~ dnorm(mu, sigma),
+          mu <- a + b1*weight_s + b2*weight_s2 + b3*weight_s3,
+          a ~ dnorm(178, 20),
+          b1 ~ dlnorm(0, 1),
+          b2 ~ dnorm(0, 10),
+          b3 ~ dnorm(0, 10),
+          sigma ~ dunif(0, 50)),
+    data = d
+  )
+
+# new data to pass to model
+pred_dat <- 
+  list(weight_s = weight.seq,
+       weight_s2 = weight.seq^2,
+       weight_s3 = weight.seq^3)
+
+# model mu
+mu <- link(m4.6, data = pred_dat)
+mu.mean <- apply(mu, 2, mean)
+mu.PI <- apply(mu, 2, PI, prob = 0.89)
+
+# model height
+sim.height <- sim(m4.6, data = pred_dat)
+height.PI <- apply(sim.height, 2, PI, prob = 0.89)
+
+# plot
+plot(height ~ weight_s, d, col = col.alpha(rangi2, 0.5))
+lines(weight.seq, mu.mean)
+shade(mu.PI, weight.seq)
+shade(height.PI, weight.seq)
+```
+
 
