@@ -1,0 +1,164 @@
+---
+title: "The Many Variables & The Spurious Waffles"
+output: github_document
+math: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  dpi = 500,
+  fig.width = 9,
+  fig.height = 6
+)
+```
+
+* States with the highest number of Waffle Houses also have the highest divorce rate.
+* This is a spurious relationship!
+* *Multiple regression* helps deflect spurious relationships (more on that later...):
+  * "Control" for confounds
+  * Multiple and complex causation
+  * Interactions
+
+## 5.1 Spurious association
+
+* The rate that adults marry is a great predictor of divorce rate, but does marriage *cause* divorce?
+
+```{r}
+library(rethinking)
+data("WaffleDivorce")
+d <- WaffleDivorce
+
+# standardize variables
+d$D <- standardize(d$Divorce)
+d$M <- standardize(d$Marriage)
+d$A <- standardize(d$MedianAgeMarriage)
+```
+
+$$
+D_i \sim Normal(\mu_i, \sigma) \\
+\mu_i = \alpha + \beta_A A_i \\
+\alpha \sim Normal(0, 0.2) \\
+\beta_A \sim Normal(0, 0.5) \\
+\sigma \sim Exponential(1)
+$$
+
+```{r}
+# model
+m5.1 <-
+  quap(
+    alist(D ~ dnorm(mu, sigma),
+          mu <- a + bA * A,
+          a ~ dnorm(0, 0.2),
+          bA ~ dnorm(0, 0.5),
+          sigma ~ dexp(1)),
+    data = d
+  )
+
+# simulate from priors:
+set.seed(10)
+prior <- extract.prior(m5.1)
+mu <- link(m5.1, post = prior, data = list(A = c(-2, 2)))
+
+# plot!
+plot(NULL, 
+     xlim = c(-2,2), 
+     ylim = c(-2,2),
+     xlab = "Median age marriage (std)",
+     ylab = "Divorce rate (std)",
+     main = "Prior simulation")
+
+for (i in 1:50) lines(c(-2,2), mu[i,], col = col.alpha("black", 0.4))
+
+# plotting function for posterior:
+
+
+# compute percentile interval of mean
+A_seq <- seq(from = -3, to = 3.2, length.out = 30)
+mu <- link(m5.1, data = list(A = A_seq))
+mu.mean <- apply(mu, 2, mean)
+mu.PI <- apply(mu, 2, PI)
+
+# plot it all!
+plot(D ~ A,
+     data = d,
+     col = rangi2,
+     xlab = "Median age marriage (std)",
+     ylab = "Divorce rate (std)",
+     main = "Posterior")
+
+lines(A_seq,
+      mu.mean,
+      lwd = 2)
+
+shade(mu.PI, A_seq)
+
+# model divorce rate as a fn of marriage rate
+m5.2 <-
+  quap(
+    alist(D ~ dnorm(mu, sigma),
+          mu <- a + bM * M,
+          a ~ dnorm(0, 0.2),
+          bM ~ dnorm(0, 0.5),
+          sigma ~ dexp(1)),
+    data = d
+  )
+
+# plot posterior for m5.2
+M_seq <- seq(from = -2, to = 3, length.out = 30)
+mu <- link(m5.2, data = list(M = M_seq))
+mu.mean <- apply(mu, 2, mean)
+mu.PI <- apply(mu, 2, PI)
+
+plot(D ~ M,
+     data = d,
+     col = rangi2,
+     xlab = "Marriage rate (std)",
+     ylab = "Divorce rate (std)",
+     main = "Posterior")
+
+lines(M_seq,
+      mu.mean,
+      lwd = 2)
+
+shade(mu.PI, M_seq)
+```
+
+* There is a weakly positive relationship between marriage and divorce rates, and a negative relationship between median age at marriage and divorce rate.
+* Comparing these single-variable models separately isn't great --- they could both provide value, be redundant, or one can eliminate the value of the other.
+* Goal: think *causally*, then fit a bigger regression.
+
+### 5.1.1 Think before you regress
+
+* Three variables at play: D, M, and A. 
+* A *Directed Acyclic Graph* (DAG) can help us think about the relationship between the variables.
+* A possible DAG for the divorce rate example could be:
+
+```{r}
+library(dagitty)
+dag5.1 <- dagitty("dag{A -> D; A -> M; M -> D}")
+coordinates(dag5.1) <- 
+  list(x = c(A = 0, D = 1, M = 2),
+       y = c(A = 0, D = 1, M = 0))
+
+drawdag(dag5.1)
+```
+
+* In this diagram, age influences divorce rates in two ways: directly (A -> D) and indirectly through marriage rates (A -> M -> D)
+* To infer the strength of these different arrows, we'd need more than one model. `m5.1` only shows the *total* influence of age at marriage on the divorce rate (direct and indirect). It could possible that there is no direct effect and it is associated with D entirely through the indirect path. This is known as *mediation*. 
+* Another alternative is that there is no relationship between M & D (this is still consistent with `m5.2`, because M in this DAG picks up information from A):
+
+```{r}
+dag5.2 <- dagitty("dag{A -> M; A -> D}")
+coordinates(dag5.2) <- coordinates(dag5.1)
+drawdag(dag5.2)
+```
+
+* So, which is it?
+
+
+
+
+
