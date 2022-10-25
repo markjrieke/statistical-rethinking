@@ -43,7 +43,7 @@ plot(density(pos))
 prod(1 + runif(12, 0, 0.1))
 ```
 
-    ## [1] 1.643609
+    ## [1] 1.387238
 
 -   Now let’s repeat this for 10,000 organisms:
 
@@ -416,8 +416,8 @@ precis(m4.1)
 ```
 
     ##             mean        sd       5.5%      94.5%
-    ## mu    154.607024 0.4119947 153.948577 155.265471
-    ## sigma   7.731333 0.2913860   7.265642   8.197024
+    ## mu    154.607346 0.4119059 153.949041 155.265651
+    ## sigma   7.729665 0.2912289   7.264225   8.195105
 
 -   The table from `precis()` provides the Gaussian approximations for
     each parameter’s *marginal* distribution.
@@ -466,8 +466,8 @@ precis(m4.2)
 ```
 
     ##            mean        sd      5.5%     94.5%
-    ## mu    177.86390 0.1002354 177.70371 178.02410
-    ## sigma  24.52213 0.9293475  23.03686  26.00741
+    ## mu    177.86375 0.1002354 177.70356 178.02395
+    ## sigma  24.51756 0.9289235  23.03297  26.00216
 
 -   Strong priors regularize *a lot* so the estimate for
     ![\\mu](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu "\mu")
@@ -534,20 +534,20 @@ head(post)
 ```
 
     ##         mu    sigma
-    ## 1 153.9298 7.784690
-    ## 2 154.3912 8.209448
-    ## 3 153.9433 7.834050
-    ## 4 155.0304 7.807040
-    ## 5 155.4300 7.464882
-    ## 6 154.6562 7.490757
+    ## 1 154.6071 8.346636
+    ## 2 155.0135 8.014005
+    ## 3 154.3901 7.221297
+    ## 4 155.0870 7.946823
+    ## 5 154.1264 8.076815
+    ## 6 155.0189 7.504634
 
 ``` r
 precis(post)
 ```
 
-    ##             mean        sd       5.5%      94.5%   histogram
-    ## mu    154.607976 0.4119747 153.950830 155.267493    ▁▁▁▅▇▂▁▁
-    ## sigma   7.730708 0.2943721   7.258199   8.194503 ▁▁▁▂▅▇▇▃▁▁▁
+    ##             mean        sd       5.5%      94.5%    histogram
+    ## mu    154.616607 0.4098558 153.964249 155.273202     ▁▁▁▅▇▂▁▁
+    ## sigma   7.730891 0.2912090   7.271172   8.197196 ▁▁▁▂▅▇▇▃▁▁▁▁
 
 ``` r
 plot(post)
@@ -1152,3 +1152,195 @@ shade(height.PI, weight.seq)
 ```
 
 ![](chapter_4_notes_files/figure-gfm/unnamed-chunk-49-1.png)<!-- -->
+
+### 4.5.2 Splines
+
+-   A spline is a smooth function built out of smaller, component
+    functions.
+-   There are many types, but let’s look at the *B-spline*, which is
+    fairly commonplace.
+
+``` r
+# load the cherry blossoms dataset to explore b-splines
+data("cherry_blossoms")
+d <- cherry_blossoms
+
+# simple exploration of the dataset 
+# doy = day of year of the first cherry blossom bloom in japan
+precis(d)
+```
+
+    ##                   mean          sd      5.5%      94.5%       histogram
+    ## year       1408.000000 350.8845964 867.77000 1948.23000   ▇▇▇▇▇▇▇▇▇▇▇▇▁
+    ## doy         104.540508   6.4070362  94.43000  115.00000        ▁▂▅▇▇▃▁▁
+    ## temp          6.141886   0.6636479   5.15000    7.29470        ▁▃▅▇▃▂▁▁
+    ## temp_upper    7.185151   0.9929206   5.89765    8.90235 ▁▂▅▇▇▅▂▂▁▁▁▁▁▁▁
+    ## temp_lower    5.098941   0.8503496   3.78765    6.37000 ▁▁▁▁▁▁▁▃▅▇▃▂▁▁▁
+
+``` r
+plot(doy ~ year, data = d)
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-50-1.png)<!-- -->
+
+-   B-splines do not directly transform the predictor, but instead work
+    with a synthetic set of *basis functions*:
+
+![
+\\mu_i = \\alpha + w_i\\beta\_{i,1} + w_2\\beta\_{i,2} + \\ldots
+](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cmu_i%20%3D%20%5Calpha%20%2B%20w_i%5Cbeta_%7Bi%2C1%7D%20%2B%20w_2%5Cbeta_%7Bi%2C2%7D%20%2B%20%5Cldots%0A "
+\mu_i = \alpha + w_i\beta_{i,1} + w_2\beta_{i,2} + \ldots
+")
+
+-   ![\\beta\_{i,n}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cbeta_%7Bi%2Cn%7D "\beta_{i,n}")
+    is the *n*-th basis function’s value on row *i*. *w* parameters are
+    the weights for each.
+-   (this is just linear regression)
+-   Let’s explore placing 15 *knots* for a cubic b-spline on the cherry
+    blossom data (for more info, see figure 4.1.2 on page 116).
+
+``` r
+# d2 is a frame with no NAs for doy
+d2 <- d[complete.cases(d$doy),] 
+
+# split up d2 into 15 quantiles
+num_knots <- 15
+knot_list <- quantile(d2$year, probs = seq(0, 1, length.out = num_knots))
+
+# create cubic b-spline (degree = 3) out of the knots
+library(splines)
+B <- 
+  bs(
+    d2$year,
+    knots = knot_list[-c(1, num_knots)],
+    degree = 3,
+    intercept = TRUE
+  )
+
+# plot cubic basis functions
+plot(
+  NULL, 
+  xlim = range(d2$year), 
+  ylim = c(0, 1),
+  xlab = "year",
+  ylab = "basis"
+)
+
+for (i in 1:ncol(B)) lines(d2$year, B[,i])
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-51-1.png)<!-- -->
+
+-   Now we can plop these basis functions into a linear model to get the
+    weight of each
+
+![
+D_i \\sim Normal(\\mu_i, \\sigma) \\\\
+\\mu_i = \\alpha + \\sum\_{k = 1} ^{K} w_k B\_{k, i} \\\\
+\\alpha \\sim Normal(100, 10) \\\\
+w_k \\sim Normal(0, 10) \\\\
+\\sigma \\sim Exponential(1)
+](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0AD_i%20%5Csim%20Normal%28%5Cmu_i%2C%20%5Csigma%29%20%5C%5C%0A%5Cmu_i%20%3D%20%5Calpha%20%2B%20%5Csum_%7Bk%20%3D%201%7D%20%5E%7BK%7D%20w_k%20B_%7Bk%2C%20i%7D%20%5C%5C%0A%5Calpha%20%5Csim%20Normal%28100%2C%2010%29%20%5C%5C%0Aw_k%20%5Csim%20Normal%280%2C%2010%29%20%5C%5C%0A%5Csigma%20%5Csim%20Exponential%281%29%0A "
+D_i \sim Normal(\mu_i, \sigma) \\
+\mu_i = \alpha + \sum_{k = 1} ^{K} w_k B_{k, i} \\
+\alpha \sim Normal(100, 10) \\
+w_k \sim Normal(0, 10) \\
+\sigma \sim Exponential(1)
+")
+
+-   Some quick notes on the mathematical model:
+    -   ![w_k](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;w_k "w_k")
+        indicates that each basis function has the same prior
+    -   The *Exponential* prior for
+        ![\\sigma](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Csigma "\sigma")
+        forces it to be greater than 0 (this is the least
+        informative/max entropy case of the *gamma distribution*).
+
+``` r
+# model w/quap
+m4.7 <-
+  quap(
+    alist(D ~ dnorm(mu, sigma),
+          mu <- a + B %*% w,
+          a ~ dnorm(100, 10),
+          w ~ dnorm(0, 10),
+          sigma ~ dexp(1)),
+    data = list(D = d2$doy,
+                B = B),
+    start = list(w = rep(0, ncol(B)))
+  )
+
+precis(m4.7, depth = 2)
+```
+
+    ##              mean        sd         5.5%       94.5%
+    ## w[1]   -3.0257576 3.8610453  -9.19645377   3.1449386
+    ## w[2]   -0.8654717 3.8700408  -7.05054429   5.3196009
+    ## w[3]   -1.0274023 3.5848362  -6.75666296   4.7018583
+    ## w[4]    4.8375713 2.8770768   0.23944691   9.4356957
+    ## w[5]   -0.8367738 2.8742885  -5.43044198   3.7568944
+    ## w[6]    4.3348685 2.9147966  -0.32353933   8.9932764
+    ## w[7]   -5.3288914 2.8001759  -9.80411328  -0.8536696
+    ## w[8]    7.8568441 2.8020289   3.37866074  12.3350274
+    ## w[9]   -1.0141020 2.8809954  -5.61848908   3.5902852
+    ## w[10]   3.0589236 2.9100511  -1.59190009   7.7097473
+    ## w[11]   4.6409908 2.8916730   0.01953893   9.2624427
+    ## w[12]  -0.1321205 2.8693627  -4.71791628   4.4536752
+    ## w[13]   5.5477451 2.8873841   0.93314763  10.1623426
+    ## w[14]   0.7424729 2.9992560  -4.05091745   5.5358632
+    ## w[15]  -0.8336141 3.2934266  -6.09714589   4.4299178
+    ## w[16]  -6.9422214 3.3756783 -12.33720733  -1.5472355
+    ## w[17]  -7.6602777 3.2226660 -12.81072041  -2.5098350
+    ## a     103.3470640 2.3697442  99.55975507 107.1343729
+    ## sigma   5.8761926 0.1437276   5.64648813   6.1058971
+
+``` r
+# plot the weight * basis function
+post <- 
+  extract.samples(m4.7)
+
+# return mean for each w
+w <-
+  apply(post$w, 2, mean)
+
+# plot
+plot(
+  NULL,
+  xlim = range(d2$year),
+  ylim = c(-6, 6),
+  xlab = "year",
+  ylab = "basis * weight"
+)
+
+for (i in 1:ncol(B)) lines(d2$year, w[i] * B[,i])
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-53-1.png)<!-- -->
+
+``` r
+# get posterior draws of mu
+mu <- link(m4.7)
+
+# get 97% percentile interval & plot
+mu_PI <- apply(mu, 2, PI, 0.97)
+plot(d2$year, 
+     d2$doy,
+     col = col.alpha(rangi2, 0.3),
+     pch = 16)
+
+shade(mu_PI, 
+      d2$year,
+      col = col.alpha("black", 0.5))
+```
+
+![](chapter_4_notes_files/figure-gfm/unnamed-chunk-54-1.png)<!-- -->
+
+-   More knots = more wiggliness. How many knots is “correct?” (We’ll
+    address in a few chapters).
+-   This is just te beginning of an entire class of models, *Generalized
+    Additive Models* (GAMS).
+
+## 4.6 Summary
+
+-   Gaussian distribution is a good geocentric tool.
+-   Use `quap()` to use quadratic approximation of the posterior.

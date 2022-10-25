@@ -813,4 +813,134 @@ shade(mu.PI, weight.seq)
 shade(height.PI, weight.seq)
 ```
 
+### 4.5.2 Splines
 
+* A spline is a smooth function built out of smaller, component functions.
+* There are many types, but let's look at the *B-spline*, which is fairly commonplace.
+
+```{r}
+# load the cherry blossoms dataset to explore b-splines
+data("cherry_blossoms")
+d <- cherry_blossoms
+
+# simple exploration of the dataset 
+# doy = day of year of the first cherry blossom bloom in japan
+precis(d)
+plot(doy ~ year, data = d)
+```
+
+* B-splines do not directly transform the predictor, but instead work with a synthetic set of *basis functions*:
+
+$$
+\mu_i = \alpha + w_i\beta_{i,1} + w_2\beta_{i,2} + \ldots
+$$
+
+* $\beta_{i,n}$ is the *n*-th basis function's value on row *i*. *w* parameters are the weights for each.
+* (this is just linear regression)
+* Let's explore placing 15 *knots* for a cubic b-spline on the cherry blossom data (for more info, see figure 4.1.2 on page 116).
+
+```{r}
+# d2 is a frame with no NAs for doy
+d2 <- d[complete.cases(d$doy),] 
+
+# split up d2 into 15 quantiles
+num_knots <- 15
+knot_list <- quantile(d2$year, probs = seq(0, 1, length.out = num_knots))
+
+# create cubic b-spline (degree = 3) out of the knots
+library(splines)
+B <- 
+  bs(
+    d2$year,
+    knots = knot_list[-c(1, num_knots)],
+    degree = 3,
+    intercept = TRUE
+  )
+
+# plot cubic basis functions
+plot(
+  NULL, 
+  xlim = range(d2$year), 
+  ylim = c(0, 1),
+  xlab = "year",
+  ylab = "basis"
+)
+
+for (i in 1:ncol(B)) lines(d2$year, B[,i])
+```
+
+* Now we can plop these basis functions into a linear model to get the weight of each
+
+$$
+D_i \sim Normal(\mu_i, \sigma) \\
+\mu_i = \alpha + \sum_{k = 1} ^{K} w_k B_{k, i} \\
+\alpha \sim Normal(100, 10) \\
+w_k \sim Normal(0, 10) \\
+\sigma \sim Exponential(1)
+$$
+
+* Some quick notes on the mathematical model:
+  * $w_k$ indicates that each basis function has the same prior
+  * The *Exponential* prior for $\sigma$ forces it to be greater than 0 (this is the least informative/max entropy case of the *gamma distribution*).
+  
+```{r}
+# model w/quap
+m4.7 <-
+  quap(
+    alist(D ~ dnorm(mu, sigma),
+          mu <- a + B %*% w,
+          a ~ dnorm(100, 10),
+          w ~ dnorm(0, 10),
+          sigma ~ dexp(1)),
+    data = list(D = d2$doy,
+                B = B),
+    start = list(w = rep(0, ncol(B)))
+  )
+
+precis(m4.7, depth = 2)
+```
+
+```{r}
+# plot the weight * basis function
+post <- 
+  extract.samples(m4.7)
+
+# return mean for each w
+w <-
+  apply(post$w, 2, mean)
+
+# plot
+plot(
+  NULL,
+  xlim = range(d2$year),
+  ylim = c(-6, 6),
+  xlab = "year",
+  ylab = "basis * weight"
+)
+
+for (i in 1:ncol(B)) lines(d2$year, w[i] * B[,i])
+```
+
+```{r}
+# get posterior draws of mu
+mu <- link(m4.7)
+
+# get 97% percentile interval & plot
+mu_PI <- apply(mu, 2, PI, 0.97)
+plot(d2$year, 
+     d2$doy,
+     col = col.alpha(rangi2, 0.3),
+     pch = 16)
+
+shade(mu_PI, 
+      d2$year,
+      col = col.alpha("black", 0.5))
+```
+
+* More knots = more wiggliness. How many knots is "correct?" (We'll address in a few chapters).
+* This is just te beginning of an entire class of models, *Generalized Additive Models* (GAMS).
+
+## 4.6 Summary
+
+* Gaussian distribution is a good geocentric tool.
+* Use `quap()` to use quadratic approximation of the posterior. 
