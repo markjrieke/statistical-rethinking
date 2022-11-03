@@ -158,6 +158,145 @@ drawdag(dag5.2)
 
 * So, which is it?
 
+### 5.1.2 Testable implications
+
+* To compare multiple probable causal model, we need to first consider the *testable implications* of each model. Consider the two DAGs above.
+* Any DAG may imply that some variables are independent of others under certain conditions (*conditional independencies*). 
+* Conditional independencies come in two forms:
+  1. Statements of which variables should be associated with one another (or not) in the data.
+  2. Statements of which variables become dis-associated when we condition on some other set of variables.
+* For example, conditioning on a variable *Z* means learning it's value, then asking if *X* adds any additional information about *Y*. If learning *X* doesn't give you more information about *Y*, then *Y* is independent of *X* conditional on *Z*.
+* For `dag5.1`, every pair of variables is correlated (there is a causal arrow between every pair). Before we condition on anything, everything is associated with everything else.
+
+$$
+D \not\!\perp\!\!\!\perp A \\
+D \not\!\perp\!\!\!\perp M \\
+A \not\!\perp\!\!\!\perp M
+$$
+
+* In `dag5.2`, *M* has no influence on *D*, though *M* and *D* are associated via *A*. If we condition on *A*, *D* should be independent of *M*, because according to this DAG, *D* and *M* have no direct connection.
+
+$$
+D \!\perp\!\!\!\perp M | A
+$$
+
+```{r}
+# returns nothing! because there are *no* conditional independencies (everything is connected!)
+impliedConditionalIndependencies(dag5.1)
+
+# returns 1 conditional independency between D and M conditioned on A
+impliedConditionalIndependencies(dag5.2)
+```
+
+* We can test this conditional independency! We first need a statistical model that conditions on *A* so we can see whether that renders *D* independent of *M*. 
+* Multiple regression can help answer the question: *After I know the age at marriage, what additional value is there in also knowing the marriage rate?*
+
+### 5.1.3 Multiple regression notation
+
+1. Nominate the predictor variables you want in the linear model of mean.
+2. For each predictor, make a parameter that will measure its conditional association with the outcome.
+3. Multiply the parameter by the variable and add that term to the linear model.
+
+* For the divorce case:
+
+$$
+D_i \sim Normal(\mu_i, \sigma) \\
+\mu_i = \alpha + \beta_M M_i + \beta_A A_i \\
+\alpha \sim Normal(0, 0.2) \\
+\beta_M \sim Normal(0, 0.5) \\
+\beta_A \sim Normal(0, 0.5) \\
+\sigma \sim Exponential(1)
+$$
+
+* One note --- the mechanical definition of the model above doesn't map onto a unique causal meaning (we'll return to that later).
+* We can also write this in terms of compact notation / in terms of a design matrix:
+
+$$
+\mu_i = \alpha + \sum_{j = 1}^n \beta_j x_{ji} \\
+$$
+$$
+m = Xb
+$$
+
+* In the design matrix, *m* is a vector of predicted means, *b* is a (column) vector of parameters, and *X* is a matrix with an extra first column for the intercept ($\alpha$). 
+* Matrix multiplication can be performed in R with the `%*%` operator. 
+
+### 5.1.4 Approximating the posterior
+
+```{r}
+m5.3 <-
+  quap(
+    alist(D ~ dnorm(mu, sigma),
+          mu <- a + bM*M + bA*A,
+          a ~ dnorm(0, 0.2),
+          bM ~ dnorm(0, 0.5),
+          bA ~ dnorm(0, 0.5),
+          sigma ~ dexp(1)),
+    data = d
+  )
+
+precis(m5.3)
+```
+
+* The posterior mean for marriage rate, `bM`, is close to 0 with plenty of probability on both sides of 0. 
+* The posterior mean for age at marriage, `bA`, is essentially unchanged.
+
+```{r}
+coeftab_plot(coeftab(m5.1, m5.2, m5.3), pars = c("bA", "bM"))
+```
+
+* *Once we know the median age at marriage for a State, there is little or no additional predictive power in also knowing the rate of marriage in that State!*
+* Using DAG notation, $D \!\perp\!\!\!\perp M | A$
+* Since the first DAG did not imply this result, it is out!
+* Every DAG implies a simulation, and such simulations can help to design models to correctly infer relationships among variables:
+
+### 5.1.5 Plotting multivariate posteriors
+
+* There's a huge body of literature around visualizing the results of multiple linear regression, but in this book we''l look at just a few:
+  1. *Predictor residual plots*
+  2. *Posterior predictive plots*
+  3. *Counterfactual plots* (implied predictions for imaginary experiments)
+  
+#### 5.1.5.1 Predictor residual plots
+
+* A predictor residual is the average prediction error when we use all of the other variables to model a predictor of interest. 
+* For example, use *all other predictors* to predict *M*, and *use all other predictors* to predict *A*:
+
+$$
+M_i \sim Normal(\mu_i, \sigma) \\
+\mu_i = \alpha + \beta A_i \\
+\alpha \sim Normal(0, 0.2) \\
+\beta \sim Normal(0, 0.5) \\ 
+\sigma \sim Exponential(1)
+$$
+
+```{r}
+# model marriage rate based on median age at marriage
+m5.4 <-
+  quap(
+    alist(M ~ dnorm(mu, sigma),
+          mu <- a + bAM*A,
+          a ~ dnorm(0, 0.2),
+          bAM ~ dnorm(0, 0.5),
+          sigma ~ dexp(1)),
+    data = d
+  )
+
+# linque 
+mu <- link(m5.4)
+mu_mean <- apply(mu, 2, mean)
+mu_resid <- d$M - mu_mean
+
+plot(d$A, d$M)
+
+# plotting residuals of M ~ A against divorce rate plots the linear relationship 
+# between divorce and marriage rates, having already conditioned on the age at marriage
+plot(mu_resid, d$D)
+```
+
+* This procedure basically lets us *subtract out* the influence of other predictors.
+
+
 
 
 

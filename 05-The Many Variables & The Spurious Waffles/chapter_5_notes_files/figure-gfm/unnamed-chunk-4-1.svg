@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' class='svglite' width='648.00pt' height='432.00pt' viewBox='0 0 648.00 432.00'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
+<defs>
+  <clipPath id='cpMC4wMHw2NDguMDB8MC4wMHw0MzIuMDA='>
+    <rect x='0.00' y='0.00' width='648.00' height='432.00' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHw2NDguMDB8MC4wMHw0MzIuMDA=)'>
+<line x1='45.11' y1='37.62' x2='314.86' y2='394.38' style='stroke-width: 1.12;' />
+<line x1='46.41' y1='26.12' x2='599.71' y2='26.12' style='stroke-width: 1.12;' />
+<polygon points='312.86,386.74 312.78,388.76 313.10,390.75 313.80,392.65 314.86,394.38 314.86,394.38 313.49,392.89 311.85,391.70 310.02,390.85 308.06,390.37 308.06,390.37 308.22,390.46 308.49,390.45 308.87,390.35 309.32,390.16 309.83,389.89 310.37,389.55 310.91,389.16 311.43,388.74 311.91,388.31 312.31,387.90 312.62,387.51 312.82,387.18 312.90,386.92 312.86,386.74 ' style='stroke-width: 1.12; fill: #000000;' />
+<polygon points='592.42,23.11 593.98,24.39 595.76,25.33 597.70,25.92 599.71,26.12 599.71,26.12 597.70,26.31 595.76,26.90 593.98,27.85 592.42,29.12 592.42,29.12 592.59,29.05 592.75,28.83 592.89,28.47 593.01,27.99 593.10,27.42 593.15,26.79 593.17,26.12 593.15,25.45 593.10,24.81 593.01,24.24 592.89,23.77 592.75,23.41 592.59,23.18 592.42,23.11 ' style='stroke-width: 1.12; fill: #000000;' />
+<text x='36.41' y='30.41' text-anchor='middle' style='font-size: 12.00px; font-family: "Arial";' textLength='8.01px' lengthAdjust='spacingAndGlyphs'>A</text>
+<text x='323.56' y='410.18' text-anchor='middle' style='font-size: 12.00px; font-family: "Arial";' textLength='8.67px' lengthAdjust='spacingAndGlyphs'>D</text>
+<text x='610.71' y='30.41' text-anchor='middle' style='font-size: 12.00px; font-family: "Arial";' textLength='10.00px' lengthAdjust='spacingAndGlyphs'>M</text>
+</g>
+</svg>
