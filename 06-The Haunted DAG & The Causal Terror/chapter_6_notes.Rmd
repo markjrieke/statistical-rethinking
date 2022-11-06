@@ -1,0 +1,26 @@
+---
+title: "The Haunted DAG & The Causal Terror"
+output: 
+  github_document:
+    math_method: null
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  dpi = 500,
+  fig.width = 9,
+  fig.height = 6
+)
+```
+
+$$
+\begin{align*}
+Height_i \sim Normal(\mu_i, \sigma) \\
+\mu_i = \alpha + \beta_{weight} Weight \\
+\beta_{weight} \sim Normal(0, 1) \\
+\sigma \sim Exponential(1)
+\end{align}
+$$
