@@ -211,7 +211,7 @@ $$
 $$
 \\begin{gather}
 D \\!\\perp\\!\\!\\!\\perp M \| A
-end{gather}
+\\end{gather}
 $$
 
 ``` r
