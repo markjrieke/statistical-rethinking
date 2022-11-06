@@ -4,7 +4,7 @@ Sampling the Imaginary
 -   Classic example of false postives (in this case, detecting
     vampirism): correct 95% of the time, but with a false positive rate
     of 1%. Finally, vampires are rare — about 0.1% of the population.
--   P(povitive test result \| vampire) = 0.95
+-   P(positive test result \| vampire) = 0.95
 -   P(positive test result \| mortal) = 0.01
 -   P(vampire) = 0.001
 -   With a positive test result — what is the probability that person is
@@ -118,7 +118,7 @@ sum(posterior[p_grid < 0.5])
 sum(samples < 0.5)/length(samples)
 ```
 
-    ## [1] 0.1714
+    ## [1] 0.1677
 
 -   Similar, but not exactly the same (expected)
 -   Same approach let’s us say how much posterior probability lies
@@ -128,7 +128,7 @@ sum(samples < 0.5)/length(samples)
 sum(samples > 0.5 & samples < 0.75)/length(samples)
 ```
 
-    ## [1] 0.6063
+    ## [1] 0.6035
 
 ### 3.2.2 Intervals of defined mass
 
@@ -138,8 +138,8 @@ sum(samples > 0.5 & samples < 0.75)/length(samples)
 quantile(samples, 0.8)
 ```
 
-    ##       80% 
-    ## 0.7597598
+    ##      80% 
+    ## 0.761962
 
 -   What is the middle 80% interval (between 10th & 90th percentile)?
 
@@ -148,7 +148,7 @@ quantile(samples, c(0.1, 0.9))
 ```
 
     ##       10%       90% 
-    ## 0.4464464 0.8108108
+    ## 0.4514515 0.8158158
 
 -   This percentile interval method is okay in a lot of scenarios, but
     isn’t perfect.
@@ -178,7 +178,7 @@ PI(samples_skewed, prob = 0.5)
 ```
 
     ##       25%       75% 
-    ## 0.7077077 0.9309309
+    ## 0.7097097 0.9329329
 
 -   Alternatively, the *highest posterior density interval* finds the
     narrowest interval containing the specified probability mass (which
@@ -189,7 +189,7 @@ HPDI(samples_skewed, prob = 0.5)
 ```
 
     ##      |0.5      0.5| 
-    ## 0.8438438 1.0000000
+    ## 0.8398398 1.0000000
 
 -   In many scenarios, the HPDI & PI are very similar.
 -   Although there are benefits to the HPDI over the PI, there are
@@ -217,7 +217,7 @@ p_grid[which.max(posterior)]
 chainmode(samples_skewed, adj = 0.01)
 ```
 
-    ## [1] 0.989987
+    ## [1] 0.9972416
 
 -   What about the mean/median?
 
@@ -225,13 +225,13 @@ chainmode(samples_skewed, adj = 0.01)
 mean(samples_skewed)
 ```
 
-    ## [1] 0.8013004
+    ## [1] 0.80061
 
 ``` r
 median(samples_skewed)
 ```
 
-    ## [1] 0.8438438
+    ## [1] 0.8398398
 
 -   The mean, median, and mode (MAP) are all different!
 -   One way to choose is to utilize a *loss function* (note that
@@ -298,7 +298,7 @@ table(dummy_w)/1e5
 
     ## dummy_w
     ##       0       1       2       3       4       5       6       7       8       9 
-    ## 0.00002 0.00038 0.00359 0.02162 0.07268 0.17422 0.26689 0.26538 0.15621 0.03901
+    ## 0.00001 0.00047 0.00340 0.02091 0.07369 0.17057 0.26448 0.26877 0.15711 0.04059
 
 -   What about a simulation of 9 tosses?
 

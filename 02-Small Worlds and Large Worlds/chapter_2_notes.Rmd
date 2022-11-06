@@ -1,7 +1,8 @@
 ---
 title: "Small Worlds and Large Worlds"
-output: github_document
-math: true
+output: 
+  github_document:
+    math_method: null
 ---
 
 ```{r setup, include=FALSE}
@@ -77,7 +78,7 @@ ways/sum(ways)
 #### 2.3.2.1 Observed variables
 
 * Likelihood --- distribution function assigned to an observed variable.
-* Here's an exmaple the likelihood of seeing 6 heads in a series of 9 coin flips
+* Here's an example the likelihood of seeing 6 heads in a series of 9 coin flips
 
 ```{r}
 dbinom(6, size = 9, prob = 0.5)
@@ -100,11 +101,10 @@ Some examples:
 Let's make a really simple model:
 
 $$
-\begin{align*}
+\begin{gather}
 W \sim Binomial(N, p) \\
-\\
 p \sim Uniform(0, 1)\\
-\end{align*}
+\end{gather}
 $$
 
 ## 2.4 Making the model go

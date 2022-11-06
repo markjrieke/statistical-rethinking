@@ -43,7 +43,7 @@ plot(density(pos))
 prod(1 + runif(12, 0, 0.1))
 ```
 
-    ## [1] 1.387238
+    ## [1] 1.855755
 
 -   Now let’s repeat this for 10,000 organisms:
 
@@ -112,19 +112,12 @@ rethinking::dens(log.big)
 
 ### 4.2.1 Re-describing the globe tossing model
 
-![
-\\begin{align\*}
+$$
+\\begin{gather}
 W \\sim Binomial(N, p) \\\\
-\\\\
 p \\sim Uniform(0, 1)\\\\
-\\end{align\*}
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cbegin%7Balign%2A%7D%0AW%20%5Csim%20Binomial%28N%2C%20p%29%20%5C%5C%0A%5C%5C%0Ap%20%5Csim%20Uniform%280%2C%201%29%5C%5C%0A%5Cend%7Balign%2A%7D%0A "
-\begin{align*}
-W \sim Binomial(N, p) \\
-\\
-p \sim Uniform(0, 1)\\
-\end{align*}
-")
+\\end{gather}
+$$
 
 -   Both lines in the above model are *stochastic* — that is no single
     variable on the left is known with certainty, but rather is
@@ -175,15 +168,13 @@ hist(d2$height)
     This assumption is often wrong (for example, heights amongst family
     members are not independent), but also often useful.
 
-![
+$$
+\\begin{gather}
 h\_{i} \\sim Normal(\\mu, \\sigma) \\\\
 \\mu \\sim Normal(178, 20) \\\\
 \\sigma \\sim Uniform(0, 50)
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0Ah_%7Bi%7D%20%5Csim%20Normal%28%5Cmu%2C%20%5Csigma%29%20%5C%5C%0A%5Cmu%20%5Csim%20Normal%28178%2C%2020%29%20%5C%5C%0A%5Csigma%20%5Csim%20Uniform%280%2C%2050%29%0A "
-h_{i} \sim Normal(\mu, \sigma) \\
-\mu \sim Normal(178, 20) \\
-\sigma \sim Uniform(0, 50)
-")
+\\end{gather}
+$$
 
 ``` r
 # ***average*** height somewhere between 140 & 220 cm
@@ -213,11 +204,9 @@ dens(prior_h)
 ![](chapter_4_notes_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
 
 -   Prior prediction is useful for setting reasonable priors.
--   For example, if the prior for the mean,
-    ![\\mu](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu "\mu"),
-    was
-    ![\\mu \\sim Normal(178, 100)](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu%20%5Csim%20Normal%28178%2C%20100%29 "\mu \sim Normal(178, 100)"),
-    we’d end up with implausible (negative!) prior heights:
+-   For example, if the prior for the mean, *μ*, was
+    *μ* ∼ *N**o**r**m**a**l*(178,100), we’d end up with implausible
+    (negative!) prior heights:
 
 ``` r
 # this set of priors is unreasonable!
@@ -321,9 +310,7 @@ PI(sample.sigma)
     ##       5%      94% 
     ## 7.323232 8.252525
 
--   One interesting thing to note is that
-    ![\\sigma](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Csigma "\sigma")
-    is *right-skewed*.
+-   One interesting thing to note is that *σ* is *right-skewed*.
 -   This *basically* has to do with the fact that it must be positive —
     if variance is estimated to be near zero, then it can’t be much
     smaller, but could be a lot bigger.
@@ -388,15 +375,13 @@ dens(sample2.sigma, norm.comp = TRUE)
 -   `quap()` allows us to define the formulas very similarly to the
     mathematical syntax:
 
-![
+$$
+\\begin{gather}
 h\_{i} \\sim Normal(\\mu, \\sigma) \\\\
 \\mu \\sim Normal(178, 20) \\\\
 \\sigma \\sim Uniform(0, 50)
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0Ah_%7Bi%7D%20%5Csim%20Normal%28%5Cmu%2C%20%5Csigma%29%20%5C%5C%0A%5Cmu%20%5Csim%20Normal%28178%2C%2020%29%20%5C%5C%0A%5Csigma%20%5Csim%20Uniform%280%2C%2050%29%0A "
-h_{i} \sim Normal(\mu, \sigma) \\
-\mu \sim Normal(178, 20) \\
-\sigma \sim Uniform(0, 50)
-")
+\\end{gather}
+$$
 
 ``` r
 flist <-
@@ -415,18 +400,15 @@ m4.1 <- quap(flist, data = d2)
 precis(m4.1)
 ```
 
-    ##             mean        sd       5.5%      94.5%
-    ## mu    154.607346 0.4119059 153.949041 155.265651
-    ## sigma   7.729665 0.2912289   7.264225   8.195105
+    ##             mean        sd       5.5%     94.5%
+    ## mu    154.607057 0.4120042 153.948594 155.26552
+    ## sigma   7.731512 0.2914029   7.265794   8.19723
 
 -   The table from `precis()` provides the Gaussian approximations for
     each parameter’s *marginal* distribution.
--   This means the plausibility of each value of
-    ![\\mu](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu "\mu")
-    after averaging over the plausibilities of each value of
-    ![\\sigma](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Csigma "\sigma")
-    is given by a Gaussian distribution with mean 154.6 & std. dev of
-    0.4.
+-   This means the plausibility of each value of *μ* after averaging
+    over the plausibilities of each value of *σ* is given by a Gaussian
+    distribution with mean 154.6 & std. dev of 0.4.
 -   `quap()` will start at random parameter values by default, but you
     can also give it an explicit starting value:
 
@@ -467,24 +449,17 @@ precis(m4.2)
 
     ##            mean        sd      5.5%     94.5%
     ## mu    177.86375 0.1002354 177.70356 178.02395
-    ## sigma  24.51756 0.9289235  23.03297  26.00216
+    ## sigma  24.51757 0.9289236  23.03297  26.00216
 
--   Strong priors regularize *a lot* so the estimate for
-    ![\\mu](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu "\mu")
-    has hardly moved.
--   Even though
-    ![\\mu](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu "\mu")
-    hasn’t moved,
-    ![\\sigma](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Csigma "\sigma")
-    has *had* to move quite a bit to compensate.
+-   Strong priors regularize *a lot* so the estimate for *μ* has hardly
+    moved.
+-   Even though *μ* hasn’t moved, *σ* has *had* to move quite a bit to
+    compensate.
 
 ### 4.3.6 Sampling from a `quap`
 
--   Quadratic approximation is just a multidimensional gaussian
-    (![\\mu](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu "\mu")
-    and
-    ![\\sigma](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Csigma "\sigma")
-    both contribute a dimension) distribution.
+-   Quadratic approximation is just a multidimensional gaussian (*μ* and
+    *σ* both contribute a dimension) distribution.
 -   Just like a mean and standard deviation are enough to describe a
     one-dimensional Gaussian distribution, a list of means and a matrix
     of variances and covariances are enough to describe a
@@ -534,20 +509,20 @@ head(post)
 ```
 
     ##         mu    sigma
-    ## 1 154.6071 8.346636
-    ## 2 155.0135 8.014005
-    ## 3 154.3901 7.221297
-    ## 4 155.0870 7.946823
-    ## 5 154.1264 8.076815
-    ## 6 155.0189 7.504634
+    ## 1 154.3330 7.374420
+    ## 2 154.8001 7.498716
+    ## 3 154.4903 7.793386
+    ## 4 154.3520 8.292934
+    ## 5 154.5383 7.718690
+    ## 6 154.7274 7.824662
 
 ``` r
 precis(post)
 ```
 
-    ##             mean        sd       5.5%      94.5%    histogram
-    ## mu    154.616607 0.4098558 153.964249 155.273202     ▁▁▁▅▇▂▁▁
-    ## sigma   7.730891 0.2912090   7.271172   8.197196 ▁▁▁▂▅▇▇▃▁▁▁▁
+    ##             mean       sd       5.5%      94.5%    histogram
+    ## mu    154.615312 0.414371 153.950134 155.279164      ▁▁▅▇▂▁▁
+    ## sigma   7.735643 0.292622   7.270406   8.198819 ▁▁▁▂▅▇▇▃▁▁▁▁
 
 ``` r
 plot(post)
@@ -573,51 +548,34 @@ plot(d2$height ~ d2$weight)
     function of the predictor(s).
 -   For our height example:
 
-![
+$$
+\\begin{gather}
 h_i \\sim Normal(\\mu_i, \\sigma) \\\\
 \\mu_i = \\alpha + \\beta(x_i - \\overline{x}) \\\\
 \\alpha \\sim Normal(178, 20) \\\\
 \\beta \\sim Normal(0, 10) \\\\
 \\sigma \\sim Uniform(0, 50)
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0Ah_i%20%5Csim%20Normal%28%5Cmu_i%2C%20%5Csigma%29%20%5C%5C%0A%5Cmu_i%20%3D%20%5Calpha%20%2B%20%5Cbeta%28x_i%20-%20%5Coverline%7Bx%7D%29%20%5C%5C%0A%5Calpha%20%5Csim%20Normal%28178%2C%2020%29%20%5C%5C%0A%5Cbeta%20%5Csim%20Normal%280%2C%2010%29%20%5C%5C%0A%5Csigma%20%5Csim%20Uniform%280%2C%2050%29%0A "
-h_i \sim Normal(\mu_i, \sigma) \\
-\mu_i = \alpha + \beta(x_i - \overline{x}) \\
-\alpha \sim Normal(178, 20) \\
-\beta \sim Normal(0, 10) \\
-\sigma \sim Uniform(0, 50)
-")
+\\end{gather}
+$$
 
 #### 4.4.1.1 Probability of the data
 
--   Read
-    ![h_i](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;h_i "h_i")
-    and
-    ![\\mu_i](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu_i "\mu_i")
-    as “each
-    ![h](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;h "h")”
-    and “each
-    ![\\mu](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu "\mu").
--   The mean of each now depends on unique values on each row
-    ![i](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;i "i").
+-   Read *h*<sub>*i*</sub> and *μ*<sub>*i*</sub> as “each *h*” and “each
+    *μ*.
+-   The mean of each now depends on unique values on each row *i*.
 
 #### 4.4.1.2 Linear model
 
--   ![\\mu_i](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu_i "\mu_i")
-    is now *deterministic*, because it described by other parameters.
+-   *μ*<sub>*i*</sub> is now *deterministic*, because it described by
+    other parameters.
 -   We’re asking two things in this regression:
 
-1.  What is the expected height when
-    ![x_i = \\overline{x}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;x_i%20%3D%20%5Coverline%7Bx%7D "x_i = \overline{x}")?
-    The parameter
-    ![\\alpha](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Calpha "\alpha")
-    answers this question — in this case
-    ![\\alpha](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Calpha "\alpha")
-    is a centered intercept.
-2.  What is the change in expected height when
-    ![x_i](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;x_i "x_i")
-    changes by 1 unit? The parameter
-    ![\\beta](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cbeta "\beta")
-    answers this question — in this case the slope.
+1.  What is the expected height when $x_i = \\overline{x}$? The
+    parameter *α* answers this question — in this case *α* is a centered
+    intercept.
+2.  What is the change in expected height when *x*<sub>*i*</sub> changes
+    by 1 unit? The parameter *β* answers this question — in this case
+    the slope.
 
 #### 4.4.1.3 Priors
 
@@ -695,19 +653,15 @@ for (i in 1:N) curve(a[i] + b[i]*(x - xbar),
 
 -   An update to the model:
 
-![
+$$
+\\begin{gather}
 h_i \\sim Normal(\\mu_i, \\sigma)\\\\
 \\mu_i = \\alpha + \\beta(x_i - \\overline{x}) \\\\
 \\alpha \\sim Normal(178, 20) \\\\
 \\beta \\sim LogNormal(0, 1) \\\\
-\\sigma \\sim Uniform(0, 50)
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0Ah_i%20%5Csim%20Normal%28%5Cmu_i%2C%20%5Csigma%29%5C%5C%0A%5Cmu_i%20%3D%20%5Calpha%20%2B%20%5Cbeta%28x_i%20-%20%5Coverline%7Bx%7D%29%20%5C%5C%0A%5Calpha%20%5Csim%20Normal%28178%2C%2020%29%20%5C%5C%0A%5Cbeta%20%5Csim%20LogNormal%280%2C%201%29%20%5C%5C%0A%5Csigma%20%5Csim%20Uniform%280%2C%2050%29%0A "
-h_i \sim Normal(\mu_i, \sigma)\\
-\mu_i = \alpha + \beta(x_i - \overline{x}) \\
-\alpha \sim Normal(178, 20) \\
-\beta \sim LogNormal(0, 1) \\
-\sigma \sim Uniform(0, 50)
-")
+\\sigma \\sim Uniform(0, 50)\\
+\\end{gather}
+$$
 
 ``` r
 m4.3 <-
@@ -794,11 +748,7 @@ curve(a_map + b_map*(x - xbar), add = TRUE)
 
 #### 4.4.3.3 Adding uncertainty around the mean
 
--   The above plot is a single line defined by
-    ![\\alpha](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Calpha "\alpha")
-    &
-    ![\\beta](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cbeta "\beta").
-    Let’s add more
+-   The above plot is a single line defined by *α* & *β*. Let’s add more
 
 ``` r
 post[1:5, ]
@@ -954,10 +904,8 @@ shade(mu.PI, weight.seq)
 
 -   To summarise, here’s the `rethinking` approach to generating
     predictions and intervals from the posterior fit of a model:
-    1.  Use `link()` to generate posterior values for
-        ![\\mu](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu "\mu")
-        (`link()` uses the original data by default or you can pass new
-        data).
+    1.  Use `link()` to generate posterior values for *μ* (`link()` uses
+        the original data by default or you can pass new data).
     2.  Use summary functions (like `mean()` or `PI()`) to find
         averages, lower, and upper bounds for each value.
     3.  Use plotting functions like `lines()` and `shade()` to draw the
@@ -966,10 +914,9 @@ shade(mu.PI, weight.seq)
 #### 4.4.3.5 Prediction intervals
 
 -   What we’ve done so far is generate the uncertainty around
-    ![\\mu_i](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu_i "\mu_i"),
-    the mean.
+    *μ*<sub>*i*</sub>, the mean.
 -   Actual predictions of height also depends on the distribution (e.g.,
-    ![\\sigma](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Csigma "\sigma")).
+    *σ*).
 -   `rethinking::sim()` handles this for us.
 
 ``` r
@@ -1046,10 +993,8 @@ shade(height.PI, weight.seq)
 ![](chapter_4_notes_files/figure-gfm/unnamed-chunk-46-1.png)<!-- -->
 
 -   We can model this with a *second order* polynomial by changing the
-    equation for
-    ![\\mu_i](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu_i "\mu_i")
-    to:
-    ![\\mu_i = \\alpha + \\beta_1 x_i + \\beta_2 x^2_i](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cmu_i%20%3D%20%5Calpha%20%2B%20%5Cbeta_1%20x_i%20%2B%20%5Cbeta_2%20x%5E2_i "\mu_i = \alpha + \beta_1 x_i + \beta_2 x^2_i")
+    equation for *μ*<sub>*i*</sub> to:
+    *μ*<sub>*i*</sub> = *α* + *β*<sub>1</sub>*x*<sub>*i*</sub> + *β*<sub>2</sub>*x*<sub>*i*</sub><sup>2</sup>
 -   Fitting this model is easy — interpreting it is hard.
 -   First thing to do is standardize the predictor
 
@@ -1186,15 +1131,10 @@ plot(doy ~ year, data = d)
 -   B-splines do not directly transform the predictor, but instead work
     with a synthetic set of *basis functions*:
 
-![
-\\mu_i = \\alpha + w_i\\beta\_{i,1} + w_2\\beta\_{i,2} + \\ldots
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cmu_i%20%3D%20%5Calpha%20%2B%20w_i%5Cbeta_%7Bi%2C1%7D%20%2B%20w_2%5Cbeta_%7Bi%2C2%7D%20%2B%20%5Cldots%0A "
-\mu_i = \alpha + w_i\beta_{i,1} + w_2\beta_{i,2} + \ldots
-")
+*μ*<sub>*i*</sub> = *α* + *w*<sub>*i*</sub>*β*<sub>*i*, 1</sub> + *w*<sub>2</sub>*β*<sub>*i*, 2</sub> + …
 
--   ![\\beta\_{i,n}](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cbeta_%7Bi%2Cn%7D "\beta_{i,n}")
-    is the *n*-th basis function’s value on row *i*. *w* parameters are
-    the weights for each.
+-   *β*<sub>*i*, *n*</sub> is the *n*-th basis function’s value on row
+    *i*. *w* parameters are the weights for each.
 -   (this is just linear regression)
 -   Let’s explore placing 15 *knots* for a cubic b-spline on the cherry
     blossom data (for more info, see figure 4.1.2 on page 116).
@@ -1234,27 +1174,22 @@ for (i in 1:ncol(B)) lines(d2$year, B[,i])
 -   Now we can plop these basis functions into a linear model to get the
     weight of each
 
-![
+$$
+\\begin{gather}
 D_i \\sim Normal(\\mu_i, \\sigma) \\\\
 \\mu_i = \\alpha + \\sum\_{k = 1} ^{K} w_k B\_{k, i} \\\\
 \\alpha \\sim Normal(100, 10) \\\\
 w_k \\sim Normal(0, 10) \\\\
 \\sigma \\sim Exponential(1)
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0AD_i%20%5Csim%20Normal%28%5Cmu_i%2C%20%5Csigma%29%20%5C%5C%0A%5Cmu_i%20%3D%20%5Calpha%20%2B%20%5Csum_%7Bk%20%3D%201%7D%20%5E%7BK%7D%20w_k%20B_%7Bk%2C%20i%7D%20%5C%5C%0A%5Calpha%20%5Csim%20Normal%28100%2C%2010%29%20%5C%5C%0Aw_k%20%5Csim%20Normal%280%2C%2010%29%20%5C%5C%0A%5Csigma%20%5Csim%20Exponential%281%29%0A "
-D_i \sim Normal(\mu_i, \sigma) \\
-\mu_i = \alpha + \sum_{k = 1} ^{K} w_k B_{k, i} \\
-\alpha \sim Normal(100, 10) \\
-w_k \sim Normal(0, 10) \\
-\sigma \sim Exponential(1)
-")
+\\end{gather}
+$$
 
 -   Some quick notes on the mathematical model:
-    -   ![w_k](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;w_k "w_k")
-        indicates that each basis function has the same prior
-    -   The *Exponential* prior for
-        ![\\sigma](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Csigma "\sigma")
-        forces it to be greater than 0 (this is the least
-        informative/max entropy case of the *gamma distribution*).
+    -   *w*<sub>*k*</sub> indicates that each basis function has the
+        same prior
+    -   The *Exponential* prior for *σ* forces it to be greater than 0
+        (this is the least informative/max entropy case of the *gamma
+        distribution*).
 
 ``` r
 # model w/quap

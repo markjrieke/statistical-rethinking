@@ -73,7 +73,7 @@ ways/sum(ways)
 #### 2.3.2.1 Observed variables
 
 -   Likelihood — distribution function assigned to an observed variable.
--   Here’s an exmaple the likelihood of seeing 6 heads in a series of 9
+-   Here’s an example the likelihood of seeing 6 heads in a series of 9
     coin flips
 
 ``` r
@@ -99,19 +99,12 @@ Some examples:
 
 Let’s make a really simple model:
 
-![
-\\begin{align\*}
+$$
+\\begin{gather}
 W \\sim Binomial(N, p) \\\\
-\\\\
 p \\sim Uniform(0, 1)\\\\
-\\end{align\*}
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cbegin%7Balign%2A%7D%0AW%20%5Csim%20Binomial%28N%2C%20p%29%20%5C%5C%0A%5C%5C%0Ap%20%5Csim%20Uniform%280%2C%201%29%5C%5C%0A%5Cend%7Balign%2A%7D%0A "
-\begin{align*}
-W \sim Binomial(N, p) \\
-\\
-p \sim Uniform(0, 1)\\
-\end{align*}
-")
+\\end{gather}
+$$
 
 ## 2.4 Making the model go
 
@@ -212,7 +205,7 @@ precis(globe.qa)
 ```
 
     ##        mean        sd      5.5%     94.5%
-    ## p 0.6666667 0.1571338 0.4155366 0.9177968
+    ## p 0.6666597 0.1571354 0.4155269 0.9177924
 
 How does `quap()`’s approximation compare with the analytical solution?
 

@@ -1,6 +1,8 @@
 ---
 title: "The Golem of Prague"
-output: github_document
+output: 
+  github_document:
+    math_method: null
 ---
 
 ```{r setup, include=FALSE}
@@ -19,7 +21,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ### 1.2.1 Hypotheses are not models
 
 * All models are wrong, but some are useful (classic)
-* Statistical models do not express causality, but instead expres *associations among variables*
+* Statistical models do not express causality, but instead express *associations among variables*
 
 ### 1.2.2 Measurement Matters
 

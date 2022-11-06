@@ -1,7 +1,8 @@
 ---
 title: "The Many Variables & The Spurious Waffles"
-output: github_document
-math: true
+output: 
+  github_document:
+    math_method: null
 ---
 
 ```{r setup, include=FALSE}
@@ -38,11 +39,13 @@ d$A <- standardize(d$MedianAgeMarriage)
 ```
 
 $$
+\begin{gather}
 D_i \sim Normal(\mu_i, \sigma) \\
 \mu_i = \alpha + \beta_A A_i \\
 \alpha \sim Normal(0, 0.2) \\
 \beta_A \sim Normal(0, 0.5) \\
 \sigma \sim Exponential(1)
+\end{gather}
 $$
 
 ```{r}
@@ -169,15 +172,19 @@ drawdag(dag5.2)
 * For `dag5.1`, every pair of variables is correlated (there is a causal arrow between every pair). Before we condition on anything, everything is associated with everything else.
 
 $$
+\begin{gather}
 D \not\!\perp\!\!\!\perp A \\
 D \not\!\perp\!\!\!\perp M \\
 A \not\!\perp\!\!\!\perp M
+\end{gather}
 $$
 
 * In `dag5.2`, *M* has no influence on *D*, though *M* and *D* are associated via *A*. If we condition on *A*, *D* should be independent of *M*, because according to this DAG, *D* and *M* have no direct connection.
 
 $$
+\begin{gather}
 D \!\perp\!\!\!\perp M | A
+end{gather}
 $$
 
 ```{r}
@@ -200,22 +207,28 @@ impliedConditionalIndependencies(dag5.2)
 * For the divorce case:
 
 $$
+\begin{gather}
 D_i \sim Normal(\mu_i, \sigma) \\
 \mu_i = \alpha + \beta_M M_i + \beta_A A_i \\
 \alpha \sim Normal(0, 0.2) \\
 \beta_M \sim Normal(0, 0.5) \\
 \beta_A \sim Normal(0, 0.5) \\
 \sigma \sim Exponential(1)
+\end{gather}
 $$
 
 * One note --- the mechanical definition of the model above doesn't map onto a unique causal meaning (we'll return to that later).
 * We can also write this in terms of compact notation / in terms of a design matrix:
 
 $$
-\mu_i = \alpha + \sum_{j = 1}^n \beta_j x_{ji} \\
+\begin{gather}
+\mu_i = \alpha + \sum_{j = 1}^n \beta_j x_{ji} 
+\end{gather}
 $$
 $$
+\begin{gather}
 m = Xb
+\end{gather}
 $$
 
 * In the design matrix, *m* is a vector of predicted means, *b* is a (column) vector of parameters, and *X* is a matrix with an extra first column for the intercept ($\alpha$). 
@@ -263,11 +276,13 @@ coeftab_plot(coeftab(m5.1, m5.2, m5.3), pars = c("bA", "bM"))
 * For example, use *all other predictors* to predict *M*, and *use all other predictors* to predict *A*:
 
 $$
+\begin{gather}
 M_i \sim Normal(\mu_i, \sigma) \\
 \mu_i = \alpha + \beta A_i \\
 \alpha \sim Normal(0, 0.2) \\
 \beta \sim Normal(0, 0.5) \\ 
 \sigma \sim Exponential(1)
+\end{gather}
 $$
 
 ```{r}
@@ -457,8 +472,10 @@ d$M <- standardize(log(d$mass))
 * First consider a simple regression between kilocalories and neocortex percent:
 
 $$
+\begin{gather}
 K_i \sim Normal(\mu_i, \sigma) \\
 \mu_i = \alpha + \beta_N N_i
+\end{gather}
 $$
 
 ```{r, error=TRUE}
@@ -579,12 +596,14 @@ shade(mu_PI, xseq)
 * A model with both predictors may be more useful:
 
 $$
+\begin{gather}
 K_i \sim Normal(\mu_i, \sigma) \\ 
 \mu_i = \alpha + \beta_N N_i + \beta_M M_i \\
 \alpha \sim Normal(0, 0.2) \\
 \beta_N \sim Normal(0, 0.5) \\
 \beta_M \sim Normal(0, 0.5) \\
 \sigma \sim Exponential(1)
+\end{gather}
 $$
 
 ```{r}
@@ -680,11 +699,13 @@ str(d)
 * Here, the `male` variable is an example of an *indicator variable* or *dummy variable*. 
 
 $$
+\begin{gather}
 h_i \sim Normal(\mu_i, \sigma) \\
 \mu_i = \alpha + \beta_m m_i \\
 \alpha \sim Normal(178, 20) \\
 \beta_m \sim Normal(0, 10) \\
 \sigma \sim Uniform(0, 50)
+\end{gather}
 $$
 
 * In this approach, $\beta_m$ represents the expected *difference* between males and females in height.
@@ -699,10 +720,12 @@ str(d$sex)
 * Now 1 means female and 2 means male, though no order is applied (these are just indeces for the model):
 
 $$
+\begin{gather}
 h_i \sim Normal(\mu_i, \sigma) \\
 \mu_i = \alpha_{SEX[i]} \\
 \alpha_j \sim Normal(178, 20) \\
 \sigma \sim Uniform(0, 50)
+\end{gather}
 $$
 
 * This approach creates a list of $\alpha$ parameters. This solves the problem with priors --- we can assign the same prior to each and neither category has more uncertainty than the other.

@@ -1,7 +1,8 @@
 ---
 title: "Geocentric Models"
-output: github_document
-math: true
+output: 
+  github_document:
+    math_method: null
 ---
 
 ```{r setup, include=FALSE}
@@ -85,11 +86,10 @@ rethinking::dens(log.big)
 ### 4.2.1 Re-describing the globe tossing model
 
 $$
-\begin{align*}
+\begin{gather}
 W \sim Binomial(N, p) \\
-\\
 p \sim Uniform(0, 1)\\
-\end{align*}
+\end{gather}
 $$
 
 * Both lines in the above model are *stochastic* --- that is no single variable on the left is known with certainty, but rather is described probabilistically. 
@@ -124,9 +124,11 @@ hist(d2$height)
 * Notation note: *iid* = *independent and identically distributed*. This assumption is often wrong (for example, heights amongst family members are not independent), but also often useful.
 
 $$
+\begin{gather}
 h_{i} \sim Normal(\mu, \sigma) \\
 \mu \sim Normal(178, 20) \\
 \sigma \sim Uniform(0, 50)
+\end{gather}
 $$
 
 ```{r}
@@ -281,9 +283,11 @@ dens(sample2.sigma, norm.comp = TRUE)
 * `quap()` allows us to define the formulas very similarly to the mathematical syntax:
 
 $$
+\begin{gather}
 h_{i} \sim Normal(\mu, \sigma) \\
 \mu \sim Normal(178, 20) \\
 \sigma \sim Uniform(0, 50)
+\end{gather}
 $$
 
 ```{r}
@@ -385,11 +389,13 @@ plot(d2$height ~ d2$weight)
 * For our height example:
 
 $$
+\begin{gather}
 h_i \sim Normal(\mu_i, \sigma) \\
 \mu_i = \alpha + \beta(x_i - \overline{x}) \\
 \alpha \sim Normal(178, 20) \\
 \beta \sim Normal(0, 10) \\
 \sigma \sim Uniform(0, 50)
+\end{gather}
 $$
 
 #### 4.4.1.1 Probability of the data 
@@ -471,11 +477,13 @@ for (i in 1:N) curve(a[i] + b[i]*(x - xbar),
 * An update to the model:
 
 $$
+\begin{gather}
 h_i \sim Normal(\mu_i, \sigma)\\
 \mu_i = \alpha + \beta(x_i - \overline{x}) \\
 \alpha \sim Normal(178, 20) \\
 \beta \sim LogNormal(0, 1) \\
-\sigma \sim Uniform(0, 50)
+\sigma \sim Uniform(0, 50)\
+\end{gather}
 $$
 
 ```{r}
@@ -872,11 +880,13 @@ for (i in 1:ncol(B)) lines(d2$year, B[,i])
 * Now we can plop these basis functions into a linear model to get the weight of each
 
 $$
+\begin{gather}
 D_i \sim Normal(\mu_i, \sigma) \\
 \mu_i = \alpha + \sum_{k = 1} ^{K} w_k B_{k, i} \\
 \alpha \sim Normal(100, 10) \\
 w_k \sim Normal(0, 10) \\
 \sigma \sim Exponential(1)
+\end{gather}
 $$
 
 * Some quick notes on the mathematical model:

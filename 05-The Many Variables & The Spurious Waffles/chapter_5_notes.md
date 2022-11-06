@@ -26,19 +26,15 @@ d$M <- standardize(d$Marriage)
 d$A <- standardize(d$MedianAgeMarriage)
 ```
 
-![
+$$
+\\begin{gather}
 D_i \\sim Normal(\\mu_i, \\sigma) \\\\
 \\mu_i = \\alpha + \\beta_A A_i \\\\
 \\alpha \\sim Normal(0, 0.2) \\\\
 \\beta_A \\sim Normal(0, 0.5) \\\\
 \\sigma \\sim Exponential(1)
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0AD_i%20%5Csim%20Normal%28%5Cmu_i%2C%20%5Csigma%29%20%5C%5C%0A%5Cmu_i%20%3D%20%5Calpha%20%2B%20%5Cbeta_A%20A_i%20%5C%5C%0A%5Calpha%20%5Csim%20Normal%280%2C%200.2%29%20%5C%5C%0A%5Cbeta_A%20%5Csim%20Normal%280%2C%200.5%29%20%5C%5C%0A%5Csigma%20%5Csim%20Exponential%281%29%0A "
-D_i \sim Normal(\mu_i, \sigma) \\
-\mu_i = \alpha + \beta_A A_i \\
-\alpha \sim Normal(0, 0.2) \\
-\beta_A \sim Normal(0, 0.5) \\
-\sigma \sim Exponential(1)
-")
+\\end{gather}
+$$
 
 ``` r
 # model
@@ -199,26 +195,24 @@ drawdag(dag5.2)
     causal arrow between every pair). Before we condition on anything,
     everything is associated with everything else.
 
-![
+$$
+\\begin{gather}
 D \\not\\!\\perp\\!\\!\\!\\perp A \\\\
 D \\not\\!\\perp\\!\\!\\!\\perp M \\\\
 A \\not\\!\\perp\\!\\!\\!\\perp M
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0AD%20%5Cnot%5C%21%5Cperp%5C%21%5C%21%5C%21%5Cperp%20A%20%5C%5C%0AD%20%5Cnot%5C%21%5Cperp%5C%21%5C%21%5C%21%5Cperp%20M%20%5C%5C%0AA%20%5Cnot%5C%21%5Cperp%5C%21%5C%21%5C%21%5Cperp%20M%0A "
-D \not\!\perp\!\!\!\perp A \\
-D \not\!\perp\!\!\!\perp M \\
-A \not\!\perp\!\!\!\perp M
-")
+\\end{gather}
+$$
 
 -   In `dag5.2`, *M* has no influence on *D*, though *M* and *D* are
     associated via *A*. If we condition on *A*, *D* should be
     independent of *M*, because according to this DAG, *D* and *M* have
     no direct connection.
 
-![
+$$
+\\begin{gather}
 D \\!\\perp\\!\\!\\!\\perp M \| A
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0AD%20%5C%21%5Cperp%5C%21%5C%21%5C%21%5Cperp%20M%20%7C%20A%0A "
-D \!\perp\!\!\!\perp M | A
-")
+end{gather}
+$$
 
 ``` r
 # returns nothing! because there are *no* conditional independencies (everything is connected!)
@@ -248,43 +242,36 @@ impliedConditionalIndependencies(dag5.2)
 
 -   For the divorce case:
 
-![
+$$
+\\begin{gather}
 D_i \\sim Normal(\\mu_i, \\sigma) \\\\
 \\mu_i = \\alpha + \\beta_M M_i + \\beta_A A_i \\\\
 \\alpha \\sim Normal(0, 0.2) \\\\
 \\beta_M \\sim Normal(0, 0.5) \\\\
 \\beta_A \\sim Normal(0, 0.5) \\\\
 \\sigma \\sim Exponential(1)
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0AD_i%20%5Csim%20Normal%28%5Cmu_i%2C%20%5Csigma%29%20%5C%5C%0A%5Cmu_i%20%3D%20%5Calpha%20%2B%20%5Cbeta_M%20M_i%20%2B%20%5Cbeta_A%20A_i%20%5C%5C%0A%5Calpha%20%5Csim%20Normal%280%2C%200.2%29%20%5C%5C%0A%5Cbeta_M%20%5Csim%20Normal%280%2C%200.5%29%20%5C%5C%0A%5Cbeta_A%20%5Csim%20Normal%280%2C%200.5%29%20%5C%5C%0A%5Csigma%20%5Csim%20Exponential%281%29%0A "
-D_i \sim Normal(\mu_i, \sigma) \\
-\mu_i = \alpha + \beta_M M_i + \beta_A A_i \\
-\alpha \sim Normal(0, 0.2) \\
-\beta_M \sim Normal(0, 0.5) \\
-\beta_A \sim Normal(0, 0.5) \\
-\sigma \sim Exponential(1)
-")
+\\end{gather}
+$$
 
 -   One note — the mechanical definition of the model above doesn’t map
     onto a unique causal meaning (we’ll return to that later).
 -   We can also write this in terms of compact notation / in terms of a
     design matrix:
 
-![
-\\mu_i = \\alpha + \\sum\_{j = 1}^n \\beta_j x\_{ji} \\\\
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0A%5Cmu_i%20%3D%20%5Calpha%20%2B%20%5Csum_%7Bj%20%3D%201%7D%5En%20%5Cbeta_j%20x_%7Bji%7D%20%5C%5C%0A "
-\mu_i = \alpha + \sum_{j = 1}^n \beta_j x_{ji} \\
-")
-
-![
+$$
+\\begin{gather}
+\\mu_i = \\alpha + \\sum\_{j = 1}^n \\beta_j x\_{ji} 
+\\end{gather}
+$$
+$$
+\\begin{gather}
 m = Xb
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0Am%20%3D%20Xb%0A "
-m = Xb
-")
+\\end{gather}
+$$
 
 -   In the design matrix, *m* is a vector of predicted means, *b* is a
     (column) vector of parameters, and *X* is a matrix with an extra
-    first column for the intercept
-    (![\\alpha](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Calpha "\alpha")).
+    first column for the intercept (*α*).
 -   Matrix multiplication can be performed in R with the `%*%` operator.
 
 ### 5.1.4 Approximating the posterior
@@ -324,8 +311,7 @@ coeftab_plot(coeftab(m5.1, m5.2, m5.3), pars = c("bA", "bM"))
 -   *Once we know the median age at marriage for a State, there is
     little or no additional predictive power in also knowing the rate of
     marriage in that State!*
--   Using DAG notation,
-    ![D \\!\\perp\\!\\!\\!\\perp M \| A](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;D%20%5C%21%5Cperp%5C%21%5C%21%5C%21%5Cperp%20M%20%7C%20A "D \!\perp\!\!\!\perp M | A")
+-   Using DAG notation, *D* ⊥    ⊥ *M*\|*A*
 -   Since the first DAG did not imply this result, it is out!
 -   Every DAG implies a simulation, and such simulations can help to
     design models to correctly infer relationships among variables:
@@ -347,19 +333,15 @@ coeftab_plot(coeftab(m5.1, m5.2, m5.3), pars = c("bA", "bM"))
 -   For example, use *all other predictors* to predict *M*, and *use all
     other predictors* to predict *A*:
 
-![
+$$
+\\begin{gather}
 M_i \\sim Normal(\\mu_i, \\sigma) \\\\
 \\mu_i = \\alpha + \\beta A_i \\\\
 \\alpha \\sim Normal(0, 0.2) \\\\
 \\beta \\sim Normal(0, 0.5) \\\\ 
 \\sigma \\sim Exponential(1)
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0AM_i%20%5Csim%20Normal%28%5Cmu_i%2C%20%5Csigma%29%20%5C%5C%0A%5Cmu_i%20%3D%20%5Calpha%20%2B%20%5Cbeta%20A_i%20%5C%5C%0A%5Calpha%20%5Csim%20Normal%280%2C%200.2%29%20%5C%5C%0A%5Cbeta%20%5Csim%20Normal%280%2C%200.5%29%20%5C%5C%20%0A%5Csigma%20%5Csim%20Exponential%281%29%0A "
-M_i \sim Normal(\mu_i, \sigma) \\
-\mu_i = \alpha + \beta A_i \\
-\alpha \sim Normal(0, 0.2) \\
-\beta \sim Normal(0, 0.5) \\ 
-\sigma \sim Exponential(1)
-")
+\\end{gather}
+$$
 
 ``` r
 # model marriage rate based on median age at marriage
@@ -602,13 +584,12 @@ d$M <- standardize(log(d$mass))
 -   First consider a simple regression between kilocalories and
     neocortex percent:
 
-![
+$$
+\\begin{gather}
 K_i \\sim Normal(\\mu_i, \\sigma) \\\\
 \\mu_i = \\alpha + \\beta_N N_i
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0AK_i%20%5Csim%20Normal%28%5Cmu_i%2C%20%5Csigma%29%20%5C%5C%0A%5Cmu_i%20%3D%20%5Calpha%20%2B%20%5Cbeta_N%20N_i%0A "
-K_i \sim Normal(\mu_i, \sigma) \\
-\mu_i = \alpha + \beta_N N_i
-")
+\\end{gather}
+$$
 
 ``` r
 # vague priors
@@ -760,21 +741,16 @@ shade(mu_PI, xseq)
 
 -   A model with both predictors may be more useful:
 
-![
+$$
+\\begin{gather}
 K_i \\sim Normal(\\mu_i, \\sigma) \\\\ 
 \\mu_i = \\alpha + \\beta_N N_i + \\beta_M M_i \\\\
 \\alpha \\sim Normal(0, 0.2) \\\\
 \\beta_N \\sim Normal(0, 0.5) \\\\
 \\beta_M \\sim Normal(0, 0.5) \\\\
 \\sigma \\sim Exponential(1)
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0AK_i%20%5Csim%20Normal%28%5Cmu_i%2C%20%5Csigma%29%20%5C%5C%20%0A%5Cmu_i%20%3D%20%5Calpha%20%2B%20%5Cbeta_N%20N_i%20%2B%20%5Cbeta_M%20M_i%20%5C%5C%0A%5Calpha%20%5Csim%20Normal%280%2C%200.2%29%20%5C%5C%0A%5Cbeta_N%20%5Csim%20Normal%280%2C%200.5%29%20%5C%5C%0A%5Cbeta_M%20%5Csim%20Normal%280%2C%200.5%29%20%5C%5C%0A%5Csigma%20%5Csim%20Exponential%281%29%0A "
-K_i \sim Normal(\mu_i, \sigma) \\ 
-\mu_i = \alpha + \beta_N N_i + \beta_M M_i \\
-\alpha \sim Normal(0, 0.2) \\
-\beta_N \sim Normal(0, 0.5) \\
-\beta_M \sim Normal(0, 0.5) \\
-\sigma \sim Exponential(1)
-")
+\\end{gather}
+$$
 
 ``` r
 m5.7 <-
@@ -899,31 +875,21 @@ str(d)
 -   Here, the `male` variable is an example of an *indicator variable*
     or *dummy variable*.
 
-![
+$$
+\\begin{gather}
 h_i \\sim Normal(\\mu_i, \\sigma) \\\\
 \\mu_i = \\alpha + \\beta_m m_i \\\\
 \\alpha \\sim Normal(178, 20) \\\\
 \\beta_m \\sim Normal(0, 10) \\\\
 \\sigma \\sim Uniform(0, 50)
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0Ah_i%20%5Csim%20Normal%28%5Cmu_i%2C%20%5Csigma%29%20%5C%5C%0A%5Cmu_i%20%3D%20%5Calpha%20%2B%20%5Cbeta_m%20m_i%20%5C%5C%0A%5Calpha%20%5Csim%20Normal%28178%2C%2020%29%20%5C%5C%0A%5Cbeta_m%20%5Csim%20Normal%280%2C%2010%29%20%5C%5C%0A%5Csigma%20%5Csim%20Uniform%280%2C%2050%29%0A "
-h_i \sim Normal(\mu_i, \sigma) \\
-\mu_i = \alpha + \beta_m m_i \\
-\alpha \sim Normal(178, 20) \\
-\beta_m \sim Normal(0, 10) \\
-\sigma \sim Uniform(0, 50)
-")
+\\end{gather}
+$$
 
--   In this approach,
-    ![\\beta_m](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cbeta_m "\beta_m")
-    represents the expected *difference* between males and females in
-    height.
+-   In this approach, *β*<sub>*m*</sub> represents the expected
+    *difference* between males and females in height.
 -   This also inherently assumes there is more incertainty in one of the
-    categories — *male* in this case includes uncertainty in
-    ![\\alpha](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Calpha "\alpha")
-    and
-    ![\\beta_m](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Cbeta_m "\beta_m")
-    whereas *female* just includes uncertainty in
-    ![\\alpha](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Calpha "\alpha").
+    categories — *male* in this case includes uncertainty in *α* and
+    *β*<sub>*m*</sub> whereas *female* just includes uncertainty in *α*.
 -   An alternative is to use *index variables*:
 
 ``` r
@@ -936,23 +902,18 @@ str(d$sex)
 -   Now 1 means female and 2 means male, though no order is applied
     (these are just indeces for the model):
 
-![
+$$
+\\begin{gather}
 h_i \\sim Normal(\\mu_i, \\sigma) \\\\
 \\mu_i = \\alpha\_{SEX\[i\]} \\\\
 \\alpha_j \\sim Normal(178, 20) \\\\
 \\sigma \\sim Uniform(0, 50)
-](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%0Ah_i%20%5Csim%20Normal%28%5Cmu_i%2C%20%5Csigma%29%20%5C%5C%0A%5Cmu_i%20%3D%20%5Calpha_%7BSEX%5Bi%5D%7D%20%5C%5C%0A%5Calpha_j%20%5Csim%20Normal%28178%2C%2020%29%20%5C%5C%0A%5Csigma%20%5Csim%20Uniform%280%2C%2050%29%0A "
-h_i \sim Normal(\mu_i, \sigma) \\
-\mu_i = \alpha_{SEX[i]} \\
-\alpha_j \sim Normal(178, 20) \\
-\sigma \sim Uniform(0, 50)
-")
+\\end{gather}
+$$
 
--   This approach creates a list of
-    ![\\alpha](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%5Calpha "\alpha")
-    parameters. This solves the problem with priors — we can assign the
-    same prior to each and neither category has more uncertainty than
-    the other.
+-   This approach creates a list of *α* parameters. This solves the
+    problem with priors — we can assign the same prior to each and
+    neither category has more uncertainty than the other.
 
 ``` r
 m5.8 <-

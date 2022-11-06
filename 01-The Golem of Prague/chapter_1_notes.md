@@ -18,7 +18,7 @@ The Golem of Prague
 ### 1.2.1 Hypotheses are not models
 
 -   All models are wrong, but some are useful (classic)
--   Statistical models do not express causality, but instead expres
+-   Statistical models do not express causality, but instead express
     *associations among variables*
 
 ### 1.2.2 Measurement Matters

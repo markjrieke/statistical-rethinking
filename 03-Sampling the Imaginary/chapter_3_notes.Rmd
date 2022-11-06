@@ -1,7 +1,8 @@
 ---
 title: "Sampling the Imaginary"
-output: github_document
-math: true
+output: 
+  github_document:
+    math_method: null
 ---
 
 ```{r setup, include=FALSE}
@@ -16,7 +17,7 @@ knitr::opts_chunk$set(
 ```
 
 * Classic example of false postives (in this case, detecting vampirism): correct 95% of the time, but with a false positive rate of 1%. Finally, vampires are rare --- about 0.1% of the population. 
-* P(povitive test result | vampire) = 0.95
+* P(positive test result | vampire) = 0.95
 * P(positive test result | mortal) = 0.01
 * P(vampire) = 0.001
 * With a positive test result --- what is the probability that person is a vampire?
