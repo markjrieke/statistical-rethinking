@@ -1,0 +1,79 @@
+---
+title: "Ulysses' Compass"
+output: 
+  github_document:
+    math_method: null
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  dpi = 500,
+  fig.width = 9,
+  fig.height = 6
+)
+```
+
+* The modeler's *Ockham's Razor*: *models with fewer assumptions are to be preferred*. 
+* What if we want to evaluate the tradeoff between simplicity and accuracy?
+* There are two beasts to deal with: *overfitting* and *underfitting*
+* Two common approaches to navigating these two problems: utilizing a *regularizing prior* or a scoring device such as an *information criteria* or *cross-validation*. 
+
+## 7.1 The problem with parameters
+
+* Sometimes we don't care about a causal model and just want to make good predictions. 
+* This isn't an excuse for just tossing everything into the model with no regard!
+* Adding a bunch of variables to a model will always increase $R^2$ but may actually make *out-of-sample* prediction *worse!*
+* A model that is too simple, on the other hand, may underfit both the training and out-of-sample data.
+
+### 7.1.1 More parameters (almost) always improve fit
+
+* *Overfitting* occurs when a model learns too much from the sample. 
+* Overfitting also happens automatically!
+
+```{r}
+# let's create a dataset to explore overfitting
+sppnames <- c("afarensis", "africanus", "habilis", "boisei", "rudolfensis", "ergaster", "sapiens")
+brainvolcc <- c(438, 452, 612, 521, 752, 871, 1350)
+masskg <- c(37.0, 35.5, 34.5, 41.5, 55.5, 61.0, 53.5)
+d <- data.frame(species = sppnames, brain = brainvolcc, mass = masskg)
+
+plot(brain ~ mass, data = d)
+```
+
+```{r}
+d$mass_std <- (d$mass - mean(d$mass))/sd(d$mass)
+d$brain_std <- d$brain/max(d$brain)
+```
+
+* A simple model relating brain volume to body mass is shown below.
+* A quick note --- these priors are very wide, particularly $\beta$
+
+$$
+\begin{gather}
+b_i \sim Normal(\mu_i, \sigma) \\
+\mu_i = \alpha + \beta m_i \\
+\alpha \sim Normal(0.5, 1) \\
+\beta \sim Normal(0, 10) \\
+\sigma \sim Lognormal(0, 1)
+\end{gather}
+$$
+
+```{r}
+library(rethinking)
+m7.1 <-
+  quap(
+    alist(brain_std ~ dnorm(mu, exp(log_sigma)),
+          mu <- a + b * mass_std,
+          a ~ dnorm(0.5, 1),
+          b ~ dnorm(0, 10),
+          log_sigma ~ dnorm(0, 1)),
+    data = d
+  )
+```
+
+
+
+
