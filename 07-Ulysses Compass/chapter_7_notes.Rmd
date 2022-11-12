@@ -214,5 +214,152 @@ brain_loo_plot(m7.6)
 
 ## 7.2 Entropy and accuracy
 
+* The first step to navigating the bias-variance tradeoff is to pick a criterion of model performance (henceforth, the *target* in this section).
+* First, establish a measurement scale for the distance from perfect accuracy.
+* Second, establish *deviance* as an approximation of relative distance from perfect accuracy.
+* Finally, establish that the only deviance we care about is the out-of-sample deviance. 
+
+### 7.2.1 Firing the weatherperson
+
+* Accuracy depends on the definition of a target! 
+* There is no universally best target --- there are two major dimensions to worry about:
+  1. *Cost-benefit analysis*: How much does it cost when we're wrong/how much do we win when we're right?
+  2. *Accuracy in context*: Some predictions are inherently easier than others, so we need to judge accuracy in a way that accounts for how much a model could possibly improve.
+* Let's imagine two weather forecasters predicting the probability of rain over the course of 10 days. 
+* It rains the first three days, then doesn't rain in the subsequent seven.
+* Weatherperson A predicts the following probabilities of rain: 100%, 100%, 100%, 60%, 60%, 60%, 60%, 60%, 60%, 60%.
+* Weatherperson B predicts the following: 0%, 0%, 0%, 0%, 0%, 0%, 0%, 0%, 0%, 0%.
+* If *hit rate* is the average chance of a correct prediction, the weatherperson A gets a score of $3 \times 1 + 7 \times 0.4 = 5.8$ and weatherperson B gets a score of $3 \times 0 + 7 \times 1 = 7$. 
+* By hit rate alone, weatherperson B is the better forecaster. But intuitively, we wouldn't want this person as our weatherperson!
+
+#### 7.2.1.1 Costs and benefits
+
+* It's easy to define another cost/benefit metric that ends up in weatherperson A's favor. 
+* If, for example, getting rained on "costs" $-5$ happiness points and carrying an umbrella "costs" $-1$ happiness points (and the probability of carrying an umbrella is equal to the probability of rain), then you get the following:
+* Weatherperson A's score is $3 \times (-1) + 7 \times (-0.6) = -7.2$ and Weatherperson B's score is $3 \times (-5) + 7 \times 0 = -15$.
+* By this metric, Weatherperson B provides a poor forecast!
+
+#### 7.2.1.2 Measuring accuracy
+
+* There's still ambiguity about which measure of accuracy to adopt.
+* In the above scenario, there's nothing special about the hit rate. 
+* If we consider the two forecasts above and the *joint probability* of correctly predicting the sequence of days, weatherperson A's chances are: $1^3 \times 4^7 \approx 0.005$ whereas weatherperson B's chances are $0^3 \times 1^7 = 0$.
+* Weatherperson B is more accurate *on average*, but has a terrible *joint* probability of being correct. 
+* We'll see this measure of accuracy in literature as the *log-scoring rule*. 
+
+### 7.2.2 Information and uncertainty
+
+* So we want to use the log probability of the data to score the accuracy of competing models --- but how do we measure the distance from a perfect prediction?
+* The solution comes from the field of *information theory* and the basic insight to ask: *How much is our uncertainty reduced by learning an outcome?*
+* *Information*: The reduction in uncertainty when we learn an outcome. 
+* To use this definition, we need a way to quantify the uncertainty inherent in a probability distribution. 
+* There are mayn possible ways to measure uncertainty, but the most common way begins by naming a few properties a measure of uncertainty should possess:
+  1. The measure of uncertainty should be continuous. 
+  2. The measure of uncertainty should increase as the number of possible events increases. 
+  3. The measure of uncertainty should be additive. 
+* There is one function that satisfies these conditions: *information entropy*:
+
+$$
+\begin{gather}
+H(p) = - E \; log(p_i) = - \sum_{i = 1}^n \; p_i \; log(p_i)
+\end{gather}
+$$
+
+* In plainer terms, *the uncertainty contained in a probability distribution is the average log-probability of an event.*
+* Suppose the true probabilities of rain and shine are $p_{rain} = 0.3$ and $p_{shine} = 0.7$. $H(p)$ would evaluate to:
+
+$$
+H(p) = - (p_{rain} \ log(p_{rain}) \ + \ p_{shine} \ log(p_{shine})) \approx 0.61
+$$
+
+```{r}
+p <- c(0.3, 0.7)
+-sum(p * log(p))
+```
+
+* If instead we live in Abu Dhabi and the probabilities of rain/shine are 0.01 and 0.99, respectively, then the entropy would be:
+
+```{r}
+p <- c(0.01, 0.99)
+-sum(p * log(p))
+```
+
+### 7.2.3 From entropy to accuracy
+
+* Now we can say how hard it is to hit the target --- how can we use information entropy to say how far a model is from the target?
+* *Divergence*: The additional uncertainty introduced by using probabilities from one distribution to describe another distribution.
+* If we know the true distribution for the probability of rain/shine is 0.3/0.7, but we instead believe that these events happen with probabilities (q) 0.25/0.75, then the *Kullback-Leibler divergence* is:
+
+$$
+\begin{gather}
+D_{KL} (p, q) = \sum_{i = 1}^n \ p_i \ (log(p_i) - log(q_i)) = \sum_{i = 1}^n p_i \ log(\frac{p_i}{q_i})
+\end{gather}
+$$
+
+* In plainer language, *divergence is the average difference in log probability between the target (p) and the model (q).* 
+* When $p = q$, the divergence is 0.
+* As q becomes more accurate, the divergence will shrink. So if we have a pair of candidate distributions, then the candidate that minimizes the divergence will be closest to the target. 
+* ^ we can use this fact to compare the accuracy of models!
+
+### 7.2.4 Estimating divergence
+
+* The point of all this discussion about entropy is to establish two things (the first is established, the second remains):
+  1. How to measure the distance of a model from our target.
+  2. How to estimate the divergence in real statistical modeling tasks. 
+* Thus far, we've assumed we've known the true distribution, *p*, but in reality we won't know this!
+* But there's a sneaky way out of this predicament --- if we compare two models (*q* and *r*) and their divergences, the *p* term will cancel each other out!
+* So while we don't know where *p* is, we can estimate how far apart *q* and *r* are and determine which is closer to the target. 
+* So in practice, if we sum the log-probability of a model *q*, we get the *log-probability* score:
+
+$$
+\begin{gather}
+S(q) = \sum_{i = 1}^n \ log(q_i)
+\end{gather}
+$$
+
+* This is the gold standard way to compare the predictive accuracy of different models.
+* In a Bayesian model, we have to use the entire posterior distribution. `rethinking::lppd()` estimates the *log-pointwise-predictive-density* for `quap()` models. 
+
+```{r}
+set.seed(1)
+lppd(m7.1, n = 1e4)
+```
+
+* Some overthinking, for some data *y* and posterior distribution $\theta$, the log-pointwise-predictive-density is:
+
+$$
+\begin{gather}
+lppd(y, \theta) = \sum_i \ log \frac{1}{S} \ \sum_s p (y_i |\theta_s)
+\end{gather}
+$$
+
+* *S* is the number of samples and $\theta_s$ is the *s*-th set of sampled parameter values for the posterior distribution. In code:
+
+```{r}
+set.seed(1)
+
+# this gives the same values as rethinking::lppd() above
+logprob <- sim(m7.1, ll = TRUE, n = 1e4)
+n <- ncol(logprob)
+ns <- nrow(logprob)
+f <- function(i) log_sum_exp(logprob[,i]) - log(ns)
+sapply(1:n, f)
+```
+
+### 7.2.5 Scoring the right data
+
+* The log-probability score is a principled way to measure distance from the target, but it has the same flaw as $R^2$ --- it always improves as models get more complex. 
+* For example, computing the log-probability score on the previous models shows that the ridiculuous polynomial models have the best score:
+
+```{r}
+set.seed(1)
+sapply(list(m7.1, m7.2, m7.3, m7.4, m7.5, m7.6),
+       function(m) sum(lppd(m)))
+```
+
+* It's not the score on *training* data that interests us, it's the score on *test data* that we ought to care about!
+* See figure 7.6 on page 212 for an example --- adding parameters improves both in and out-of-sample data to a point, then adding more parameters continues to improve in-sample performance while out-of-sample performance gets worse!
+
+
 
 
