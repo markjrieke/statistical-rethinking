@@ -84,7 +84,7 @@ outcome_var <- var2(d$brain_std)
 1 - resid_var/outcome_var
 ```
 
-    ## [1] 0.4770213
+    ## [1] 0.4774589
 
 ``` r
 # function for calculating r^2 for future models
@@ -432,7 +432,7 @@ set.seed(1)
 lppd(m7.1, n = 1e4)
 ```
 
-    ## [1]  0.6109594  0.6486424  0.5421561  0.6232093  0.4573538  0.4231109 -0.8376971
+    ## [1]  0.6098668  0.6483437  0.5496091  0.6234934  0.4648142  0.4347603 -0.8444629
 
 -   Some overthinking, for some data *y* and posterior distribution *θ*,
     the log-pointwise-predictive-density is:
@@ -457,7 +457,7 @@ f <- function(i) log_sum_exp(logprob[,i]) - log(ns)
 sapply(1:n, f)
 ```
 
-    ## [1]  0.6109594  0.6486424  0.5421561  0.6232093  0.4573538  0.4231109 -0.8376971
+    ## [1]  0.6098668  0.6483437  0.5496091  0.6234934  0.4648142  0.4347603 -0.8444629
 
 ### 7.2.5 Scoring the right data
 
@@ -474,7 +474,7 @@ sapply(list(m7.1, m7.2, m7.3, m7.4, m7.5, m7.6),
        function(m) sum(lppd(m)))
 ```
 
-    ## [1]  2.417273  2.566165  3.707343  5.333750 14.090061 39.445390
+    ## [1]  2.490390  2.566165  3.707343  5.333750 14.090061 39.445390
 
 -   It’s not the score on *training* data that interests us, it’s the
     score on *test data* that we ought to care about!
@@ -482,3 +482,302 @@ sapply(list(m7.1, m7.2, m7.3, m7.4, m7.5, m7.6),
     improves both in and out-of-sample data to a point, then adding more
     parameters continues to improve in-sample performance while
     out-of-sample performance gets worse!
+
+## 7.3 Golem taming: regularization
+
+-   The root of overfitting is a model’s tendency to get overexcited by
+    the training sample.
+-   A *regularizing prior* can help reduce overfitting while still
+    allowing the model to learn from the training sample.
+-   If a prior regularizes too much, the model may underfit, so the
+    problem turns to one of tuning.
+-   Consider this model with very diffuse priors:
+
+$$
+\\begin{gather}
+y_i \\sim Normal(\\mu_i, \\sigma) \\\\
+\\mu_i = \\alpha + \\beta x_i \\\\
+\\alpha \\sim Normal(0, 100) \\\\
+\\beta \\sim Normal(0, 1) \\\\
+\\sigma \\sim Exponential(1)
+\\end{gather}
+$$
+
+-   Here (assuming that the predictors are standardized so that the mean
+    is 0 and standard deviation is 1), the prior on *α* is basically
+    flat & has no practical effect on inference.
+-   The prior on *β* is narrower and meant to regularize — this golem is
+    skeptical of values above 2 and below -2.
+-   See figure 7.8 on page 216 for examples of varying levels of priors
+    and the effect on out of sample prediction.
+-   When there is a lot of data, regularizing priors have less of an
+    impact.
+-   Regularization (from the machine learning literature: ridge, lasso,
+    and elastic-net) can be understood from both Bayesian and
+    non-Bayesian standpoints.
+
+## 7.4 Predicting predictive accuracy
+
+-   Two families of strategies for navigating between overfitting and
+    underfitting:
+    1.  *Cross-validation*
+    2.  *Information criteria*
+
+### 7.4.1 Cross-validation
+
+-   Basic strategy of cross validation: leave out a small chunk of
+    observations & evaluating the model on these.
+
+-   Generally divide the sample into a discrete number of chunks (folds)
+    (k-fold cross validation).
+
+-   *How many folds to use?* is an understudied question — the maximum
+    number of folds results in *leave-one-out cross-validation* (LOO).
+
+-   This is the default in `rethinking::cv_quap()`.
+
+-   LOO, however, can be incredibly time consuming. Luckily, there are
+    clever ways to approximate cross-validation without actually
+    re-running the model over and over again.
+
+-   One approach is to use the “importance” of each observation in the
+    posterior (i.e., if we remove an import observation, the posterior
+    changes more).
+
+-   This approximation is called *Pareto-smoothed importance sampling
+    cross-validation* (PSIS) and can be computed with
+    `rethinking::PSIS()`.
+
+-   One feature of PSIS is that it self notes that particular
+    observations with very high weights could make it’s own PSIS score
+    inaccurate.
+
+-   Cross-validation estimates the out-of-sample LPPD. If you have *N*
+    observations and fit the model *N* times (each time dropping a
+    single observation *y*<sub>*i*</sub>), then the out-of-sample LPPD
+    is the sum of the average accuracy for each omitted
+    *y*<sub>*i*</sub>:
+
+$$
+\\begin{gather}
+lppd\_{CV} = \\sum\_{i = 1}^N \\ \\frac{1}{S} \\ \\sum\_{s = 1}^S \\ log \\ Pr(y_i \| \\theta\_{-i, s})
+\\end{gather}
+$$
+
+-   Here, *s* indexes samples from a Markov chain and
+    *θ*<sub>−*i*, *s*</sub> is the *s*-th sample from the posterior
+    distribution computed for observations omitting *y*<sub>*i*</sub>.
+-   Importance sampling replaces the computation of *N* posterior
+    distributions by using an estimate of the importance of each *i* to
+    the posterior distribution.
+-   So we re-weight each sample *s* by the inverse of the probability of
+    the omitted observation:
+
+$$
+\\begin{gather}
+r(\\theta_s) = \\frac{1}{p(y_i \| \\theta_s)}
+\\end{gather}
+$$
+
+-   This gives the importance sampling estimate of out-of-sample LPPD:
+
+$$
+\\begin{gather}
+lppd\_{IS} = \\sum\_{i = 1}^N \\ log \\ \\frac{\\sum\_{s = 1}^S r(\\theta_s) \\ p(y_i \| \\theta_s)}{\\sum\_{s = 1}^S \\ r(\\theta_s)}
+\\end{gather}
+$$
+
+-   The next step is to incorporate Pareto smoothing. This is because if
+    any *r*(*θ*<sub>*s*</sub>) is too large, it can ruin the LPPD
+    estimate by dominating it.
+-   PSIS exploits the fact that the distribution of weights ought to
+    follow a *Pareto distribution*:
+
+$$
+\\begin{gather}
+p(r\|u, \\sigma, k) = \\sigma^{-1} (1 + k(r - u) \\sigma^{-1})^{-\\frac{1}{k} - 1}
+\\end{gather}
+$$
+
+-   Where *u*, *σ*, and *k* correspond to the *location*, *scale*, and
+    *shape* parameters.
+-   For each observation *y*<sub>*i*</sub>, the largest weights are used
+    to estimate a Pareto distribution then smoothed using that
+    distribution.
+-   Larger values of *k* indicate larger variance — in
+    theory/simulation, PSIS weights perform well as long as *k* \< 0.7.
+
+### 7.4.2 Information criteria
+
+-   The second major approach is to use an *information criteria* to
+    compute an expected score out-of-sample.
+-   For ordinary linear regressions with flat priors, the expected
+    overfitting penalty is about 2x the number of parameters. This is
+    the phenomenon behind information criteria.
+-   The best known criterion is *Akaike information criterion*, or
+    *AIC*.
+
+$$
+\\begin{gather}
+AIC = D\_{train} + 2p = -2 \\ lppd + 2p
+\\end{gather}
+$$
+
+-   Where *p* is the number of free parameters in the posterior
+    distribution (2 is just there for scaling).
+-   While this is the best known, AIC is mostly just of historical
+    interest now, since it’s only reliable when:
+    1.  The priors are flat or overwhelmed by the likelihood.
+    2.  The posterior distribution is approximately multivariate
+        Gaussian.
+    3.  The sample size *N* is much greater than the number of
+        parameters *k*.
+-   A more general criterion, the *deviance information criterion*
+    (DIC), can handle informative priors, but still assumes the
+    posterior is multivariate Gaussian and that *N \>\> k*.
+-   Even more general than that is the *widely applicable information
+    criterion* (WAIC), which makes no assumption about the shape of the
+    posterior.
+-   In large samples, WAIC converges on the cross-validation
+    approximation. In small samples, it can disagree, since it’s not
+    trying to approximate the cV score, but rather guess the
+    out-of-sample Kullback-Leiber (KL) divergence (in large samples,
+    these tend to be the same).
+-   WAIC is calculated simply as the LPPD from earlier plus a penalty
+    proportional to the variance in posterior predictions:
+
+$$
+\\begin{gather}
+WAIC(y, \\Theta) = -2(lppd - \\sum_i \\ var\_{\\theta} \\ log \\ p(y_i\|\\theta))
+\\end{gather}
+$$
+
+-   The penalty term (everything after the sum) means, “compute the
+    variance in log-probabilities for each observation *i*, then sum up
+    these variances to get the total penalty.”
+-   Because of the historical ties to AIC, the penalty term in WAIC is
+    sometimes called the *effective number of parameters*, labeled
+    *p*<sub>*W**A**I**C*</sub>. This makes historical sense, but not
+    much mathematical sense.
+-   `rethinking::WAIC()` will compute WAIC for a model fit with
+    `quap()`, `ulam()`, or using `{rstan}`.
+-   Like PSIS, WAIC is *pointwise* (computed for each point in the
+    data).
+-   To see how WAIC actually works, let’s do a lil bit of overthinking
+    with a simple model:
+
+``` r
+# predict a car's stopping distance based on its top speed
+data("cars")
+m <-
+  quap(
+    alist(dist ~ dnorm(mu, sigma),
+          mu <- a + b*speed,
+          a ~ dnorm(0, 100),
+          b ~ dnorm(0, 10),
+          sigma ~ dexp(1)),
+    data = cars
+  )
+
+# get 1000 draws from the posterior 
+set.seed(94)
+post <- extract.samples(m, n = 1000)
+
+# compute the log-likelihood of each observation i at each sample s from the posterior
+n_samples <- 1000
+logprob <-
+  sapply(1:n_samples,
+         function(s) {
+           mu <- post$a[s] + post$b[s] * cars$speed
+           dnorm(cars$dist, mu, post$sigma[s], log = TRUE)
+         })
+
+# logprob is a 50x1000 matrix of log-likelihoods
+# observations are rows and samples are columns
+
+# calculate lppd for each observation
+n_cases <- nrow(cars)
+lppd <- sapply(1:n_cases, function(i) log_sum_exp(logprob[i,] - log(n_samples)))
+
+# sum(lppd) gives lppd as defined in 7.2.4
+sum(lppd)
+```
+
+    ## [1] -206.8787
+
+``` r
+sum(lppd(m))
+```
+
+    ## [1] -206.8781
+
+``` r
+# the penalty term:
+pWAIC <- sapply(1:n_cases, function(i) var(logprob[i,]))
+
+# finally, WAIC:
+-2 * (sum(lppd) - sum(pWAIC))
+```
+
+    ## [1] 423.3188
+
+``` r
+# matches WAIC() (with some variability):
+WAIC(m)
+```
+
+    ##     WAIC      lppd  penalty  std_err
+    ## 1 422.82 -206.8799 4.530137 17.27583
+
+### 7.4.3 Comparing CV, PSIS, and WAIC
+
+-   Honestly, just recommend rereading section 7.4.3 on page 223 in
+    conjunction with referencing figure 7.9 on page 224.
+-   PSIS and WAIC perform very similarly in the context of ordinary
+    linear models.
+-   Where there are important differences, they lie in other model types
+    where the posterior is not approximately gaussian or in the presence
+    of observations that strongly influence the posterior.
+-   CV and PSIS have higher variance as estimators of KL divergence,
+    while WAIC has greater bias.
+-   We should expect that each is slightly better in different contexts,
+    however, in practice any advantage may be much smaller than the
+    expected error.
+-   One recommendation is to compute both WAIC and PSIS — if there are
+    large differences, this implies that one or both criteria are
+    unreliable.
+-   PSIS has the unique advantage in that it warns the user when it is
+    unreliable (via *k* values).
+-   Some rethinking: these criteria are just scores for models, and
+    statistics is no substitute for science (see the rethinking box on
+    224/225).
+
+## 7.5 Model comparison
+
+-   Some review — when there are several plausible models, how should we
+    compare the accuracy?
+-   Following the fit to the sample is no good, because it will always
+    favor more complex models.
+-   Information divergence is the right measure of accuracy, but it will
+    always favor more complex models.
+-   We need to evaluate the models on out-of-sample data.
+-   Flat priors produce bad predictions — regularizing priors reduce the
+    fit to the sample but improve predictive accuracy.
+-   We can get a useful guess of predictive accuracy with the criteria
+    of CV, PSIS, and WAIC.
+-   Regularizing priors and CV/PSIS/WAIC are complementary tools.
+-   Using these tools is much easier than understanding them — which
+    makes them incredibly useful but potentially dangerous.
+-   A common use of CV/information criteria is to perform *model
+    selection*, which refers to tossing out all but the model with the
+    lowest criterion value.
+-   You should never do this! It discards information about the relative
+    model accuracy.
+-   Why? Sometimes the differences are large and sometimes they are
+    small. Additionally, scores say nothing about the *causality* of
+    each model.
+-   Maximizing the expected predictive accuracy is not the same as
+    inferring causation; highly confounded models can still make good
+    predictions but won’t tell us about the consequences of an
+    intervention. We need to be clear about the goal of the model.
+-   Instead of model selection, we’ll focus on *model comparison*.
