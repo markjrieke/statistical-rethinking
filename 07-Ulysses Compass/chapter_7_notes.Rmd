@@ -547,3 +547,10 @@ WAIC(m)
 * Maximizing the expected predictive accuracy is not the same as inferring causation; highly confounded models can still make good predictions but won't tell us about the consequences of an intervention. We need to be clear about the goal of the model. 
 * Instead of model selection, we'll focus on *model comparison*. 
 
+### 7.5.1 Model mis-selection
+
+* A good PSIS or WAIC score does not in general indicate a good causal model!
+* Considering the plant growing example from chapter 6, WAIC will give the best score to the model that accidentally includes a *post-treatment* variable!
+* This is because WAIC's goal is to measure predictive accuracy
+* Since we simulated the data, we can see from the plot on 228 that including the treatment doesn't make predictions way better. This is because a variable can be causally related to the outcome, but have little relative impact on it.
+

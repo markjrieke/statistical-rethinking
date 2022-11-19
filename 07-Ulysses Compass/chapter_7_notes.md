@@ -432,7 +432,7 @@ set.seed(1)
 lppd(m7.1, n = 1e4)
 ```
 
-    ## [1]  0.6098668  0.6483437  0.5496091  0.6234934  0.4648142  0.4347603 -0.8444629
+    ## [1]  0.6098668  0.6483438  0.5496091  0.6234934  0.4648143  0.4347604 -0.8444631
 
 -   Some overthinking, for some data *y* and posterior distribution *θ*,
     the log-pointwise-predictive-density is:
@@ -457,7 +457,7 @@ f <- function(i) log_sum_exp(logprob[,i]) - log(ns)
 sapply(1:n, f)
 ```
 
-    ## [1]  0.6098668  0.6483437  0.5496091  0.6234934  0.4648142  0.4347603 -0.8444629
+    ## [1]  0.6098668  0.6483438  0.5496091  0.6234934  0.4648143  0.4347604 -0.8444631
 
 ### 7.2.5 Scoring the right data
 
@@ -781,3 +781,16 @@ WAIC(m)
     predictions but won’t tell us about the consequences of an
     intervention. We need to be clear about the goal of the model.
 -   Instead of model selection, we’ll focus on *model comparison*.
+
+### 7.5.1 Model mis-selection
+
+-   A good PSIS or WAIC score does not in general indicate a good causal
+    model!
+-   Considering the plant growing example from chapter 6, WAIC will give
+    the best score to the model that accidentally includes a
+    *post-treatment* variable!
+-   This is because WAIC’s goal is to measure predictive accuracy
+-   Since we simulated the data, we can see from the plot on 228 that
+    including the treatment doesn’t make predictions way better. This is
+    because a variable can be causally related to the outcome, but have
+    little relative impact on it.
