@@ -353,7 +353,11 @@ $$
     *p*<sub>*r**a**i**n*</sub> = 0.3 and
     *p*<sub>*s**h**i**n**e*</sub> = 0.7. *H*(*p*) would evaluate to:
 
-*H*(*p*) =  − (*p*<sub>*r**a**i**n*</sub> *l**o**g*(*p*<sub>*r**a**i**n*</sub>) + *p*<sub>*s**h**i**n**e*</sub> *l**o**g*(*p*<sub>*s**h**i**n**e*</sub>)) ≈ 0.61
+$$
+\\begin{gather}
+H(p) = - (p\_{rain} \\ log(p\_{rain}) \\ + \\ p\_{shine} \\ log(p\_{shine})) \\approx 0.61
+\\end{gather}
+$$
 
 ``` r
 p <- c(0.3, 0.7)
@@ -432,7 +436,7 @@ set.seed(1)
 lppd(m7.1, n = 1e4)
 ```
 
-    ## [1]  0.6098668  0.6483438  0.5496091  0.6234934  0.4648143  0.4347604 -0.8444631
+    ## [1]  0.6098669  0.6483439  0.5496092  0.6234935  0.4648143  0.4347605 -0.8444633
 
 -   Some overthinking, for some data *y* and posterior distribution *θ*,
     the log-pointwise-predictive-density is:
@@ -457,7 +461,7 @@ f <- function(i) log_sum_exp(logprob[,i]) - log(ns)
 sapply(1:n, f)
 ```
 
-    ## [1]  0.6098668  0.6483438  0.5496091  0.6234934  0.4648143  0.4347604 -0.8444631
+    ## [1]  0.6098669  0.6483439  0.5496092  0.6234935  0.4648143  0.4347605 -0.8444633
 
 ### 7.2.5 Scoring the right data
 

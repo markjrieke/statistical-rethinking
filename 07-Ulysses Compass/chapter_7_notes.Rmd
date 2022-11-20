@@ -269,7 +269,9 @@ $$
 * Suppose the true probabilities of rain and shine are $p_{rain} = 0.3$ and $p_{shine} = 0.7$. $H(p)$ would evaluate to:
 
 $$
+\begin{gather}
 H(p) = - (p_{rain} \ log(p_{rain}) \ + \ p_{shine} \ log(p_{shine})) \approx 0.61
+\end{gather}
 $$
 
 ```{r}
