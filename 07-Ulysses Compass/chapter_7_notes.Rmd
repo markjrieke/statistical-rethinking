@@ -554,5 +554,132 @@ WAIC(m)
 * A good PSIS or WAIC score does not in general indicate a good causal model!
 * Considering the plant growing example from chapter 6, WAIC will give the best score to the model that accidentally includes a *post-treatment* variable!
 * This is because WAIC's goal is to measure predictive accuracy
-* Since we simulated the data, we can see from the plot on 228 that including the treatment doesn't make predictions way better. This is because a variable can be causally related to the outcome, but have little relative impact on it.
+* Since we simulated the data, we know that the treatment works. However, we can see from the plot on 228 that including the treatment doesn't make predictions way better. This is because a variable can be causally related to the outcome, but have little relative impact on it.
+* Within a set of comparative models, the `weight` (from `rethinking::compare()`) is a traditional way to summarise the relative support for each model.
+* `weight` always sums to 1, and the weight of a model *i* is calculated as:
+
+$$
+\begin{gather}
+w_i = \frac{exp(-0.5 \Delta_i)}{\sum_j \ exp(-0.5 \Delta_j)}
+\end{gather}
+$$
+
+* Here, $\Delta_i$ is the difference between model *i*'s WAIC and the best in the set.
+
+```{r}
+compare(m7.1, m7.2, m7.3)
+```
+
+* Weights don't reflect the standard errors, so they're not sufficient alone for model comparison (rerunning `compare()` repeatedly also shuffles the weight around!).
+* Weights are used in *model averaging*, a family of methods for combining the predictions from multiple models. 
+
+### 7.5.2 Outliers and other illusions
+
+* In the divorce example (predicting divorce rate), some points, like *Idaho*, were *outliers* and could potentially be very influential in an ordinary regression. 
+
+```{r, warning=TRUE}
+data("WaffleDivorce")
+d <- WaffleDivorce
+
+# standardize variables
+d$A <- standardize(d$MedianAgeMarriage)
+d$D <- standardize(d$Divorce)
+d$M <- standardize(d$Marriage)
+
+# rebuild models
+m5.1 <-
+  quap(
+    alist(D ~ dnorm(mu, sigma),
+          mu <- a + bA * A,
+          a ~ dnorm(0, 0.2),
+          bA ~ dnorm(0, 0.5),
+          sigma ~ dexp(1)),
+    data = d
+  )
+
+m5.2 <-
+  quap(
+    alist(D ~ dnorm(mu, sigma), 
+          mu <- a + bM * M,
+          a ~ dnorm(0, 0.2),
+          bM ~ dnorm(0, 0.5),
+          sigma ~ dexp(1)),
+    data = d
+  )
+
+m5.3 <-
+  quap(
+    alist(D ~ dnorm(mu, sigma),
+          mu <- a + bM*M + bA*A,
+          a ~ dnorm(0, 0.2),
+          bM ~ dnorm(0, 0.5),
+          bA ~ dnorm(0, 0.5),
+          sigma ~ dexp(1)),
+    data = d
+  )
+
+# marriage rate (m5.2) has very little to do with divorce rate
+set.seed(24071847)
+compare(m5.1, m5.2, m5.3, func = PSIS)
+```
+
+* Some notes --- `m5.1`, which omits the marriage rate, performs best by `PSIS`. This is because marriage rate has little to do with divorce rate, so the model that excludes it performs better on out-of-sample prediction, even though it fits the sample a bit better. 
+* This had a warning about Pareto k values though! Let's inspect the pointwise `PSIS` values to dig in further
+
+```{r}
+# estimate psis
+set.seed(24071847)
+PSIS_m5.3 <- PSIS(m5.3, pointwise = TRUE)
+
+# estimate waic
+set.seed(24071847)
+WAIC_m5.3 <- WAIC(m5.3, pointwise = TRUE)
+
+plot(
+  PSIS_m5.3$k, 
+  WAIC_m5.3$penalty, 
+  xlab = "PSIS Pareto k",
+  ylab = "WAIC penalty",
+  col = rangi2,
+  lwd = 2
+)
+```
+
+* Individual points are individual states --- Idaho is way off in the upper right corner, with a very high Pareto k value and large WAIC penalty term. 
+* This outlier Idaho is causing additional overfitting risk. What can be done about this?
+* Dropping outliers is shady business (it's really only okay in few scenarios with few outliers). 
+* One problem here is that the Gaussian error model is easily surprised --- little probability mass is given to values far away from the mean. 
+* While this works for many natural processes, it doesn't work for all, and some have "fat tail" distributions. 
+* One way to use the extremes while reducing their influence is to use *robust regression*, which generally points to using a fatter-tailed distribution. In this case, a natural replacement for the Gaussian distribution is the *student-t* distribution, which is defined by the mean, $\mu$, scale, $\sigma$, and shape, $\nu$.
+* If you have a large dataset with lots of outlier events, you may be able to estimate $\nu$, but in most cases there aren't enough extreme events to do so, so the assumption is that $\nu$ is relatively small. 
+
+```{r}
+# reestimate the divorce model with nu = 2
+m5.3t <-
+  quap(
+    alist(D ~ dstudent(nu = 2, mu, sigma),
+          mu <- a + bM*M + bA*A,
+          a ~ dnorm(0, 0.2),
+          bM ~ dnorm(0, 0.5),
+          bA ~ dnorm(0, 0.5),
+          sigma ~ dexp(1)),
+    data = d
+  )
+
+# look, no warnings about pareto-k!
+PSIS(m5.3t)
+
+precis_plot(precis(m5.3))
+precis_plot(precis(m5.3t))
+```
+
+* The coefficient `bA` is also further away from 0 in `m5.3t` --- this is because Idaho's impact is less influential!
+
+## 7.6 Summary
+
+* This chapter has been a marathon!
+* Overfitting is a universal problem by which introducing more variables always improves in-sample, but not necessarily out-of-sample, predictions. 
+* Regularizing priors and out-of-sample accuracy measures (WAIC and PSIS) can be used to address overfitting. 
+* If you're after causal estimates, these tools will mislead you!
+
 

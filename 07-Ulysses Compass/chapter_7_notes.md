@@ -84,7 +84,7 @@ outcome_var <- var2(d$brain_std)
 1 - resid_var/outcome_var
 ```
 
-    ## [1] 0.4774589
+    ## [1] 0.4774588
 
 ``` r
 # function for calculating r^2 for future models
@@ -436,7 +436,7 @@ set.seed(1)
 lppd(m7.1, n = 1e4)
 ```
 
-    ## [1]  0.6098669  0.6483439  0.5496092  0.6234935  0.4648143  0.4347605 -0.8444633
+    ## [1]  0.6098630  0.6483398  0.5496070  0.6234899  0.4648123  0.4347584 -0.8444576
 
 -   Some overthinking, for some data *y* and posterior distribution *θ*,
     the log-pointwise-predictive-density is:
@@ -461,7 +461,7 @@ f <- function(i) log_sum_exp(logprob[,i]) - log(ns)
 sapply(1:n, f)
 ```
 
-    ## [1]  0.6098669  0.6483439  0.5496092  0.6234935  0.4648143  0.4347605 -0.8444633
+    ## [1]  0.6098630  0.6483398  0.5496070  0.6234899  0.4648123  0.4347584 -0.8444576
 
 ### 7.2.5 Scoring the right data
 
@@ -478,7 +478,7 @@ sapply(list(m7.1, m7.2, m7.3, m7.4, m7.5, m7.6),
        function(m) sum(lppd(m)))
 ```
 
-    ## [1]  2.490390  2.566165  3.707343  5.333750 14.090061 39.445390
+    ## [1]  2.490378  2.566165  3.707343  5.333750 14.090061 39.445390
 
 -   It’s not the score on *training* data that interests us, it’s the
     score on *test data* that we ought to care about!
@@ -794,7 +794,188 @@ WAIC(m)
     the best score to the model that accidentally includes a
     *post-treatment* variable!
 -   This is because WAIC’s goal is to measure predictive accuracy
--   Since we simulated the data, we can see from the plot on 228 that
-    including the treatment doesn’t make predictions way better. This is
-    because a variable can be causally related to the outcome, but have
-    little relative impact on it.
+-   Since we simulated the data, we know that the treatment works.
+    However, we can see from the plot on 228 that including the
+    treatment doesn’t make predictions way better. This is because a
+    variable can be causally related to the outcome, but have little
+    relative impact on it.
+-   Within a set of comparative models, the `weight` (from
+    `rethinking::compare()`) is a traditional way to summarise the
+    relative support for each model.
+-   `weight` always sums to 1, and the weight of a model *i* is
+    calculated as:
+
+$$
+\\begin{gather}
+w_i = \\frac{exp(-0.5 \\Delta_i)}{\\sum_j \\ exp(-0.5 \\Delta_j)}
+\\end{gather}
+$$
+
+-   Here, *Δ*<sub>*i*</sub> is the difference between model *i*’s WAIC
+    and the best in the set.
+
+``` r
+compare(m7.1, m7.2, m7.3)
+```
+
+    ##          WAIC       SE    dWAIC      dSE    pWAIC     weight
+    ## m7.1 4.261853 7.539914 0.000000       NA 4.628148 0.81838855
+    ## m7.2 7.894491 7.067769 3.632637 1.742126 6.541127 0.13308908
+    ## m7.3 9.912478 8.488564 5.650624 6.897376 8.646866 0.04852237
+
+-   Weights don’t reflect the standard errors, so they’re not sufficient
+    alone for model comparison (rerunning `compare()` repeatedly also
+    shuffles the weight around!).
+-   Weights are used in *model averaging*, a family of methods for
+    combining the predictions from multiple models.
+
+### 7.5.2 Outliers and other illusions
+
+-   In the divorce example (predicting divorce rate), some points, like
+    *Idaho*, were *outliers* and could potentially be very influential
+    in an ordinary regression.
+
+``` r
+data("WaffleDivorce")
+d <- WaffleDivorce
+
+# standardize variables
+d$A <- standardize(d$MedianAgeMarriage)
+d$D <- standardize(d$Divorce)
+d$M <- standardize(d$Marriage)
+
+# rebuild models
+m5.1 <-
+  quap(
+    alist(D ~ dnorm(mu, sigma),
+          mu <- a + bA * A,
+          a ~ dnorm(0, 0.2),
+          bA ~ dnorm(0, 0.5),
+          sigma ~ dexp(1)),
+    data = d
+  )
+
+m5.2 <-
+  quap(
+    alist(D ~ dnorm(mu, sigma), 
+          mu <- a + bM * M,
+          a ~ dnorm(0, 0.2),
+          bM ~ dnorm(0, 0.5),
+          sigma ~ dexp(1)),
+    data = d
+  )
+
+m5.3 <-
+  quap(
+    alist(D ~ dnorm(mu, sigma),
+          mu <- a + bM*M + bA*A,
+          a ~ dnorm(0, 0.2),
+          bM ~ dnorm(0, 0.5),
+          bA ~ dnorm(0, 0.5),
+          sigma ~ dexp(1)),
+    data = d
+  )
+
+# marriage rate (m5.2) has very little to do with divorce rate
+set.seed(24071847)
+compare(m5.1, m5.2, m5.3, func = PSIS)
+```
+
+    ##          PSIS       SE     dPSIS        dSE    pPSIS       weight
+    ## m5.1 127.5665 14.69481  0.000000         NA 4.671418 0.6709844243
+    ## m5.3 128.9962 14.83288  1.429715  0.8960671 5.702238 0.3282871259
+    ## m5.2 141.2177 11.56537 13.651165 10.9238918 4.057096 0.0007284498
+
+-   Some notes — `m5.1`, which omits the marriage rate, performs best by
+    `PSIS`. This is because marriage rate has little to do with divorce
+    rate, so the model that excludes it performs better on out-of-sample
+    prediction, even though it fits the sample a bit better.
+-   This had a warning about Pareto k values though! Let’s inspect the
+    pointwise `PSIS` values to dig in further
+
+``` r
+# estimate psis
+set.seed(24071847)
+PSIS_m5.3 <- PSIS(m5.3, pointwise = TRUE)
+
+# estimate waic
+set.seed(24071847)
+WAIC_m5.3 <- WAIC(m5.3, pointwise = TRUE)
+
+plot(
+  PSIS_m5.3$k, 
+  WAIC_m5.3$penalty, 
+  xlab = "PSIS Pareto k",
+  ylab = "WAIC penalty",
+  col = rangi2,
+  lwd = 2
+)
+```
+
+![](chapter_7_notes_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+-   Individual points are individual states — Idaho is way off in the
+    upper right corner, with a very high Pareto k value and large WAIC
+    penalty term.
+-   This outlier Idaho is causing additional overfitting risk. What can
+    be done about this?
+-   Dropping outliers is shady business (it’s really only okay in few
+    scenarios with few outliers).
+-   One problem here is that the Gaussian error model is easily
+    surprised — little probability mass is given to values far away from
+    the mean.
+-   While this works for many natural processes, it doesn’t work for
+    all, and some have “fat tail” distributions.
+-   One way to use the extremes while reducing their influence is to use
+    *robust regression*, which generally points to using a fatter-tailed
+    distribution. In this case, a natural replacement for the Gaussian
+    distribution is the *student-t* distribution, which is defined by
+    the mean, *μ*, scale, *σ*, and shape, *ν*.
+-   If you have a large dataset with lots of outlier events, you may be
+    able to estimate *ν*, but in most cases there aren’t enough extreme
+    events to do so, so the assumption is that *ν* is relatively small.
+
+``` r
+# reestimate the divorce model with nu = 2
+m5.3t <-
+  quap(
+    alist(D ~ dstudent(nu = 2, mu, sigma),
+          mu <- a + bM*M + bA*A,
+          a ~ dnorm(0, 0.2),
+          bM ~ dnorm(0, 0.5),
+          bA ~ dnorm(0, 0.5),
+          sigma ~ dexp(1)),
+    data = d
+  )
+
+# look, no warnings about pareto-k!
+PSIS(m5.3t)
+```
+
+    ##       PSIS      lppd  penalty  std_err
+    ## 1 133.7104 -66.85521 6.845203 11.94534
+
+``` r
+precis_plot(precis(m5.3))
+```
+
+![](chapter_7_notes_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->
+
+``` r
+precis_plot(precis(m5.3t))
+```
+
+![](chapter_7_notes_files/figure-gfm/unnamed-chunk-16-2.png)<!-- -->
+
+-   The coefficient `bA` is also further away from 0 in `m5.3t` — this
+    is because Idaho’s impact is less influential!
+
+## 7.6 Summary
+
+-   This chapter has been a marathon!
+-   Overfitting is a universal problem by which introducing more
+    variables always improves in-sample, but not necessarily
+    out-of-sample, predictions.
+-   Regularizing priors and out-of-sample accuracy measures (WAIC and
+    PSIS) can be used to address overfitting.
+-   If you’re after causal estimates, these tools will mislead you!
