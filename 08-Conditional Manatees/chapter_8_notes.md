@@ -185,3 +185,153 @@ precis(m8.1)
     ## sigma 0.136497402 0.007396152  0.1246769 0.14831788
 
 -   Basically nothing!
+
+### 8.1.2 Adding an indicator variable isn’t enough
+
+-   Adding an indicator for African nations, `const_africa`, won’t
+    correct our slope issue!
+-   Let’s still fit this model so we can see why (here,
+    *α*<sub>*C**I**D*\[*i*\]</sub> is an index for continent id):
+
+$$
+\\begin{gather}
+\\mu_i = \\alpha\_{CID\[i\]} + \\beta(r_i - \\overline r)
+\\end{gather}
+$$
+
+``` r
+# make variable to index countries in africa (1) or not (2)
+# this means that our prior for african nations isn't more uncertain than non-african nations
+dd$cid <- ifelse(dd$cont_africa == 1, 1, 2)
+
+# fit with indicator variable
+m8.2 <-
+  quap(
+    alist(log_gdp_std ~ dnorm(mu, sigma),
+          mu <- a[cid] + b*(rugged_std - 0.215),
+          a[cid] ~ dnorm(1, 0.1),
+          b ~ dnorm(0, 0.3),
+          sigma ~ dexp(1)),
+    data = dd
+  )
+
+# compare with WAIC:
+compare(m8.1, m8.2)
+```
+
+    ##           WAIC       SE    dWAIC      dSE    pWAIC       weight
+    ## m8.2 -252.2687 15.30518  0.00000       NA 4.258517 1.000000e+00
+    ## m8.1 -188.7542 13.29295 63.51448 15.14678 2.690401 1.614382e-14
+
+``` r
+# show parameter values
+precis(m8.2, depth = 2)
+```
+
+    ##              mean          sd       5.5%      94.5%
+    ## a[1]   0.88041284 0.015937003  0.8549424 0.90588325
+    ## a[2]   1.04916425 0.010185554  1.0328858 1.06544274
+    ## b     -0.04651347 0.045686725 -0.1195297 0.02650274
+    ## sigma  0.11238738 0.006091077  0.1026527 0.12212209
+
+-   Here, `a[1]` is the intercept for African nations and is reliably
+    lower than `a[2]` (non-African nations)
+
+``` r
+# compare the posterior difference between a1/a2
+post <- extract.samples(m8.2)
+diff_a1_a2 <- post$a[,1] - post$a[,2]
+PI(diff_a1_a2)
+```
+
+    ##         5%        94% 
+    ## -0.1990118 -0.1378490
+
+-   Despite this difference in intercepts, there is not a difference in
+    slopes (see figure 8.4 on page 247)
+
+``` r
+rugged_seq <- seq(from = -0.1, to = 1.1, length.out = 30)
+
+# compute mu over samples, fixing cid = 2 and then cid = 1
+mu.notAfrica <- link(m8.2, data = data.frame(cid = 2, rugged_std = rugged_seq))
+mu.Africa <- link(m8.2, data = data.frame(cid = 1, rugged_std = rugged_seq))
+
+# summarise to means and intervals
+mu.notAfrica_mu <- apply(mu.notAfrica, 2, mean)
+mu.notAfrica_ci <- apply(mu.notAfrica, 2, PI, prob = 0.97)
+mu.Africa_mu <- apply(mu.Africa, 2, mean)
+mu.Africa_ci <- apply(mu.Africa, 2, PI, prob = 0.97)
+
+# plot
+plot(NULL,
+     xlab = "ruggedness (standardized)",
+     ylab = "log GDP (as proportion of mean)",
+     xlim = c(0, 1),
+     ylim = c(0.7, 1.3))
+
+lines(x = rugged_seq, y = mu.notAfrica_mu, lwd = 2)
+shade(mu.notAfrica_ci, rugged_seq, col = col.alpha("black", 0.25))
+lines(x = rugged_seq, y = mu.Africa_mu, lwd = 2, col = rangi2)
+shade(mu.Africa_ci, rugged_seq, col = col.alpha(rangi2, 0.25))
+```
+
+![](chapter_8_notes_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+### 8.1.3 Adding an interaction does work
+
+-   To add an interaction, we can double down on indexing to make our
+    slope conditional as well as the intercept (as an aside, I really
+    appreciate this way of looking at indicators and interactions, it
+    makes it way easier to generalize to hierarchical models):
+
+$$
+\\begin{gather}
+\\mu_i = \\alpha\_{CID\[i\]} + \\beta\_{CID\[i\]} (r_i - \\overline r)
+\\end{gather}
+$$
+
+``` r
+# fit a model with an interaction
+m8.3 <-
+  quap(
+    alist(log_gdp_std ~ dnorm(mu, sigma),
+          mu <- a[cid] + b[cid]*(rugged_std - 0.215),
+          a[cid] ~ dnorm(1, 0.1),
+          b[cid] ~ dnorm(0, 0.3),
+          sigma ~ dexp(1)),
+    data = dd
+  )
+
+# inspect the marginal posterior distribution
+precis(m8.3, depth = 2)
+```
+
+    ##             mean          sd        5.5%       94.5%
+    ## a[1]   0.8865442 0.015676378  0.86149028  0.91159804
+    ## a[2]   1.0505689 0.009937071  1.03468758  1.06645030
+    ## b[1]   0.1326132 0.074207629  0.01401504  0.25121129
+    ## b[2]  -0.1427253 0.054751746 -0.23022921 -0.05522148
+    ## sigma  0.1094993 0.005935989  0.10001242  0.11898613
+
+``` r
+# investigate predictions based on PSIS:
+compare(m8.1, m8.2, m8.3, func = PSIS)
+```
+
+    ##           PSIS       SE    dPSIS       dSE    pPSIS       weight
+    ## m8.3 -259.1326 15.21911  0.00000        NA 5.166182 9.716174e-01
+    ## m8.2 -252.0662 15.40450  7.06637  6.670773 4.340923 2.838263e-02
+    ## m8.1 -188.5944 13.37393 70.53821 15.453690 2.750823 4.680775e-16
+
+-   If prediction is the end goal, this is very strong evidence for the
+    interaction effect.
+-   The little bit of weight for `m8.2` suggests that the posterior
+    means for slopes in `m8.3` are a bit overfit. The standard error of
+    the difference in PSIS is almost the same as the difference itself!
+
+``` r
+plot(PSIS(m8.3, pointwise = TRUE)$k)
+```
+
+![](chapter_8_notes_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
