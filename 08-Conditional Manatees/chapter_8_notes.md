@@ -335,3 +335,315 @@ plot(PSIS(m8.3, pointwise = TRUE)$k)
 ```
 
 ![](chapter_8_notes_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+### 8.1.4 Plotting the interaction
+
+``` r
+# plot Africa - cid = 1
+plot_africa <- function(idx = 1) {
+  
+  # pull out frame for plotting
+  d.plot <- dd[dd$cid == idx, ]
+  
+  # plot area
+  plot(
+    d.plot$rugged_std, 
+    d.plot$log_gdp_std, 
+    pch = 16, 
+    col = rangi2,
+    xlab = "ruggedness (standardized",
+    ylab = "log GDP (as proportion of mean)",
+    xlim = c(0, 1)
+  )
+  
+  # pull out mean & ci
+  mu <- link(m8.3, data = data.frame(cid = idx, rugged_std = rugged_seq))
+  mu_mean <- apply(mu, 2, mean)
+  mu_ci <- apply(mu, 2, PI, prob = 0.97)
+  
+  # add trend to plot
+  lines(rugged_seq, mu_mean, lwd = 2)
+  shade(mu_ci, rugged_seq, col = col.alpha(rangi2, 0.3))
+  
+  # add title
+  if (idx == 1) mtext("African nations") else mtext("Non-African nations")
+  
+}
+
+# plot for continent: africa:
+plot_africa(1)
+```
+
+![](chapter_8_notes_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+``` r
+# plot for other continents:
+plot_africa(2)
+```
+
+![](chapter_8_notes_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
+
+## 8.2 Symmetry of interactions
+
+-   Let’s generate a *counter-facutal* plot, comparing the difference
+    between being an African/non-African nation at varying levels of
+    ruggedness:
+
+``` r
+rugged_seq <- seq(from = -0.2, to = 1.2, length.out = 30)
+muA <- link(m8.3, data = data.frame(cid = 1, rugged_std = rugged_seq))
+muN <- link(m8.3, data = data.frame(cid = 2, rugged_std = rugged_seq))
+delta <- muA - muN
+
+delta_mu <- apply(delta, 2, mean)
+delta_ci <- apply(delta, 2, PI, prob = 0.89)
+
+plot(
+  NULL,
+  xlim = c(0, 1),
+  ylim = c(-0.3, 0.2),
+  xlab = "ruggedness",
+  ylab = "expected difference in log GDP (A - N)"
+)
+
+lines(x = rugged_seq, y = delta_mu, lwd = 2)
+shade(delta_ci, rugged_seq)
+```
+
+![](chapter_8_notes_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+-   This is consistent with (1) the influence of ruggedness depends on
+    continent and (2) the influence of continent depends upon
+    ruggedness!
+
+## 8.3 Continuous interactions
+
+-   Interactions among continuous variables are much more difficult!
+-   *Continuous interactions* are interactions between two or more
+    continuous predictor variables.
+
+### 8.3.1 A winter flower
+
+``` r
+# load data for the sizes of blooms from beds of tulups under different soil and light conditions
+data("tulips")
+d <- tulips
+str(d)
+```
+
+    ## 'data.frame':    27 obs. of  4 variables:
+    ##  $ bed   : Factor w/ 3 levels "a","b","c": 1 1 1 1 1 1 1 1 1 2 ...
+    ##  $ water : int  1 1 1 2 2 2 3 3 3 1 ...
+    ##  $ shade : int  1 2 3 1 2 3 1 2 3 1 ...
+    ##  $ blooms: num  0 0 111 183.5 59.2 ...
+
+-   We want to predict the number of `blooms` using `water` and `shade`
+    as predictors.
+-   `water` is three ordered levels of water supply from low (1) to high
+    (3)
+-   `shade`, conversely, is three ordered levels of light exposure from
+    low (1) to high (3)
+-   It stands to reason that light and water levels will improve growth,
+    but there may also be an interaction between the two!
+
+### 8.3.2 The models
+
+-   Let’s build two models: one with `water` and `shade` but no
+    interaction, and a second that contains the interaction as well.
+
+``` r
+# scale values
+d$blooms_std <- d$blooms/max(d$blooms)
+d$water_cent <- d$water - mean(d$water)
+d$shade_cent <- d$shade - mean(d$shade)
+```
+
+$$
+\\begin{gather}
+Bloom_i \\sim Normal(\\mu_i, \\sigma) \\\\ 
+\\mu_i = \\alpha + \\beta_W (W_i - \\overline W) + \\beta_S (S_i - \\overline S) \\\\
+\\alpha \\sim Normal(0.5, 0.25) \\\\
+\\beta_W \\sim Normal(0, 0.25) \\\\ 
+\\beta_S \\sim Normal(0, 0.25) \\\\
+\\sigma \\sim Exponential(1)
+\\end{gather}
+$$
+
+-   McElreath originally set priors for the *α* and *β* parameters with
+    a standard deviation of 1, but that would have put most of the prior
+    probability outside any reasonable range:
+
+``` r
+a <- rnorm(1e4, 0.5, 1)
+
+# we really only ought to expect ~5ish percent outside the range of 0/1
+sum(a < 0 | a > 1)/length(a)
+```
+
+    ## [1] 0.6164
+
+``` r
+# changing std dev to 0.25 fixes that:
+a <- rnorm(1e4, 0.5, 0.25)
+
+sum(a < 0 | a > 1)/length(a)
+```
+
+    ## [1] 0.0473
+
+``` r
+m8.4 <-
+  quap(
+    alist(blooms_std ~ dnorm(mu, sigma),
+          mu <- a + bw*water_cent + bs*shade_cent,
+          a ~ dnorm(0.5, 0.25),
+          bw ~ dnorm(0, 0.25),
+          bs ~ dnorm(0, 0.25),
+          sigma ~ dexp(1)),
+    data = d
+  )
+
+precis(m8.4)
+```
+
+    ##             mean         sd       5.5%       94.5%
+    ## a      0.3587847 0.03021990  0.3104875  0.40708195
+    ## bw     0.2050361 0.03689063  0.1460778  0.26399445
+    ## bs    -0.1125324 0.03687677 -0.1714686 -0.05359619
+    ## sigma  0.1581591 0.02144538  0.1238853  0.19243297
+
+-   Now let’s start building the interaction model. In principle, there
+    are an infinite number of “categories” among the two predictors.
+-   We want to preserve the ordering of the values. Lucky for us, the
+    math is pretty simple:
+
+$$
+\\begin{gather}
+Bloom_i \\sim Normal(\\mu_i, \\sigma) \\\\
+\\mu_i = \\alpha + \\beta_W W_i + \\beta_S S_i + \\beta\_{WS} W_i S_i \\\\
+...
+\\end{gather}
+$$
+
+``` r
+m8.5 <-
+  quap(
+    alist(blooms_std ~ dnorm(mu, sigma),
+          mu <- a + bw*water_cent + bs*shade_cent + bws*water_cent*shade_cent,
+          a ~ dnorm(0.5, 0.25),
+          bw ~ dnorm(0, 0.25),
+          bs ~ dnorm(0, 0.25),
+          bws ~ dnorm(0, 0.25),
+          sigma ~ dexp(1)),
+    data = d
+  )
+
+precis(m8.5)
+```
+
+    ##             mean         sd        5.5%       94.5%
+    ## a      0.3579806 0.02391931  0.31975291  0.39620827
+    ## bw     0.2067216 0.02923520  0.15999815  0.25344514
+    ## bs    -0.1134683 0.02922809 -0.16018042 -0.06675616
+    ## bws   -0.1431849 0.03568024 -0.20020885 -0.08616101
+    ## sigma  0.1248475 0.01694131  0.09777206  0.15192302
+
+### Plotting posterior predictions
+
+-   A *triptych* plot can be very useful for plotting interactions.
+
+``` r
+tulip_post_plot <- function(model) {
+  
+  par(mfrow = c(1, 3))
+  for (s in -1:1) {
+    
+    idx <- which(d$shade_cent == s)
+    plot(d$water_cent[idx],
+         d$blooms_std[idx], 
+         xlim = c(-1, 1),
+         ylim = c(0, 1),
+         xlab = "water",
+         ylab = "blooms",
+         pch = 16,
+         col = rangi2)
+    
+    mu <- link(model, data = data.frame(shade_cent = s, water_cent = -1:1))
+    for (i in 1:20) lines(-1:1, mu[i,], col = col.alpha("black", 0.3))
+    
+  } 
+  
+}
+
+# posterior plot for model without interactions
+tulip_post_plot(m8.4)
+```
+
+![](chapter_8_notes_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+``` r
+# posterior plot for model with interactions
+tulip_post_plot(m8.5)
+```
+
+![](chapter_8_notes_files/figure-gfm/unnamed-chunk-18-2.png)<!-- -->
+
+-   The interaction model believes that the effect of water decreases as
+    shade increases!
+
+### 8.3.4 Plotting prior predictions
+
+-   Let’s evaluate our priors from beforehand:
+
+``` r
+set.seed(7)
+prior_no_interact <- extract.prior(m8.4)
+prior_interact <- extract.prior(m8.5)
+
+tulip_prior_plot <- function(model, prior) {
+  
+  par(mfrow = c(1, 3))
+  for (s in -1:1) {
+    
+    idx <- which(d$shade_cent == s)
+    plot(d$water_cent[idx],
+         d$blooms_std[idx], 
+         xlim = c(-1, 1),
+         ylim = c(0, 1),
+         xlab = "water",
+         ylab = "blooms",
+         pch = 16,
+         col = rangi2)
+    
+    mu <- link(model, post = prior, data = data.frame(shade_cent = s, water_cent = -1:1))
+    for (i in 1:20) lines(-1:1, mu[i,], col = col.alpha("black", 0.3))
+    
+  } 
+  
+}
+
+# prior for non interaction model
+tulip_prior_plot(m8.4, prior_no_interact)
+```
+
+![](chapter_8_notes_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+
+``` r
+# prior for interaction model
+tulip_prior_plot(m8.5, prior_interact)
+```
+
+![](chapter_8_notes_files/figure-gfm/unnamed-chunk-19-2.png)<!-- -->
+
+-   These are harmless, but only weakly realistic (see page 259 for
+    McElreath’s original plots). We could do better, but this is okay.
+
+## 8.4 Summary
+
+-   This chapter introduced *interactions*, which allow for the
+    association between a predictor and outcome to depend on the value
+    of another predictor.
+-   Interactions don’t appear in a DAG, but can be important for making
+    accurate inferences.
+-   Interactions can be difficult to interpret.
+-   Sneak peak, next chapter introduces MCMC.
