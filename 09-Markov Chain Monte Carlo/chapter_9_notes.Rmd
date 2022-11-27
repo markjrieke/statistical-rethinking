@@ -251,4 +251,122 @@ m8.3 <-
 precis(m8.3, depth = 2)
 ```
 
+### 9.4.1 Preparation
+
+* To refit `m8.3` using HMC via `ulam()`, we'll need to do a few things:
+  1. Preprocess all variable transformations, like logs, squares, polynomials, etc. (it's a waste of compute to do this with HMC)
+  2. Trim down the training data frame to just the variables used in the model directly.
+  
+```{r}
+# for m8.3, all variables are already pre-processed
+# so we just need a slim list of data
+dat_slim <-
+  list(log_gdp_std = dd$log_gdp_std,
+       rugged_std = dd$rugged_std,
+       cid = as.integer(dd$cid))
+
+str(dat_slim)
+```
+
+* It's better to use a list than a dataframe, since lists can be varying lengths (with some models, like multilevel models, this isn't unusual). 
+
+### 9.4.2 Sampling from the posterior
+
+```{r}
+m9.1 <-
+  ulam(
+    alist(log_gdp_std ~ dnorm(mu, sigma),
+          mu <- a[cid] + b[cid]*(rugged_std - 0.215),
+          a[cid] ~ dnorm(1, 0.1),
+          b[cid] ~ dnorm(0, 0.3),
+          sigma ~ dexp(1)),
+    data = dat_slim,
+    chains = 1
+  )
+
+precis(m9.1, depth = 2)
+```
+
+* The estimates here from `ulam()` are really similar to the estimates from `quap()`, with two new columns, `n_eff` and `Rhat4`. These are diagnostic criteria that we'll discuss later. 
+
+### 9.4.3 Sampling again, in parallel
+
+* This was a pretty "easy" problem, so the default 1000 samples was effective, but we can run the program on multiple chains in parallel pretty easily:
+
+```{r}
+m9.1 <-
+  ulam(
+    alist(log_gdp_std ~ dnorm(mu, sigma),
+          mu <- a[cid] + b[cid]*(rugged_std - 0.215),
+          a[cid] ~ dnorm(1, 0.1),
+          b[cid] ~ dnorm(0, 0.3),
+          sigma ~ dexp(1)),
+    data = dat_slim,
+    chains = 4,
+    cores = 4
+  )
+
+precis(m9.1, depth = 2)
+```
+
+```{r}
+show(m9.1)
+```
+
+* Something interesting --- there are 4 chains, running 1000 samples each, half of which are warmup. So we should expect 2000 samples in total. Why are there more than 2000 effective samples then?
+* Stan's adaptive sampler is so good, it can produce sequential samples that are better than uncorrelated, they are *anti-correlated*. 
+
+### 9.4.4 Visualization
+
+```{r}
+pairs(m9.1)
+```
+
+* Here we can see how the Gaussian approximation from `quap()` was likely a good approximation of what HMC found --- all distributions are approximately normal, and `sigma` is skewed in the direction we expect (bound by 0). 
+
+### 9.4.5 Checking the chain
+
+* Some posterior distributions are hard to explore, so we need to diagnose whether or not HMC was able to fully explore the posterior before trusting it completely. 
+* Two tools that can often (but not always) spot problems are *trace plots* and *trace rank* or *trank plots*.
+* Trace plots show the samples in sequential order. A healthy trace plot tends to have three qualities:
+  1. Stationarity: the chain should be generally in the same high-probability area
+  2. Good mixing: the chain rapidly explores the full region (jumping erratically rather than slowly moving)
+  3. Convergence: multiple independent chains stick around the same region of high probability
+  
+```{r}
+# show all chains, all paremeters, all samples
+traceplot(m9.1)
+
+# show only 1 chain for the sampling region:
+traceplot(
+  m9.1, 
+  chains = 1,
+  window = c(501, 1000)
+)
+```
+
+* A trankplot takes all the samples across all chains for each parameter and ranks them. Histograms of these ranks for individual chains should be similar to one another and largely overlapping if the chains are exploring the space efficiently.
+
+```{r}
+trankplot(m9.1)
+```
+
+* Some overthinking --- all that `ulam()` does is translate lists of formulas to Stan code. Using Stan directly gives more flexibility, but isn't necessary for all model types.
+
+```{r}
+stancode(m9.1)
+```
+
+* The `data` block is where observed variables are named and their types and sizes are declared.
+* The `parameters` block is where the unobserved variables go and are described just like the observed ones.
+* The `model` block is where the action is --- this computes the log-probability of the data, running from top to bottom. 
+
+
+
+
+
+
+
+
+
 

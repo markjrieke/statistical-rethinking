@@ -287,7 +287,7 @@ HMC2
     ##     return(list(q = new_q, traj = qtraj, ptraj = ptraj, accept = accept, 
     ##         dH = H1 - H0))
     ## }
-    ## <bytecode: 0x0000021c1e89fd10>
+    ## <bytecode: 0x0000028c7061ae68>
     ## <environment: namespace:rethinking>
 
 -   Really the momentum aspect is a huge part of HMC — the “total
@@ -350,3 +350,286 @@ precis(m8.3, depth = 2)
     ## b[1]   0.1324981 0.074199237  0.01391344  0.25108286
     ## b[2]  -0.1426057 0.054745410 -0.23009945 -0.05511197
     ## sigma  0.1094859 0.005934188  0.10000194  0.11896990
+
+### 9.4.1 Preparation
+
+-   To refit `m8.3` using HMC via `ulam()`, we’ll need to do a few
+    things:
+    1.  Preprocess all variable transformations, like logs, squares,
+        polynomials, etc. (it’s a waste of compute to do this with HMC)
+    2.  Trim down the training data frame to just the variables used in
+        the model directly.
+
+``` r
+# for m8.3, all variables are already pre-processed
+# so we just need a slim list of data
+dat_slim <-
+  list(log_gdp_std = dd$log_gdp_std,
+       rugged_std = dd$rugged_std,
+       cid = as.integer(dd$cid))
+
+str(dat_slim)
+```
+
+    ## List of 3
+    ##  $ log_gdp_std: num [1:170] 0.88 0.965 1.166 1.104 0.915 ...
+    ##  $ rugged_std : num [1:170] 0.138 0.553 0.124 0.125 0.433 ...
+    ##  $ cid        : int [1:170] 1 2 2 2 2 2 2 2 2 1 ...
+
+-   It’s better to use a list than a dataframe, since lists can be
+    varying lengths (with some models, like multilevel models, this
+    isn’t unusual).
+
+### 9.4.2 Sampling from the posterior
+
+``` r
+m9.1 <-
+  ulam(
+    alist(log_gdp_std ~ dnorm(mu, sigma),
+          mu <- a[cid] + b[cid]*(rugged_std - 0.215),
+          a[cid] ~ dnorm(1, 0.1),
+          b[cid] ~ dnorm(0, 0.3),
+          sigma ~ dexp(1)),
+    data = dat_slim,
+    chains = 1
+  )
+```
+
+    ## Running MCMC with 1 chain, with 1 thread(s) per chain...
+    ## 
+    ## Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 finished in 0.2 seconds.
+
+``` r
+precis(m9.1, depth = 2)
+```
+
+    ##             mean          sd         5.5%       94.5%    n_eff     Rhat4
+    ## a[1]   0.8867640 0.014327070  0.863226055  0.90927205 828.2130 1.0003776
+    ## a[2]   1.0505185 0.010136472  1.035520050  1.06744995 523.9357 1.0029986
+    ## b[1]   0.1323973 0.072424321  0.008925831  0.25163263 835.7581 0.9980446
+    ## b[2]  -0.1426852 0.060104625 -0.233822870 -0.04110599 569.8732 0.9984743
+    ## sigma  0.1117469 0.005715907  0.103508355  0.12204910 563.5279 0.9980095
+
+-   The estimates here from `ulam()` are really similar to the estimates
+    from `quap()`, with two new columns, `n_eff` and `Rhat4`. These are
+    diagnostic criteria that we’ll discuss later.
+
+### 9.4.3 Sampling again, in parallel
+
+-   This was a pretty “easy” problem, so the default 1000 samples was
+    effective, but we can run the program on multiple chains in parallel
+    pretty easily:
+
+``` r
+m9.1 <-
+  ulam(
+    alist(log_gdp_std ~ dnorm(mu, sigma),
+          mu <- a[cid] + b[cid]*(rugged_std - 0.215),
+          a[cid] ~ dnorm(1, 0.1),
+          b[cid] ~ dnorm(0, 0.3),
+          sigma ~ dexp(1)),
+    data = dat_slim,
+    chains = 4,
+    cores = 4
+  )
+```
+
+    ## Running MCMC with 4 parallel chains, with 1 thread(s) per chain...
+    ## 
+    ## Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 finished in 0.4 seconds.
+    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 finished in 0.4 seconds.
+    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 3 finished in 0.4 seconds.
+    ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 4 finished in 0.4 seconds.
+    ## 
+    ## All 4 chains finished successfully.
+    ## Mean chain execution time: 0.4 seconds.
+    ## Total execution time: 0.9 seconds.
+
+``` r
+precis(m9.1, depth = 2)
+```
+
+    ##             mean          sd        5.5%       94.5%    n_eff     Rhat4
+    ## a[1]   0.8867297 0.016360786  0.86062648  0.91309922 2671.904 1.0004209
+    ## a[2]   1.0508396 0.010419400  1.03401000  1.06764165 2888.744 0.9984309
+    ## b[1]   0.1346739 0.077660268  0.01139941  0.26077373 2778.726 0.9994793
+    ## b[2]  -0.1408245 0.054882757 -0.22579499 -0.04898273 2785.335 0.9993736
+    ## sigma  0.1116600 0.006326714  0.10205368  0.12261532 2778.156 0.9990519
+
+``` r
+show(m9.1)
+```
+
+    ## Hamiltonian Monte Carlo approximation
+    ## 2000 samples from 4 chains
+    ## 
+    ## Sampling durations (seconds):
+    ##         warmup sample total
+    ## chain:1   0.23   0.18  0.41
+    ## chain:2   0.24   0.18  0.42
+    ## chain:3   0.22   0.18  0.40
+    ## chain:4   0.23   0.17  0.40
+    ## 
+    ## Formula:
+    ## log_gdp_std ~ dnorm(mu, sigma)
+    ## mu <- a[cid] + b[cid] * (rugged_std - 0.215)
+    ## a[cid] ~ dnorm(1, 0.1)
+    ## b[cid] ~ dnorm(0, 0.3)
+    ## sigma ~ dexp(1)
+
+-   Something interesting — there are 4 chains, running 1000 samples
+    each, half of which are warmup. So we should expect 2000 samples in
+    total. Why are there more than 2000 effective samples then?
+-   Stan’s adaptive sampler is so good, it can produce sequential
+    samples that are better than uncorrelated, they are
+    *anti-correlated*.
+
+### 9.4.4 Visualization
+
+``` r
+pairs(m9.1)
+```
+
+![](chapter_9_notes_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+-   Here we can see how the Gaussian approximation from `quap()` was
+    likely a good approximation of what HMC found — all distributions
+    are approximately normal, and `sigma` is skewed in the direction we
+    expect (bound by 0).
+
+### 9.4.5 Checking the chain
+
+-   Some posterior distributions are hard to explore, so we need to
+    diagnose whether or not HMC was able to fully explore the posterior
+    before trusting it completely.
+-   Two tools that can often (but not always) spot problems are *trace
+    plots* and *trace rank* or *trank plots*.
+-   Trace plots show the samples in sequential order. A healthy trace
+    plot tends to have three qualities:
+    1.  Stationarity: the chain should be generally in the same
+        high-probability area
+    2.  Good mixing: the chain rapidly explores the full region (jumping
+        erratically rather than slowly moving)
+    3.  Convergence: multiple independent chains stick around the same
+        region of high probability
+
+``` r
+# show all chains, all paremeters, all samples
+traceplot(m9.1)
+
+# show only 1 chain for the sampling region:
+traceplot(
+  m9.1, 
+  chains = 1,
+  window = c(501, 1000)
+)
+```
+
+![](chapter_9_notes_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->![](chapter_9_notes_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
+
+-   A trankplot takes all the samples across all chains for each
+    parameter and ranks them. Histograms of these ranks for individual
+    chains should be similar to one another and largely overlapping if
+    the chains are exploring the space efficiently.
+
+``` r
+trankplot(m9.1)
+```
+
+![](chapter_9_notes_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+-   Some overthinking — all that `ulam()` does is translate lists of
+    formulas to Stan code. Using Stan directly gives more flexibility,
+    but isn’t necessary for all model types.
+
+``` r
+stancode(m9.1)
+```
+
+    ## data{
+    ##     vector[170] log_gdp_std;
+    ##     vector[170] rugged_std;
+    ##     int cid[170];
+    ## }
+    ## parameters{
+    ##     vector[2] a;
+    ##     vector[2] b;
+    ##     real<lower=0> sigma;
+    ## }
+    ## model{
+    ##     vector[170] mu;
+    ##     sigma ~ exponential( 1 );
+    ##     b ~ normal( 0 , 0.3 );
+    ##     a ~ normal( 1 , 0.1 );
+    ##     for ( i in 1:170 ) {
+    ##         mu[i] = a[cid[i]] + b[cid[i]] * (rugged_std[i] - 0.215);
+    ##     }
+    ##     log_gdp_std ~ normal( mu , sigma );
+    ## }
+
+-   The `data` block is where observed variables are named and their
+    types and sizes are declared.
+-   The `parameters` block is where the unobserved variables go and are
+    described just like the observed ones.
+-   The `model` block is where the action is — this computes the
+    log-probability of the data, running from top to bottom.
