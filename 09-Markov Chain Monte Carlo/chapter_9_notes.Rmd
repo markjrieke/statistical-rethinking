@@ -361,12 +361,178 @@ stancode(m9.1)
 * The `parameters` block is where the unobserved variables go and are described just like the observed ones.
 * The `model` block is where the action is --- this computes the log-probability of the data, running from top to bottom. 
 
+## 9.5 Care and feeding of your Markov Chain
 
+* While we don't need to be able to write our own HMC sampler from scratch, it is important to understand the basics of how HMC might go awry.
+* The good news is that HMC makes it pretty easy to tell when something isn't right.
 
+### 9.5.1 How many samples do you need?
 
+* You can control the number of samples per chain from the `iter` and `warmup` parameters (the default is `iter = 1000` and `warmup = iter/2`). 
+* What really matters is the *effective* number of samples, rather than the raw number. 
+* Chains are *autocorrelated*, meaning sequential samples are not entirely independent. More autocorrelation means lower `n_eff`.
+* You can think of `n_eff` as the length of a Markov chain with no autocorreation that would provide the same quality of estimate as your chain. 
+* How many samples you need depends on what you want to know. If all you want is the posterior mean, then perhaps a few hundred samples will do. But if you care about the shape of the distribution or the extreme tails, you'll need many, many more samples.
+* Stan will warn about the "tail ESS" (the effective sample size of the tail regions) when it is nervous about the quality of extreme intervals. Sampling more usually helps. 
+* Warmup is a bit more subtle --- you want to have the shortest warmup period necessary to get on with actual sampling, but longer warmup can mean more efficient sampling. 
+* Some rethinking --- warmup is not *burn-in*, where early samples are tossed out because they are unlikely to be in the stationary region. Warmup is the phase Stan uses to tune the adaptive sampler & find good values for step size/number of steps. 
 
+### 9.5.2 How many chains do you need?
 
+* When debugging a model, McElreath recommends using a single chain (there are some error messages that don't display unless you're using one chain). 
+* You'll need more than one chain do run diagnostics with trace/trank plots. 
+* Once you get to the final run where you're making inferences, you really only need one chain, but more than one chain is fine!
+* You can play with the number of chains/warmup/iterations to get to the most efficient sampling, but a general rule of thumb can be: *one short chain for debugging, four chains for verification and inference*. 
 
+### 9.5.3 Taming a wild chain
 
+* One common problem with some models is that there are broad, flat regions of the posterior density (this happens most often when you use flat priors!).
 
+```{r}
+# wild chain example!
+y <- c(-1, 1)
+set.seed(11)
+
+# really really really wide priors!
+m9.2 <-
+  ulam(
+    alist(y ~ dnorm(mu, sigma),
+          mu <- alpha,
+          alpha ~ dnorm(0, 1000),
+          sigma ~ dexp(0.0001)),
+    data = list(y = y),
+    chains = 3
+  )
+
+# oh no! look at that wonky rhat! 
+precis(m9.2)
+```
+
+* This is a mess! `alpha` and `sigma` make no sense, `Rhat4` is large for all parameters, and even though we drew 1500 samples, the effective sample size is really small.
+* There are also warnings about *divergent transitions*, which is Stan's way of telling us about problems with the chains.
+* For simple models, increasing the `adapt_delta` control parameter from the default of `0.95` can remove the transitions, but when there's a problem with the model itself, this control won't help. 
+* Examining Stan's `pairs()` method can also illuminate divergent transitions:
+
+```{r}
+pairs(m9.2@stanfit)
+```
+
+* The trace/trank plots also show problems: unstable chains in the trace plot and long regions where one chain is more highly ranked than others:
+
+```{r}
+traceplot(m9.2)
+trankplot(m9.2)
+```
+
+* It doesn't take much more prior information to stop this foolishness, even without more data:
+
+$$
+\begin{gather}
+y_i \sim Normal(\mu, \sigma) \\
+\mu = \alpha \\
+\alpha \sim Normal(1, 10) \\
+\sigma \sim Exponential(1)
+\end{gather}
+$$
+
+```{r}
+# rerun with weakly informative priors
+set.seed(11)
+m9.3 <-
+  ulam(
+    alist(y ~ dnorm(mu, sigma),
+          mu <- alpha,
+          alpha ~ dnorm(1, 10),
+          sigma ~ dexp(1)),
+    data = list(y = y),
+    chains = 3
+  )
+
+precis(m9.3)
+```
+
+* In this case, a gentle nudge from the prior (i.e., we don't think that the mean can range from -30,000 to +30,000) is enough to wash away the divergent transitions.
+* This matches up with Andrew Gelman's *folk theorem of statistical computing*: when you have computational problems, often it's really a problem with your model. 
+
+### 9.5.4 Non-identifiable parameters
+
+* In Chapter 6, we saw that highly correlated predictors can create non-identifiable parameters. Here, we'll see how they look inside of a Markov chain.
+* The bad behavior here will be characteristic, so when (not if) you run into this in your own models, you can have a hunch about the remedy.
+
+```{r}
+set.seed(41)
+y <- rnorm(100, mean = 0, sd = 1)
+```
+
+* Let's fit a model with two parameters to this set of random data with mean 0 and standard deviation 1:
+
+$$
+\begin{gather}
+y_i \sim Normal(\mu, \sigma) \\
+\mu = \alpha_1 + \alpha_2 \\
+\alpha_1 \sim Normal(0, 1000) \\
+\alpha_2 \sim Normal(0, 1000) \\
+\sigma \sim Exponential(1)
+\end{gather}
+$$
+
+* Here, $\alpha_1$ and $\alpha_2$ aren't identifiable, only their sum is. Because we simulated the data, we know that it's mean should be around 0.
+
+```{r}
+set.seed(384)
+m9.4 <- 
+  ulam(
+    alist(y ~ dnorm(mu, sigma),
+          mu <- a1 + a2,
+          a1 ~ dnorm(0, 1000),
+          a2 ~ dnorm(0, 1000),
+          sigma ~ dexp(1)),
+    data = list(y = y),
+    chains = 3
+  )
+
+precis(m9.4)
+```
+
+* Wow! Suspicious estimates and *horrible* `n_eff`/`Rhat4`!
+* There is also a warning about `max_treedepth` from Stan --- this usually indicates inefficent chains, not broken chains. You can increase treedepth from the default of 10 in `ulam()` with `control = list(max_treedepth = 15)`, but it won't help much here.
+* The trace/trank plots reveal more:
+
+```{r}
+pairs(m9.4@stanfit)
+traceplot(m9.4)
+trankplot(m9.4)
+```
+
+* Again, weakly regularizing priors can come to the rescue:
+
+```{r}
+m9.5 <-
+  ulam(
+    alist(y ~ dnorm(mu, sigma),
+          mu <- a1 + a2,
+          a1 ~ dnorm(0, 10),
+          a2 ~ dnorm(0, 10),
+          sigma ~ dexp(1)),
+    data = list(y = y),
+    chains = 3
+  )
+
+precis(m9.5)
+```
+
+* So, not great effective sample size, but much more reasonable estimates and chains:
+
+```{r}
+traceplot(m9.5)
+trankplot(m9.5)
+```
+
+* It's easy for complex models with many predictors and interactions to become unidentified and have a lot of correlation among parameters.
+* In these cases, just a little prior information telling the model "none of these parameters can be 30 million" often helps. 
+
+## 9.6 Summary
+
+* `rethinking::ulam()` allows models to be sampled using HMC via Stan.
+* Stan is fussy and will provide warnings from bad chains --- reference this chapter for some introductions to diagnosing common problems.
 

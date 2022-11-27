@@ -287,7 +287,7 @@ HMC2
     ##     return(list(q = new_q, traj = qtraj, ptraj = ptraj, accept = accept, 
     ##         dH = H1 - H0))
     ## }
-    ## <bytecode: 0x0000028c7061ae68>
+    ## <bytecode: 0x000001b482e4f9d8>
     ## <environment: namespace:rethinking>
 
 -   Really the momentum aspect is a huge part of HMC — the “total
@@ -451,6 +451,9 @@ m9.1 <-
     ## Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
     ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
@@ -459,8 +462,8 @@ m9.1 <-
     ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
-    ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
-    ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 finished in 0.2 seconds.
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
@@ -468,30 +471,27 @@ m9.1 <-
     ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
     ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
-    ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 finished in 0.2 seconds.
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
     ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
     ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
-    ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
-    ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
-    ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
-    ## Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
-    ## Chain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) 
-    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 0.4 seconds.
-    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
-    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
-    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 0.4 seconds.
     ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 0.4 seconds.
+    ## Chain 3 finished in 0.2 seconds.
+    ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) 
     ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
     ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
     ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
@@ -499,11 +499,11 @@ m9.1 <-
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 0.4 seconds.
+    ## Chain 4 finished in 0.2 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 0.4 seconds.
-    ## Total execution time: 0.9 seconds.
+    ## Mean chain execution time: 0.2 seconds.
+    ## Total execution time: 0.5 seconds.
 
 ``` r
 precis(m9.1, depth = 2)
@@ -525,10 +525,10 @@ show(m9.1)
     ## 
     ## Sampling durations (seconds):
     ##         warmup sample total
-    ## chain:1   0.23   0.18  0.41
-    ## chain:2   0.24   0.18  0.42
-    ## chain:3   0.22   0.18  0.40
-    ## chain:4   0.23   0.17  0.40
+    ## chain:1   0.12   0.11  0.23
+    ## chain:2   0.12   0.11  0.22
+    ## chain:3   0.10   0.11  0.21
+    ## chain:4   0.10   0.10  0.20
     ## 
     ## Formula:
     ## log_gdp_std ~ dnorm(mu, sigma)
@@ -633,3 +633,467 @@ stancode(m9.1)
     described just like the observed ones.
 -   The `model` block is where the action is — this computes the
     log-probability of the data, running from top to bottom.
+
+## 9.5 Care and feeding of your Markov Chain
+
+-   While we don’t need to be able to write our own HMC sampler from
+    scratch, it is important to understand the basics of how HMC might
+    go awry.
+-   The good news is that HMC makes it pretty easy to tell when
+    something isn’t right.
+
+### 9.5.1 How many samples do you need?
+
+-   You can control the number of samples per chain from the `iter` and
+    `warmup` parameters (the default is `iter = 1000` and
+    `warmup = iter/2`).
+-   What really matters is the *effective* number of samples, rather
+    than the raw number.
+-   Chains are *autocorrelated*, meaning sequential samples are not
+    entirely independent. More autocorrelation means lower `n_eff`.
+-   You can think of `n_eff` as the length of a Markov chain with no
+    autocorreation that would provide the same quality of estimate as
+    your chain.
+-   How many samples you need depends on what you want to know. If all
+    you want is the posterior mean, then perhaps a few hundred samples
+    will do. But if you care about the shape of the distribution or the
+    extreme tails, you’ll need many, many more samples.
+-   Stan will warn about the “tail ESS” (the effective sample size of
+    the tail regions) when it is nervous about the quality of extreme
+    intervals. Sampling more usually helps.
+-   Warmup is a bit more subtle — you want to have the shortest warmup
+    period necessary to get on with actual sampling, but longer warmup
+    can mean more efficient sampling.
+-   Some rethinking — warmup is not *burn-in*, where early samples are
+    tossed out because they are unlikely to be in the stationary region.
+    Warmup is the phase Stan uses to tune the adaptive sampler & find
+    good values for step size/number of steps.
+
+### 9.5.2 How many chains do you need?
+
+-   When debugging a model, McElreath recommends using a single chain
+    (there are some error messages that don’t display unless you’re
+    using one chain).
+-   You’ll need more than one chain do run diagnostics with trace/trank
+    plots.
+-   Once you get to the final run where you’re making inferences, you
+    really only need one chain, but more than one chain is fine!
+-   You can play with the number of chains/warmup/iterations to get to
+    the most efficient sampling, but a general rule of thumb can be:
+    *one short chain for debugging, four chains for verification and
+    inference*.
+
+### 9.5.3 Taming a wild chain
+
+-   One common problem with some models is that there are broad, flat
+    regions of the posterior density (this happens most often when you
+    use flat priors!).
+
+``` r
+# wild chain example!
+y <- c(-1, 1)
+set.seed(11)
+
+# really really really wide priors!
+m9.2 <-
+  ulam(
+    alist(y ~ dnorm(mu, sigma),
+          mu <- alpha,
+          alpha ~ dnorm(0, 1000),
+          sigma ~ dexp(0.0001)),
+    data = list(y = y),
+    chains = 3
+  )
+```
+
+    ## Running MCMC with 3 sequential chains, with 1 thread(s) per chain...
+    ## 
+    ## Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 finished in 0.2 seconds.
+    ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 finished in 0.2 seconds.
+    ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 3 finished in 0.2 seconds.
+    ## 
+    ## All 3 chains finished successfully.
+    ## Mean chain execution time: 0.2 seconds.
+    ## Total execution time: 1.2 seconds.
+
+``` r
+# oh no! look at that wonky rhat! 
+precis(m9.2)
+```
+
+    ##            mean        sd        5.5%    94.5%    n_eff    Rhat4
+    ## alpha  16.81445  379.5485 -511.668400  580.269 145.7092 1.018089
+    ## sigma 592.40254 1467.3659    5.163389 2451.272 133.2505 1.030748
+
+-   This is a mess! `alpha` and `sigma` make no sense, `Rhat4` is large
+    for all parameters, and even though we drew 1500 samples, the
+    effective sample size is really small.
+-   There are also warnings about *divergent transitions*, which is
+    Stan’s way of telling us about problems with the chains.
+-   For simple models, increasing the `adapt_delta` control parameter
+    from the default of `0.95` can remove the transitions, but when
+    there’s a problem with the model itself, this control won’t help.
+-   Examining Stan’s `pairs()` method can also illuminate divergent
+    transitions:
+
+``` r
+pairs(m9.2@stanfit)
+```
+
+![](chapter_9_notes_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+-   The trace/trank plots also show problems: unstable chains in the
+    trace plot and long regions where one chain is more highly ranked
+    than others:
+
+``` r
+traceplot(m9.2)
+trankplot(m9.2)
+```
+
+![](chapter_9_notes_files/figure-gfm/unnamed-chunk-16-1.png)<!-- -->![](chapter_9_notes_files/figure-gfm/unnamed-chunk-16-2.png)<!-- -->
+
+-   It doesn’t take much more prior information to stop this
+    foolishness, even without more data:
+
+$$
+\\begin{gather}
+y_i \\sim Normal(\\mu, \\sigma) \\\\
+\\mu = \\alpha \\\\
+\\alpha \\sim Normal(1, 10) \\\\
+\\sigma \\sim Exponential(1)
+\\end{gather}
+$$
+
+``` r
+# rerun with weakly informative priors
+set.seed(11)
+m9.3 <-
+  ulam(
+    alist(y ~ dnorm(mu, sigma),
+          mu <- alpha,
+          alpha ~ dnorm(1, 10),
+          sigma ~ dexp(1)),
+    data = list(y = y),
+    chains = 3
+  )
+```
+
+    ## Running MCMC with 3 sequential chains, with 1 thread(s) per chain...
+    ## 
+    ## Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 finished in 0.1 seconds.
+    ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 finished in 0.1 seconds.
+    ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 3 finished in 0.1 seconds.
+    ## 
+    ## All 3 chains finished successfully.
+    ## Mean chain execution time: 0.1 seconds.
+    ## Total execution time: 0.8 seconds.
+
+``` r
+precis(m9.3)
+```
+
+    ##              mean       sd       5.5%    94.5%    n_eff    Rhat4
+    ## alpha -0.03215911 1.331023 -1.9126768 1.778442 394.0790 1.012104
+    ## sigma  1.57860880 0.839726  0.6838753 3.146200 250.2627 1.003271
+
+-   In this case, a gentle nudge from the prior (i.e., we don’t think
+    that the mean can range from -30,000 to +30,000) is enough to wash
+    away the divergent transitions.
+-   This matches up with Andrew Gelman’s *folk theorem of statistical
+    computing*: when you have computational problems, often it’s really
+    a problem with your model.
+
+### 9.5.4 Non-identifiable parameters
+
+-   In Chapter 6, we saw that highly correlated predictors can create
+    non-identifiable parameters. Here, we’ll see how they look inside of
+    a Markov chain.
+-   The bad behavior here will be characteristic, so when (not if) you
+    run into this in your own models, you can have a hunch about the
+    remedy.
+
+``` r
+set.seed(41)
+y <- rnorm(100, mean = 0, sd = 1)
+```
+
+-   Let’s fit a model with two parameters to this set of random data
+    with mean 0 and standard deviation 1:
+
+$$
+\\begin{gather}
+y_i \\sim Normal(\\mu, \\sigma) \\\\
+\\mu = \\alpha_1 + \\alpha_2 \\\\
+\\alpha_1 \\sim Normal(0, 1000) \\\\
+\\alpha_2 \\sim Normal(0, 1000) \\\\
+\\sigma \\sim Exponential(1)
+\\end{gather}
+$$
+
+-   Here, *α*<sub>1</sub> and *α*<sub>2</sub> aren’t identifiable, only
+    their sum is. Because we simulated the data, we know that it’s mean
+    should be around 0.
+
+``` r
+set.seed(384)
+m9.4 <- 
+  ulam(
+    alist(y ~ dnorm(mu, sigma),
+          mu <- a1 + a2,
+          a1 ~ dnorm(0, 1000),
+          a2 ~ dnorm(0, 1000),
+          sigma ~ dexp(1)),
+    data = list(y = y),
+    chains = 3
+  )
+```
+
+    ## Running MCMC with 3 sequential chains, with 1 thread(s) per chain...
+    ## 
+    ## Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 finished in 1.9 seconds.
+    ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 finished in 1.9 seconds.
+    ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 3 finished in 2.9 seconds.
+    ## 
+    ## All 3 chains finished successfully.
+    ## Mean chain execution time: 2.2 seconds.
+    ## Total execution time: 7.1 seconds.
+
+``` r
+precis(m9.4)
+```
+
+    ##             mean          sd         5.5%      94.5%     n_eff    Rhat4
+    ## a1    -93.450730 305.1155469 -620.4929950 357.899500  2.039450 2.993144
+    ## a2     93.641532 305.1145112 -357.7039600 620.610650  2.039476 2.993080
+    ## sigma   1.029027   0.0669941    0.9250204   1.129514 15.400222 1.244164
+
+-   Wow! Suspicious estimates and *horrible* `n_eff`/`Rhat4`!
+-   There is also a warning about `max_treedepth` from Stan — this
+    usually indicates inefficent chains, not broken chains. You can
+    increase treedepth from the default of 10 in `ulam()` with
+    `control = list(max_treedepth = 15)`, but it won’t help much here.
+-   The trace/trank plots reveal more:
+
+``` r
+pairs(m9.4@stanfit)
+```
+
+![](chapter_9_notes_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+
+``` r
+traceplot(m9.4)
+```
+
+![](chapter_9_notes_files/figure-gfm/unnamed-chunk-20-2.png)<!-- -->
+
+``` r
+trankplot(m9.4)
+```
+
+![](chapter_9_notes_files/figure-gfm/unnamed-chunk-20-3.png)<!-- -->
+
+-   Again, weakly regularizing priors can come to the rescue:
+
+``` r
+m9.5 <-
+  ulam(
+    alist(y ~ dnorm(mu, sigma),
+          mu <- a1 + a2,
+          a1 ~ dnorm(0, 10),
+          a2 ~ dnorm(0, 10),
+          sigma ~ dexp(1)),
+    data = list(y = y),
+    chains = 3
+  )
+```
+
+    ## Running MCMC with 3 sequential chains, with 1 thread(s) per chain...
+    ## 
+    ## Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 finished in 0.7 seconds.
+    ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 finished in 1.3 seconds.
+    ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 3 finished in 0.8 seconds.
+    ## 
+    ## All 3 chains finished successfully.
+    ## Mean chain execution time: 0.9 seconds.
+    ## Total execution time: 3.1 seconds.
+
+``` r
+precis(m9.5)
+```
+
+    ##             mean         sd        5.5%     94.5%    n_eff    Rhat4
+    ## a1    -0.1816462 6.75839762 -11.1915485 10.271653 391.4050 1.001848
+    ## a2     0.3740405 6.76048247 -10.0349195 11.477067 391.3189 1.001888
+    ## sigma  1.0354656 0.07774345   0.9221534  1.168177 456.5877 1.001587
+
+-   So, not great effective sample size, but much more reasonable
+    estimates and chains:
+
+``` r
+traceplot(m9.5)
+```
+
+![](chapter_9_notes_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+
+``` r
+trankplot(m9.5)
+```
+
+![](chapter_9_notes_files/figure-gfm/unnamed-chunk-22-2.png)<!-- -->
+
+-   It’s easy for complex models with many predictors and interactions
+    to become unidentified and have a lot of correlation among
+    parameters.
+-   In these cases, just a little prior information telling the model
+    “none of these parameters can be 30 million” often helps.
+
+## 9.6 Summary
+
+-   `rethinking::ulam()` allows models to be sampled using HMC via Stan.
+-   Stan is fussy and will provide warnings from bad chains — reference
+    this chapter for some introductions to diagnosing common problems.
