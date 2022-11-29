@@ -149,6 +149,85 @@ distributions[which.max(entropies)]
 * So, tl;dr, when only two unordered outcomes are possible and the expected number of each type of event is assumed to be constant, then the distribution most consistent with these constraints is the binomial. 
 * We usually want to estimate the expected value, but we'll cover that detail later.
 
+## 10.2 Generalized linear models
+
+* Gaussian models work in situations where an outcome is continuous and far from any theoretical maximum or minimum.
+* But there are lots of situations where the outcome is either discrete or bounded!
+* This is where *generalized linear models* come into play --- here's a binomial model as an example:
+
+$$
+\begin{gather}
+y_i \sim Binomial(n, p_i) \\
+f(p_i) = \alpha + \beta(x_i - \overline x)
+\end{gather}
+$$
+
+* Where $f(p_i)$ is a *link function* to coerce linear values that could range on a $(-\infty, \infty)$ scale to some target scale (in this case, the $logit$ function will bind $p_i$ to $(0, 1)$)
+* A common practice is to determine the outcome distribution by plotting a histogram, but this isn't a great idea, since the outcome should follow the distribution *after* conditioning on variables. For example, the heights of a group of men and women won't be Gaussian, but condition on gender and the residual distributions will be.
+
+### 10.2.1 Meet the family
+
+* The most common distributions in statistical modeling belong to the *Exponential Family*. 
+* We're already familiar with the Gaussian and binomial distributions, but here are the other family members:
+  1. The *Exponential Distribution* is constrained to be 0 or positive, and is described by a single parameter, the rate of events, $\lambda$. It's the fundamental distribution of distance and duration that represent displacement from some reference point in either time or space and is the core of survival and event history analysis.
+  2. The *Gamma Distribution* is also constrained to be 0 or positive. It is also a fundamental distribution of distance and duration but have a peak greater than 0. It's described by two parameters (but there are lots of interpretations of these parameters, so take care to read up ahead of implementing). It is also common in survival and event history analysis. 
+  3. The *Poisson Distribution* is a special case of the binomial distribution, used for low probability events. It is described by a single parameter for the mean and variance, $\lambda$. 
+  
+### 10.2.2 Linking linear models to distributions
+
+* We usually require a *link function* between a the linear model and the outcome distribution parameters to prevent any sort of mathematical accidents.
+* There are two exceedingly common link functions, the *logit link* and the *log link*. 
+* The *logit link* constrains parameters between 0 and 1. The logit itself is the *log-odds*: 
+
+$$
+\begin{gather}
+y_i \sim Binomial(n, p_i) \\
+logit(p_i) = \alpha + \beta x_i \\
+logit(p_i) = log \ \frac{p_i}{1 - p_i}
+\end{gather}
+$$
+
+* The compression from $(-\infty, \infty)$ to $(0, 1)$ changes the interpretation of parameter estimates, since a unit change in a predictor variable no longer produces a unit change in the outcome. 
+* Instead, a unit change in $x_i$ produces a larger or smaller change in the probability $p_i$ depending on how far from 0 the log-odds are. 
+* The other very common function is the *log link* --- here's an example where the mean $\mu$ is constant but the standard deviation must be greater than 0:
+
+$$
+\begin{gather}
+y_i \sim Normal(\mu, \sigma_i) \\
+log(\sigma_i) = \alpha + \beta x_i
+\end{gather}
+$$
+
+* With a log link, a one unit increase represents an increase in *magnitude*.
+* Log links solve the problem of constraining parameters to be positive, but may introduce a problem when the model is asked to predict well outside the range of the data used to fit it. Exponential relationships grow exponentially, but relationships aren't exponential forever! (just like how linear relationships aren't linear forever). 
+* When in doubt, play with your assumptions by conducting a *sensitivity analysis*. 
+
+### 10.2.3 Omitted variable bias again
+
+* In linear models, leaving out causally important variables leads to biased inference. The same thing can happen in GLMs, but can be worse, since even a variable that isn't a confounder can bias inference through the link function. 
+* This is because the ceiling/floor effects can distort estimates by suppressing the causal influence on a variable. 
+
+### 10.2.4 Absolute and relative differences
+
+* Parameter estimates themselves do not tell you the importance of a variable on the outcome, because of the link function.
+* Each parameter represents a relative difference on the scale of the linear model, when we're really interested in the absolute differences in the outcome. 
+
+### 10.2.5 GLMs and information criteria
+
+* All the information criteria and regularization knowledge from chapter 7 still applies for GLMs. 
+* However, WAIC (or other criterion) cannot help you sort out which likelihood function is best (poisson vs. binomial, gamma vs. exponential). 
+* WAIC/other criterion can really only be used to compare models that use the same likelihood function. 
+* There are other ways to compare models with different likelihood functions.
+
+## 10.3 Maximum entropy priors
+
+* When pressed to choose a likelihood function, maximum entropy can nominate the least informative distribution consistent with the constraints on the outcome. 
+* Maximum entropy provides a way to generate a prior that embodies our background information while assuming as little else as possible. 
+
+## 10.4 Summary
+
+* Maximum entropy provides a way to choose likelihood functions.
+* A link between a linear model and the likelihood is needed to ensure the likelihood's mathematical assumptions are not violated. 
 
 
 
