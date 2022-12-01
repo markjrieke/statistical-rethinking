@@ -26,7 +26,7 @@ y \sim Binomial(n, p)
 \end{gather}
 $$
 
-* The binomial distribution is denoted above, where $y$ is a count ($[\ 0, \infty)$), $p$ is the probability that any particular "trial" is a success, and $n$ is the number of trials. 
+* The binomial distribution is denoted above, where $y$ is a count on $[\ 0, \infty)$, $p$ is the probability that any particular "trial" is a success, and $n$ is the number of trials. 
 * Two common flavors of binomial models are:
   1. *Logistic Regression* --- for single trial cases, when the outcome can only be 0 or 1
   2. *Aggregated binomial regression* --- for multi-trial cases, where the outcome can be any integer between 0 and $n$
@@ -87,6 +87,7 @@ $$
 * We'll change up $\omega$ to see what happens. To start, we'll illustrate the madness of flat priors with $\omega = 10$.
 
 ```{r}
+# model with wide prior
 m11.1 <-
   quap(
     alist(pulled_left ~ dbinom(1, p),
@@ -94,15 +95,237 @@ m11.1 <-
           a ~ dnorm(0, 10)),
     data = d
   )
+
+# sample from the prior
+set.seed(1999)
+prior <- extract.prior(m11.1, n = 1e4)
+p <- inv_logit(prior$a) # need to get the prior on the outcome scale!
+
+# wonk!
+dens(p, adj = 0.1)
 ```
 
+* A flat prior in the logit space is not a flat prior in the probability space!
+* A *slightly* more regularized prior with $\omega = 1.5$ is more akin to what we want:
 
+```{r}
+# model with better prior
+m11.1a <-
+  quap(
+    alist(pulled_left ~ dbinom(1, p),
+          logit(p) <- a,
+          a ~ dnorm(0, 1.5)),
+    data = d
+  )
 
+# sample from the prior
+set.seed(1999)
+prior <- extract.prior(m11.1a, n = 1e4)
+p <- inv_logit(prior$a) # need to get the prior on the outcome scale!
 
+# wonk!
+dens(p, adj = 0.1)
+```
 
+* Now let's do the same weirdness with unconventionally flat priors for the $\beta$ parameters, just to drive this home.
 
+```{r}
+# model with bad priors on treatment
+m11.2 <-
+  quap(
+    alist(pulled_left ~ dbinom(1, p),
+          logit(p) <- a + b[treatment],
+          a ~ dnorm(0, 1.5),
+          b[treatment] ~ dnorm(0, 10)),
+    data = d
+  )
 
+# extract priors
+set.seed(1999)
+prior <- extract.prior(m11.2, n = 1e4)
+p <- sapply(1:4, function(k) inv_logit(prior$a + prior$b[,k]))
 
+# plot the *difference* between treatments 1 and 2:
+dens(abs(p[,1] - p[,2]), adj = 0.1)
+```
+
+* Again, the flat prior means that the model believes that the treatments are either completely alike or completely different, which is not necessarily what we think!
+* Changing to a $\beta_j \sim Normal(0, 0.5)$ prior results in priors outcome that a difference of 0 is the highest prior probability, and the average is about 10%
+
+```{r}
+# model with better priors for alpha and beta
+m11.3 <-
+  quap(
+    alist(pulled_left ~ dbinom(1, p),
+          logit(p) <- a + b[treatment],
+          a ~ dnorm(0, 1.5),
+          b[treatment] ~ dnorm(0, 0.5)),
+    data = d
+  )
+
+# extract priors
+set.seed(1999)
+prior <- extract.prior(m11.3, n = 1e4)
+p <- sapply(1:4, function(k) inv_logit(prior$a + prior$b[,k]))
+
+# return the average prior difference between treatments 1 and 2:
+mean(abs(p[,1] - p[,2]))
+
+# plot!
+dens(abs(p[,1] - p[,2]), adj = 0.1)
+```
+
+* This makes sense, because it's the *difference* in treatment effect.
+* Each treatment runs relatively evenly between 0 and 1, so *on average* the difference is likelier to be small (it's more likely that each is somewhere in the middle rather than being on opposite ends). 
+
+```{r}
+# prep data for ulam
+dat_list <-
+  list(
+    pulled_left = d$pulled_left,
+    actor = d$actor,
+    treatment = as.integer(d$treatment)
+  )
+
+# model! 
+# log_lik = TRUE will have ulam() compute the values necessary for PSIS/WAIC
+m11.4 <-
+  ulam(
+    alist(pulled_left ~ dbinom(1, p),
+          logit(p) <- a[actor] + b[treatment],
+          a[actor] ~ dnorm(0, 1.5),
+          b[treatment] ~ dnorm(0, 0.5)),
+    data = dat_list,
+    chains = 4,
+    log_lik = TRUE
+  )
+
+# posterior parameter estimations
+precis(m11.4, depth = 2)
+
+# plot parameters:
+post <- extract.samples(m11.4)
+p_left <- inv_logit(post$a)
+precis_plot(precis(as.data.frame(p_left)), xlim = c(0, 1))
+```
+
+* Here each row is a chimpanzee. Chimps 1, 3, 4, and 5 show a preference for the right lever. 2 and 7 show a preference for the left, with 2 preferring it greatly.
+* Having repeat measurements per actor (chimp), is useful for subtracting out this chimp-level preference to isolate the treatment effect.
+
+```{r}
+# plot posterior treatment
+labs <- c("R/N", "L/N", "R/P", "L/P")
+precis_plot(precis(m11.4, depth = 2, pars = "b"), labels = labs)
+```
+
+* Here, "L/N" means "prosocial on left, no partner" and "R/P" means "prosocial on right/partner."
+* We're looking to see if chimpanzees choose the prosocial option when a partner is present, so we ought to compare the first/third row and the second/fourth row:
+
+```{r}
+diffs <-
+  list(
+    db13 = post$b[,1] - post$b[,3],
+    db24 = post$b[,2] - post$b[,4]
+  )
+
+precis_plot(precis(diffs))
+```
+
+* Here, there is weak evidence of the pulling the prosocial choice on the right when the partner is present, but the interval is pretty wide. 
+* There is pretty negligible evidence for pulling the prosocial choice when the option is on the left (if anything, they choose the prosocial option when the partner is absent!)
+* Let's compare the proportion each chimp actually pulled the left lever with the model's posterior predictions.
+
+```{r}
+pl <- by(d$pulled_left, list(d$actor, d$treatment), mean)
+
+# proportion of pulling left under each treatment for chimp 1:
+pl[1,]
+```
+
+```{r}
+# plot proportions:
+plot(NULL, 
+     xlim = c(1, 28),
+     ylim = c(0, 1),
+     xlab = "",
+     ylab = "proportion left lever",
+     xaxt = "n",
+     yaxt = "n")
+
+axis(2, 
+     at = c(0, 0.5, 1),
+     labels = c(0, 0.5, 1))
+
+abline(h = 0.5,
+       lty = 2)
+
+for (j in 1:7) abline(y = (j - 1)*4 + 4.5, lwd = 0.5)
+for (j in 1:7) text((j - 1)*4 + 2.5, 1.1, concat("actor ", j), xpd = TRUE)
+for (j in (1:7)[-2]) {
+  lines((j - 1)*4 + c(1, 3), pl[j, c(1, 3)], lwd = 2, col = rangi2)
+  lines((j - 1)*4 + c(2, 4), pl[j, c(2, 4)], lwd = 2, col = rangi2)
+}
+
+points(1:28, t(pl), pch = 16, col = "white", cex = 1.7)
+points(1:28, t(pl), pch = c(1, 1, 16, 16), col = rangi2, lwd = 2)
+
+yoff <- 0.01
+text(1, pl[1, 1] - yoff, "R/N", pos = 1, cex = 0.8)
+text(2, pl[1, 2] + yoff, "L/N", pos = 3, cex = 0.8)
+text(3, pl[1, 3] - yoff, "R/P", pos = 1, cex = 0.8)
+text(4, pl[1, 4] + yoff, "L/P", pos = 3, cex = 0.8)
+```
+
+```{r}
+# posterior predictions
+# see figure 11.4 on page 333 for the actual plot lol
+dat <- list(actor = rep(1:7, each = 4), treatment = rep(1:4, times = 7))
+p_post <- link(m11.4, data = dat)
+p_mu <- apply(p_post, 2, mean)
+p_ci <- apply(p_post, 2, PI)
+```
+
+* There doesn't seem to be any much evidence of the prosocial option being chosen more when a partner is present, but to test it out explicitly, let's build a model with an interaction effect.
+* The simpler model will likely do just fine, because we don't expect to see an interaction:
+
+```{r}
+# prep new vars
+d$side <- d$prosoc_left + 1 # right 1, left 2
+d$cond <- d$condition + 1 # no partner 1, partner 2
+
+# prep new list for ulam
+dat_list2 <-
+  list(pulled_left = d$pulled_left,
+       actor = d$actor,
+       side = d$side,
+       cond = d$cond)
+
+# model
+m11.5 <- 
+  ulam(
+    alist(pulled_left ~ dbinom(1, p),
+          logit(p) <- a[actor] + bs[side] + bc[cond],
+          a[actor] ~ dnorm(0, 1.5),
+          bs[side] ~ dnorm(0, 0.5),
+          bc[cond] ~ dnorm(0, 0.5)),
+    data = dat_list2,
+    chains = 4,
+    log_lik = TRUE
+  )
+
+# finally, compare models w/PSIS
+compare(m11.5, m11.4, func = PSIS)
+```
+
+* The modle comparison here is for the sake of understanding, but the experiment + hypothesis tell us which model to use (`m11.4`), this comparison just lets us know that `m11.5` doesn't add a whole lot. 
+
+```{r}
+# follow along with the overthinking box on pages 334-336
+post <- extract.samples(m11.4, clean = FALSE) # clean = FALSE returns the log-probability
+str(post)
+
+stancode(m11.4)
+```
 
 
 
