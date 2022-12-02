@@ -327,6 +327,304 @@ str(post)
 stancode(m11.4)
 ```
 
+### 11.1.2 Relative shark and absolute deer
+
+* The above focused on the posterior difference treatment made on the outcome scale --- this focuses on *absolute effects*. 
+* Oftentimes, we're interested in the *relative effect* a term has in a logistic model --- the proportional change in the odds of an outcome. 
+* We can calculate these *proportional odds* relative effect sizes by exponentiating the parameter of interest.
+
+```{r}
+post <- extract.samples(m11.4)
+
+# what is the proportional odds difference between treatments 4 & 2?
+mean(exp(post$b[,4] - post$b[,2]))
+```
+
+* On average, the switch from treatment 2 to treatment 4 (adding a partner) multiplies the odds of pulling the left lever by 0.92 (an 8% reduction in odds). 
+* The risk in proportional odds is that they don't necessarily tell us if a parameter is important or not --- for example if the odds of some event are 1 in 1 million, and a parameter change involves a 5.0 proportional odds increase, then the resulting odds now only 5 in 1 million.
+* Relative and absolute risks are both important in --- consider relative sharks and absolute deer. People are very afraid of sharks but not so much of deer --- sharks themselves are more dangerous *relative* to deer, but more people are killed by deer each year so deer are more *absolutely* dangerous.
+
+### 11.1.3 Aggregated binomial: Chimpanzees again, condensed
+
+* The original model treated each pull of the lever as a separate trial, but we could aggregate the trials by chimp:
+
+```{r}
+data("chimpanzees")
+d <- chimpanzees
+d$treatment <- 1 + d$prosoc_left + 2*d$condition
+d$side <- d$prosoc_left + 1 # right = 1, left = 2
+d$cond <- d$condition + 1 # no partner 1, partner 2
+
+d_aggregated <- 
+  aggregate(
+    d$pulled_left,
+    list(treatment = d$treatment,
+         actor = d$actor,
+         side = d$side,
+         cond = d$cond),
+    sum
+  )
+
+colnames(d_aggregated)[5] <- "left_pulls"
+
+d_aggregated
+```
+
+* We can redefine the model in these aggregated terms & get the same inferences as before:
+
+```{r}
+# prep new aggregated data for ulam
+dat <- 
+  with(
+    d_aggregated,
+    list(left_pulls = left_pulls,
+         treatment = treatment,
+         actor = actor,
+         side = side,
+         cond = cond)
+  )
+
+# model the aggregated data!
+m11.6 <- 
+  ulam(
+    alist(left_pulls ~ dbinom(18, p), # each chimp has 18 pulls
+          logit(p) <- a[actor] + b[treatment],
+          a[actor] ~ dnorm(0, 1.5),
+          b[treatment] ~ dnorm(0, 0.5)),
+    data = dat,
+    chains = 4,
+    log_lik = TRUE
+  )
+
+# compare!
+compare(m11.6, m11.4, func = PSIS)
+```
+
+* Here, PSIS shows very different values, even though they're effectively the same. This is just because `dbinom()` contains the multiplicity term for all the possible orders the successes could appear (for example, here's 6 successes in 9 trials):
+
+$$
+\begin{gather}
+Pr(6|9, p) = \frac{6!}{6!(9 - 6)!} \ p^6 (1 - p)^{9 - 6}
+\end{gather}
+$$
+
+* When all the trials are split into 9 different 0/1 trials, there is no multiplicity term. So the joint probability for the aggregated data is larger --- there are more ways to see the data --- and the PSIS/WAIC scores end up smaller.
+
+```{r}
+# deviance of aggregated 6-in-9
+-2*dbinom(6, 9, 0.2, log = TRUE)
+
+# deviance of disaggregated
+-2*sum(dbern(c(1, 1, 1, 1, 1, 1, 0, 0, 0), 0.2, log = TRUE))
+```
+
+* This difference is meaningless --- it's just a side effect of how the data is organized. Posterior inference will be the same!
+* We do, however, get a warning about Pareto *k* values --- why didn't we get this warning for the diaggregated data? 
+* This is because of WAIC/PSIS are calculated with loo, but when there are multiple (18) trials per observation, it's more like leave 18 out! So we get a warning for highly influential observations.
+* Long story short --- if you want to calculate WAIC or PSIS, you should use a *logistic regression* format, otherwise you implicitly assume only large chunks of data are separable (though there are times where this makes sense, like multilevel models!).
+
+### 11.1.4 Aggregated binomial: Graduate schoold admissions
+
+* In the chimpanzee case, the aggregated data had the same number of trials for each observation, but this often isn't the case.
+* This can be handled simply by inserting a variable for the number of trials!
+
+```{r}
+data("UCBadmit")
+d <- UCBadmit
+
+d
+```
+
+* Our job here is to evaluate whether the data contains evidence of gender bias in admissions. Here's what we'll model:
+
+$$
+\begin{gather}
+A_i \sim Binomial(N_i, p_i) \\
+logit(p_i) = \alpha_{GID[i]} \\
+\alpha_j \sim Normal(0, 1.5)
+\end{gather}
+$$
+
+```{r}
+# prep data for ulam
+dat_list <-
+  list(admit = d$admit,
+       applications = d$applications,
+       gid = ifelse(d$applicant.gender == "male", 1, 2))
+
+# model!
+m11.7 <- 
+  ulam(
+    alist(admit ~ dbinom(applications, p),
+          logit(p) <- a[gid],
+          a[gid] ~ dnorm(0, 1.5)),
+    data = dat_list,
+    chains = 4
+  )
+
+precis(m11.7, depth = 2)
+```
+
+* There certainly seems to be a difference! To get better insight, let's compare on the logit scale (relative shark!) as well as on the outcome (absolute deer!)
+
+```{r}
+post <- extract.samples(m11.7)
+diff_a <- post$a[,1] - post$a[,2]
+diff_p <- inv_logit(post$a[,1]) - inv_logit(post$a[,2])
+precis(list(diff_a = diff_a, diff_p = diff_p))
+```
+
+* Here, the log-odds difference is certainly positive, and the difference (in favor of males) is somewhere between 12% and 16% on the probability scale. 
+* However, our predictions aren't very good!
+
+```{r}
+postcheck(m11.7)
+
+# draw lines connecting points from the same dept
+for (i in 1:6) {
+  
+  x <- 1 + 2*(i-1)
+  y1 <- d$admit[x]/d$applications[x]
+  y2 <- d$admit[x + 1]/d$applications[x + 1]
+  lines(c(x, x+1), c(y1, y2), col = rangi2, lwd = 2)
+  text(x + 0.5, (y1 + y2)/2 + 0.05, d$dept[x], cex = 0.8, col = rangi2)
+  
+}
+```
+
+* Sometimes bad fits are the result of coding mistakes, but this isn't. The model is correctly answering the bad question, *what are the average probabilities of admission for men and women across all departments?*
+* We instead want to answer the question, *what is the average difference in probability of admission between men and women within departments?*
+
+$$
+\begin{gather}
+A_i \sim Binomial(N_i, p_i) \\
+logit(p_i) = \alpha_{GID[i]} + \delta_{DEPT[i]} \\
+\alpha_j \sim Normal(0, 1.5) \\ 
+\delta_k \sim Normal(0, 1.5)
+\end{gather}
+$$
+
+```{r}
+# create an id for each department
+dat_list$dept_id <- rep(1:6, each = 2)
+
+# model!
+m11.8 <-
+  ulam(
+    alist(admit ~ dbinom(applications, p),
+          logit(p) <- a[gid] + delta[dept_id],
+          a[gid] ~ dnorm(0, 1.5),
+          delta[dept_id] ~ dnorm(0, 1.5)),
+    data = dat_list,
+    chains = 4,
+    iter = 4000
+  )
+
+precis(m11.8, depth = 2)
+```
+
+* Now the intercept for male applicants, `a[1]`, is now a little smaller than the female applicants. Let's calculate the contrasts again on both scales:
+
+```{r}
+post <- extract.samples(m11.8)
+diff_a <- post$a[,1] - post$a[,2]
+diff_p <- inv_logit(post$a[,1]) - inv_logit(post$a[,2])
+precis(list(diff_a = diff_a, diff_p = diff_p))
+```
+
+* Now we see that if male applicants have it worse, it's only by a seemingly little bit (~ 2% on average).
+* Adding in departments changed the inference about gender because the rates of admission vary quite a bit across departments:
+
+```{r}
+pg <- 
+  with(
+    dat_list, 
+    sapply(1:6, function(k) applications[dept_id == k]/sum(applications[dept_id == k]))
+  )
+
+rownames(pg) <- c("male", "female")
+colnames(pg) <- unique(d$dept)
+round(pg, 2)
+```
+
+* Department is both a confound and legitimate predictor --- in DAG form:
+
+```{r}
+library(dagitty)
+admit_dag <- 
+  dagitty(
+    "dag{
+      G -> A
+      G -> D
+      D -> A
+    }"
+  )
+
+coordinates(admit_dag) <- 
+  list(x = c(G = 1, D = 2, A = 3),
+       y = c(G = 1, D = 0, A = 1))
+
+drawdag(admit_dag)
+```
+
+* Including *D* as a predictor in the model closes the indirect path between *G* and *A*. 
+* This is an example of *mediation* analysis. 
+* There could still be unobserved confounders, for example, if an unobserved variable for academic ability influences both which department a candidate selects and their admit rate, a DAG might be:
+
+```{r}
+admit_dag <- 
+  dagitty(
+    "dag{
+      U[unobserved]
+      G -> D
+      G -> A
+      D -> A
+      U -> D
+      U -> A
+    }"
+  )
+
+coordinates(admit_dag) <- 
+  list(x = c(G = 1, D = 2, A = 3, U = 3),
+       y = c(G = 1, D = 0, A = 1, U = 0))
+
+drawdag(admit_dag)
+```
+
+* Finally, `m11.8` is technicall overparametereized --- we don't actually need one of the parameters (either `a[1]` or `a[2]`). Since we just care about the delta, we can use a dummy variable. Though we do see high correlations among the predictors:
+
+```{r}
+pairs(m11.8)
+```
+
+* On the outcome scale, the posterior predictions are much tighter:
+
+```{r}
+postcheck(m11.8)
+```
+
+* Over-parameterizing the model like we've done here isn't a violation of any statistical principle (and we get the benefit of assigning priors and not making assumptions about the indicator being more uncertain than baseline), we just need to make sure the model can handle the high correlations.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
