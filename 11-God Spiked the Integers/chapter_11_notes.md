@@ -277,7 +277,7 @@ m11.4 <-
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 4.1 seconds.
+    ## Chain 1 finished in 2.7 seconds.
     ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -290,7 +290,7 @@ m11.4 <-
     ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 3.8 seconds.
+    ## Chain 2 finished in 2.9 seconds.
     ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -303,7 +303,7 @@ m11.4 <-
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 3.7 seconds.
+    ## Chain 3 finished in 2.5 seconds.
     ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -316,11 +316,11 @@ m11.4 <-
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 4.1 seconds.
+    ## Chain 4 finished in 2.4 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 3.9 seconds.
-    ## Total execution time: 17.0 seconds.
+    ## Mean chain execution time: 2.6 seconds.
+    ## Total execution time: 11.3 seconds.
 
 ``` r
 # posterior parameter estimations
@@ -492,7 +492,7 @@ m11.5 <-
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 4.8 seconds.
+    ## Chain 1 finished in 3.0 seconds.
     ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -505,7 +505,7 @@ m11.5 <-
     ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 4.8 seconds.
+    ## Chain 2 finished in 2.9 seconds.
     ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -518,7 +518,7 @@ m11.5 <-
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 4.7 seconds.
+    ## Chain 3 finished in 2.9 seconds.
     ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -531,11 +531,11 @@ m11.5 <-
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 4.5 seconds.
+    ## Chain 4 finished in 2.9 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 4.7 seconds.
-    ## Total execution time: 20.1 seconds.
+    ## Mean chain execution time: 2.9 seconds.
+    ## Total execution time: 12.4 seconds.
 
 ``` r
 # finally, compare models w/PSIS
@@ -729,7 +729,7 @@ m11.6 <-
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 0.5 seconds.
+    ## Chain 1 finished in 0.4 seconds.
     ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -742,7 +742,7 @@ m11.6 <-
     ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 0.3 seconds.
+    ## Chain 2 finished in 0.4 seconds.
     ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -755,7 +755,7 @@ m11.6 <-
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 0.5 seconds.
+    ## Chain 3 finished in 0.3 seconds.
     ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -768,11 +768,11 @@ m11.6 <-
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 0.5 seconds.
+    ## Chain 4 finished in 0.3 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 0.5 seconds.
-    ## Total execution time: 3.0 seconds.
+    ## Mean chain execution time: 0.3 seconds.
+    ## Total execution time: 2.0 seconds.
 
 ``` r
 # compare!
@@ -896,7 +896,7 @@ m11.7 <-
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 0.2 seconds.
+    ## Chain 1 finished in 0.1 seconds.
     ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -909,7 +909,7 @@ m11.7 <-
     ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 0.2 seconds.
+    ## Chain 2 finished in 0.1 seconds.
     ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -922,7 +922,7 @@ m11.7 <-
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 0.2 seconds.
+    ## Chain 3 finished in 0.1 seconds.
     ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -935,11 +935,11 @@ m11.7 <-
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 0.2 seconds.
+    ## Chain 4 finished in 0.1 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 0.2 seconds.
-    ## Total execution time: 2.2 seconds.
+    ## Mean chain execution time: 0.1 seconds.
+    ## Total execution time: 1.2 seconds.
 
 ``` r
 precis(m11.7, depth = 2)
@@ -1064,7 +1064,7 @@ m11.8 <-
     ## Chain 1 Iteration: 3800 / 4000 [ 95%]  (Sampling) 
     ## Chain 1 Iteration: 3900 / 4000 [ 97%]  (Sampling) 
     ## Chain 1 Iteration: 4000 / 4000 [100%]  (Sampling) 
-    ## Chain 1 finished in 1.6 seconds.
+    ## Chain 1 finished in 1.3 seconds.
     ## Chain 2 Iteration:    1 / 4000 [  0%]  (Warmup) 
     ## Chain 2 Iteration:  100 / 4000 [  2%]  (Warmup) 
     ## Chain 2 Iteration:  200 / 4000 [  5%]  (Warmup) 
@@ -1107,7 +1107,7 @@ m11.8 <-
     ## Chain 2 Iteration: 3800 / 4000 [ 95%]  (Sampling) 
     ## Chain 2 Iteration: 3900 / 4000 [ 97%]  (Sampling) 
     ## Chain 2 Iteration: 4000 / 4000 [100%]  (Sampling) 
-    ## Chain 2 finished in 1.2 seconds.
+    ## Chain 2 finished in 1.1 seconds.
     ## Chain 3 Iteration:    1 / 4000 [  0%]  (Warmup) 
     ## Chain 3 Iteration:  100 / 4000 [  2%]  (Warmup) 
     ## Chain 3 Iteration:  200 / 4000 [  5%]  (Warmup) 
@@ -1150,7 +1150,7 @@ m11.8 <-
     ## Chain 3 Iteration: 3800 / 4000 [ 95%]  (Sampling) 
     ## Chain 3 Iteration: 3900 / 4000 [ 97%]  (Sampling) 
     ## Chain 3 Iteration: 4000 / 4000 [100%]  (Sampling) 
-    ## Chain 3 finished in 1.2 seconds.
+    ## Chain 3 finished in 1.0 seconds.
     ## Chain 4 Iteration:    1 / 4000 [  0%]  (Warmup) 
     ## Chain 4 Iteration:  100 / 4000 [  2%]  (Warmup) 
     ## Chain 4 Iteration:  200 / 4000 [  5%]  (Warmup) 
@@ -1193,11 +1193,11 @@ m11.8 <-
     ## Chain 4 Iteration: 3800 / 4000 [ 95%]  (Sampling) 
     ## Chain 4 Iteration: 3900 / 4000 [ 97%]  (Sampling) 
     ## Chain 4 Iteration: 4000 / 4000 [100%]  (Sampling) 
-    ## Chain 4 finished in 1.2 seconds.
+    ## Chain 4 finished in 1.1 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 1.3 seconds.
-    ## Total execution time: 6.5 seconds.
+    ## Mean chain execution time: 1.1 seconds.
+    ## Total execution time: 5.3 seconds.
 
 ``` r
 precis(m11.8, depth = 2)
@@ -1325,3 +1325,553 @@ postcheck(m11.8)
     priors and not making assumptions about the indicator being more
     uncertain than baseline), we just need to make sure the model can
     handle the high correlations.
+
+## 11.2 Poisson regression
+
+-   Binomial regression is good for when we know the upper bound of a
+    count distribution, but what about when we don’t? For example, if I
+    go fishing and return with 7 fish, what was the maximum?
+-   The binomial models still works here! Just with a special condition
+    that results in the Poisson distribution.
+-   When a binomial distribution has a small probability $p$ and a large
+    number of trials $N$, it takes on a special shape. The expected
+    value $Np$ is approximately equal to the variance $Np(1 - p)$.
+
+``` r
+# simulate 100000 samples of 1000 trials of an event with 1/1000 probability
+y <- rbinom(1e5, 1000, 1/1000)
+c(mean(y), var(y))
+```
+
+    ## [1] 1.002140 1.000145
+
+-   A Poisson model can be specified as:
+
+$$
+\begin{gather}
+y_i \sim Poisson(\lambda_i) \\
+log(\lambda_i) = \alpha + \beta(x_i - \overline x)
+\end{gather}
+$$
+
+-   Where $\lambda$ is the mean/variance of the expected count of $y$
+    and the log link ensures that $\lambda$ is always positive.
+-   This log link also implies an exponential relationship between the
+    predictors and the expected value — we need to check that the log
+    link makes sens at all ranges of the predictor variables and that
+    the priors are scaling appropriately.
+
+### 11.2.1 Example: Oceanic tool complexity
+
+-   Let’s walk through an example of predicting the number of types of
+    tools on historical island populations.
+
+``` r
+data("Kline")
+d <- Kline
+d
+```
+
+    ##       culture population contact total_tools mean_TU
+    ## 1    Malekula       1100     low          13     3.2
+    ## 2     Tikopia       1500     low          22     4.7
+    ## 3  Santa Cruz       3600     low          24     4.0
+    ## 4         Yap       4791    high          43     5.0
+    ## 5    Lau Fiji       7400    high          33     5.0
+    ## 6   Trobriand       8000    high          19     4.0
+    ## 7       Chuuk       9200    high          40     3.8
+    ## 8       Manus      13000     low          28     6.6
+    ## 9       Tonga      17500    high          55     5.4
+    ## 10     Hawaii     275000     low          71     6.6
+
+-   We’ll model `total_tools` using the idea that:
+    1.  The number of tools increases with the log of the population
+        size (from anthropological theory).
+    2.  The number of tools increases with the contact rate among
+        islands.
+    3.  The impact of population on tool counts is moderated by high
+        contact (aka, we’ll model an interaction between the two).
+
+$$
+\begin{gather}
+T_i \sim Poisson(\lambda_i) \\
+log(\lambda_i) = \alpha_{CID[i]} + \beta_{CID[i]} \ log(P_i) \\
+\alpha_j \sim to \ be \ determined \\
+\beta_j \sim to \ be \ determined
+\end{gather}
+$$
+
+-   Let’s figure out sensible priors. To start, let’s consider a vague
+    $Normal(0, 10)$ prior on a single intercept term:
+
+$$
+\begin{gather}
+T_i \sim Poisson(\lambda_i) \\
+log(\lambda_i) = \alpha \\
+\alpha \sim Normal(0, 10)
+\end{gather}
+$$
+
+``` r
+# plot the prior distribution on the outcome scale
+curve(dlnorm(x, 0, 10), from = 0, to = 100, n = 200)
+```
+
+![](chapter_11_notes_files/figure-gfm/unnamed-chunk-32-1.png)<!-- -->
+
+-   The range of number of tools spans from 0-100, like we want, but
+    there is an implausibly large spike at 0 due to our poor prior
+    choice!
+-   A weakly informative suggestion via McElreath is to use a
+    $\alpha \sim Normal(3, 0.5)$ prior:
+
+``` r
+curve(dlnorm(x, 3, 0.5), from = 0, to = 100, n = 200)
+```
+
+![](chapter_11_notes_files/figure-gfm/unnamed-chunk-33-1.png)<!-- -->
+
+-   That’s much better! Now let’s work on a prior for $\beta$ — for
+    dramatic effect we’ll first consider an incredibly wide prior:
+
+``` r
+N <- 100
+a <- rnorm(N, 3, 0.5) # reasonable prior for alpha
+b <- rnorm(N, 0, 10) # wide prior for beta
+
+# plot!
+plot(NULL, xlim = c(-2, 2), ylim = c(0, 100))
+for (i in 1:N) curve(exp(a[i] + b[i]*x), add = TRUE, col = grau())
+```
+
+![](chapter_11_notes_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->
+
+-   The priors on the are unreasonable in that there is explosive growth
+    just beyond the mean or catastrophic decline just after.
+-   McElreath settles on a $\beta \sim Normal(0, 0.2)$ prior, though
+    notes that he’s tempted from his experience to force the prior to be
+    positive.
+
+``` r
+# prior simulation for the tighter prior
+set.seed(10)
+N <- 100
+a <- rnorm(N, 3, 0.5)
+b <- rnorm(N, 0, 0.2)
+plot(NULL, xlim = c(-2, 2), ylim = c(0, 100))
+for (i in 1:N) curve(exp(a[i] + b[i]*x), add = TRUE, col = grau())
+```
+
+![](chapter_11_notes_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
+
+-   This new prior still allows for strong relationships, but not as
+    explosive.
+-   Let’s switch over from the standardized to natural scales for the
+    population:
+
+``` r
+x_seq <- seq(from = log(100), to = log(200000), length.out = 100)
+lambda <- sapply(x_seq, function(x) exp(a + b*x))
+
+# total tools vs. log-population
+plot(NULL, 
+     xlim = range(x_seq), 
+     ylim = c(0, 500), 
+     xlab = "log population", 
+     ylab = "total tools")
+
+for (i in 1:N) lines(x_seq, lambda[i,], col = grau(), lwd = 1.5)
+```
+
+![](chapter_11_notes_files/figure-gfm/unnamed-chunk-36-1.png)<!-- -->
+
+``` r
+# total tools vs. population
+plot(NULL,
+     xlim = range(exp(x_seq)),
+     ylim = c(0, 500), 
+     xlab = "population",
+     ylab = "total tools")
+
+for(i in 1:N) lines(exp(x_seq), lambda[i,], col = grau(), lwd = 1.5)
+```
+
+![](chapter_11_notes_files/figure-gfm/unnamed-chunk-36-2.png)<!-- -->
+
+-   Let’s code both the interaction model and the intercept only model:
+
+``` r
+# prep data for passing to ulam
+d$P <- scale(log(d$population))
+d$contact_id <- ifelse(d$contact == "high", 2, 1)
+dat <-
+  list(
+    T = d$total_tools,
+    P = d$P,
+    cid = d$contact_id
+  )
+
+# intercept only model
+m11.9 <- 
+  ulam(
+    alist(T ~ dpois(lambda),
+          log(lambda) <- a,
+          a ~ dnorm(3, 0.5)),
+    data = dat,
+    chains = 4,
+    log_lik = TRUE
+  )
+```
+
+    ## Running MCMC with 4 sequential chains, with 1 thread(s) per chain...
+    ## 
+    ## Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 finished in 0.1 seconds.
+    ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 finished in 0.1 seconds.
+    ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 3 finished in 0.1 seconds.
+    ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 4 finished in 0.1 seconds.
+    ## 
+    ## All 4 chains finished successfully.
+    ## Mean chain execution time: 0.1 seconds.
+    ## Total execution time: 1.1 seconds.
+
+``` r
+# interaction model
+m11.10 <- 
+  ulam(
+    alist(T ~ dpois(lambda),
+          log(lambda) <- a[cid] + b[cid]*P,
+          a[cid] ~ dnorm(3, 0.5),
+          b[cid] ~ dnorm(0, 0.2)),
+    data = dat,
+    chains = 4,
+    log_lik = TRUE
+  )
+```
+
+    ## Running MCMC with 4 sequential chains, with 1 thread(s) per chain...
+    ## 
+    ## Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 finished in 0.1 seconds.
+    ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 finished in 0.2 seconds.
+    ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 3 finished in 0.2 seconds.
+    ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 4 finished in 0.1 seconds.
+    ## 
+    ## All 4 chains finished successfully.
+    ## Mean chain execution time: 0.2 seconds.
+    ## Total execution time: 1.3 seconds.
+
+``` r
+# compare the models with PSIS
+compare(m11.9, m11.10, func = PSIS)
+```
+
+    ##             PSIS       SE    dPSIS      dSE    pPSIS       weight
+    ## m11.10  86.71241 13.85851  0.00000       NA 7.669315 1.000000e+00
+    ## m11.9  141.90822 33.89070 55.19582 33.35743 8.475937 1.033668e-12
+
+-   Here we get another Pareto k warning for highly influential points —
+    this is somewhat expected, given the size of the dataset (n = 10).
+-   It’s no surprise that the interaction model does better than the
+    intercept model, however it may be surprising that the “effective
+    number of parameters” for the intercept model is *more* than the
+    interaction model!
+
+``` r
+k <- PSIS(m11.10, pointwise = TRUE)$k
+plot(dat$P,
+     dat$T,
+     xlab = "log population (std)",
+     ylab = "total tools",
+     col = rangi2,
+     pch = ifelse(dat$cid == 1, 1, 16), 
+     lwd = 2,
+     ylim = c(0, 75),
+     cex = 1 + normalize(k))
+
+# set up the horizontal axis values to compute predictions at
+ns <- 100 
+P_seq <- seq(from = -1.4, to = 3, length.out = ns)
+
+# predictions for cid = 1 (low contact)
+lambda <- link(m11.10, data = data.frame(P = P_seq, cid = 1))
+lmu <- apply(lambda, 2, mean)
+lci <- apply(lambda, 2, PI)
+lines(P_seq, lmu, lty = 2, lwd = 1.5)
+shade(lci, P_seq)
+
+# predictions for cid = 2 (high contact)
+lambda <- link(m11.10, data = data.frame(P = P_seq, cid = 2))
+lmu <- apply(lambda, 2, mean)
+lci <- apply(lambda, 2, PI)
+lines(P_seq, lmu, lty = 1, lwd = 1.5)
+shade(lci, P_seq)
+```
+
+![](chapter_11_notes_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
+
+-   Here, open points are low contact societies, filled are high contact
+    societies, and the size of the points are scaled by the Pareto k
+    values.
+-   Here’s the same on the natural scale:
+
+``` r
+plot(d$population,
+     d$total_tools,
+     xlab = "population",
+     ylab = "total tools",
+     col = rangi2,
+     pch = ifelse(dat$cid == 1, 1, 16), 
+     lwd = 2,
+     ylim = c(0, 75),
+     cex = 1 + normalize(k))
+
+# set up the horizontal axis values to compute predictions at
+ns <- 100 
+P_seq <- seq(from = -5, to = 3, length.out = ns)
+pop_seq <- exp(P_seq * 1.53 + 9) # 9/1.53 are the mean/sd of log(pop)
+
+# predictions for cid = 1 (low contact)
+lambda <- link(m11.10, data = data.frame(P = P_seq, cid = 1))
+lmu <- apply(lambda, 2, mean)
+lci <- apply(lambda, 2, PI)
+lines(pop_seq, lmu, lty = 2, lwd = 1.5)
+shade(lci, pop_seq)
+
+# predictions for cid = 2 (high contact)
+lambda <- link(m11.10, data = data.frame(P = P_seq, cid = 2))
+lmu <- apply(lambda, 2, mean)
+lci <- apply(lambda, 2, PI)
+lines(pop_seq, lmu, lty = 1, lwd = 1.5)
+shade(lci, pop_seq)
+```
+
+![](chapter_11_notes_files/figure-gfm/unnamed-chunk-39-1.png)<!-- -->
+
+-   There are several influential points/islands that break beyond the
+    threshold of Pareto k \< 0.5, but Hawaii is the most overtly
+    influential at 1.01 (top right open circle).
+-   Poor models would drop Hawaii as an “outlier”. We can do better with
+    some careful thought.
+-   Look at the dashed, low contact line vs the dark high contact line —
+    the model currently thinks that (on average) low contact societies
+    at higher populations will have a greater number of tools than high
+    contact societies. From experience, we know this likely isn’t true!
+-   This is an artifact of the statistical model we’ve built that allows
+    for an intercept — at 0 population, there will be *more than 0*
+    tools built. This is a bit nonsensical!
+-   Let’s look at a scientific, rather than statistical, model. Tools
+    develop over time — innovation adds them to a population while
+    processes of loss remove them.
+-   If we assume each person *adds* innovative power to a society with
+    diminishing returns and tool loss is proportional to the number of
+    tools without diminishing returns, we can model the change in the
+    expected number of tools at one time step as:
+
+$$ 
+\begin{gather}
+\Delta T = \alpha P^\beta - \gamma T
+\end{gather}
+$$
+
+-   Here, $P$ is the population size, $T$ is the number of tools, and
+    $\alpha$, $\beta$, and $\gamma$ are parameters to be estimated. To
+    find the equilibrium number of tools, we just solve for $T$:
+
+$$
+\begin{gather}
+\hat{T} = \frac{\alpha P^\beta}{\gamma} \\
+\end{gather}
+$$
+
+-   Now, we can place this inside a Poisson model:
+
+$$
+\begin{gather}
+T_i \sim Poisson(\lambda_i) \\
+\lambda_i = \frac{\alpha P_i^\beta}{\gamma}
+\end{gather}
+$$
+
+-   Note that there is no link! All we need to do to ensure a positive
+    $\lambda$ is to make sure the parameters are positive.
+-   McElreath sets $\alpha$ to a lognormal prior and $\beta$ and
+    $\gamma$ to exponential priors to do so:
+
+``` r
+dat2 <- 
+  list(
+    T = d$total_tools,
+    P = d$population,
+    cid = d$contact_id
+  )
+
+m11.11 <-
+  ulam(
+    alist(T ~ dpois(lambda),
+          lambda <- exp(a[cid])*P^b[cid]/g,
+          a[cid] ~ dnorm(1, 1),
+          b[cid] ~ dexp(1),
+          g ~ dexp(1)),
+    data = dat2,
+    chains = 4,
+    log_lik = TRUE
+  )
+```
+
+    ## Running MCMC with 4 sequential chains, with 1 thread(s) per chain...
+    ## 
+    ## Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 finished in 0.7 seconds.
+    ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 finished in 0.7 seconds.
+    ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 3 finished in 0.9 seconds.
+    ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 4 finished in 1.2 seconds.
+    ## 
+    ## All 4 chains finished successfully.
+    ## Mean chain execution time: 0.9 seconds.
+    ## Total execution time: 4.4 seconds.
+
+-   We can replot the posterior predictions on the standardized/natural
+    scale & see that thinking a bit more carefully about the process can
+    generate better predictions (see figure 11.10 on page 355).

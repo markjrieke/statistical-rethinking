@@ -605,27 +605,290 @@ postcheck(m11.8)
 
 * Over-parameterizing the model like we've done here isn't a violation of any statistical principle (and we get the benefit of assigning priors and not making assumptions about the indicator being more uncertain than baseline), we just need to make sure the model can handle the high correlations.
 
+## 11.2 Poisson regression
 
+* Binomial regression is good for when we know the upper bound of a count distribution, but what about when we don't? For example, if I go fishing and return with 7 fish, what was the maximum? 
+* The binomial models still works here! Just with a special condition that results in the Poisson distribution. 
+* When a binomial distribution has a small probability $p$ and a large number of trials $N$, it takes on a special shape. The expected value $Np$ is approximately equal to the variance $Np(1 - p)$. 
 
+```{r}
+# simulate 100000 samples of 1000 trials of an event with 1/1000 probability
+y <- rbinom(1e5, 1000, 1/1000)
+c(mean(y), var(y))
+```
 
+* A Poisson model can be specified as:
 
+$$
+\begin{gather}
+y_i \sim Poisson(\lambda_i) \\
+log(\lambda_i) = \alpha + \beta(x_i - \overline x)
+\end{gather}
+$$
 
+* Where $\lambda$ is the mean/variance of the expected count of $y$ and the log link ensures that $\lambda$ is always positive.
+* This log link also implies an exponential relationship between the predictors and the expected value --- we need to check that the log link makes sens at all ranges of the predictor variables and that the priors are scaling appropriately.
 
+### 11.2.1 Example: Oceanic tool complexity
 
+* Let's walk through an example of predicting the number of types of tools on historical island populations.
 
+```{r}
+data("Kline")
+d <- Kline
+d
+```
 
+* We'll model `total_tools` using the idea that:
+  1. The number of tools increases with the log of the population size (from anthropological theory).
+  2. The number of tools increases with the contact rate among islands.
+  3. The impact of population on tool counts is moderated by high contact (aka, we'll model an interaction between the two). 
+  
+$$
+\begin{gather}
+T_i \sim Poisson(\lambda_i) \\
+log(\lambda_i) = \alpha_{CID[i]} + \beta_{CID[i]} \ log(P_i) \\
+\alpha_j \sim to \ be \ determined \\
+\beta_j \sim to \ be \ determined
+\end{gather}
+$$
 
+* Let's figure out sensible priors. To start, let's consider a vague $Normal(0, 10)$ prior on a single intercept term:
 
+$$
+\begin{gather}
+T_i \sim Poisson(\lambda_i) \\
+log(\lambda_i) = \alpha \\
+\alpha \sim Normal(0, 10)
+\end{gather}
+$$
 
+```{r}
+# plot the prior distribution on the outcome scale
+curve(dlnorm(x, 0, 10), from = 0, to = 100, n = 200)
+```
 
+* The range of number of tools spans from 0-100, like we want, but there is an implausibly large spike at 0 due to our poor prior choice!
+* A weakly informative suggestion via McElreath is to use a $\alpha \sim Normal(3, 0.5)$ prior:
 
+```{r}
+curve(dlnorm(x, 3, 0.5), from = 0, to = 100, n = 200)
+```
 
+* That's much better! Now let's work on a prior for $\beta$ --- for dramatic effect we'll first consider an incredibly wide prior:
 
+```{r}
+N <- 100
+a <- rnorm(N, 3, 0.5) # reasonable prior for alpha
+b <- rnorm(N, 0, 10) # wide prior for beta
 
+# plot!
+plot(NULL, xlim = c(-2, 2), ylim = c(0, 100))
+for (i in 1:N) curve(exp(a[i] + b[i]*x), add = TRUE, col = grau())
+```
 
+* The priors on the are unreasonable in that there is explosive growth just beyond the mean or catastrophic decline just after. 
+* McElreath settles on a $\beta \sim Normal(0, 0.2)$ prior, though notes that he's tempted from his experience to force the prior to be positive. 
 
+```{r}
+# prior simulation for the tighter prior
+set.seed(10)
+N <- 100
+a <- rnorm(N, 3, 0.5)
+b <- rnorm(N, 0, 0.2)
+plot(NULL, xlim = c(-2, 2), ylim = c(0, 100))
+for (i in 1:N) curve(exp(a[i] + b[i]*x), add = TRUE, col = grau())
+```
 
+* This new prior still allows for strong relationships, but not as explosive. 
+* Let's switch over from the standardized to natural scales for the population:
 
+```{r}
+x_seq <- seq(from = log(100), to = log(200000), length.out = 100)
+lambda <- sapply(x_seq, function(x) exp(a + b*x))
+
+# total tools vs. log-population
+plot(NULL, 
+     xlim = range(x_seq), 
+     ylim = c(0, 500), 
+     xlab = "log population", 
+     ylab = "total tools")
+
+for (i in 1:N) lines(x_seq, lambda[i,], col = grau(), lwd = 1.5)
+
+# total tools vs. population
+plot(NULL,
+     xlim = range(exp(x_seq)),
+     ylim = c(0, 500), 
+     xlab = "population",
+     ylab = "total tools")
+
+for(i in 1:N) lines(exp(x_seq), lambda[i,], col = grau(), lwd = 1.5)
+```
+
+* Let's code both the interaction model and the intercept only model:
+
+```{r}
+# prep data for passing to ulam
+d$P <- scale(log(d$population))
+d$contact_id <- ifelse(d$contact == "high", 2, 1)
+dat <-
+  list(
+    T = d$total_tools,
+    P = d$P,
+    cid = d$contact_id
+  )
+
+# intercept only model
+m11.9 <- 
+  ulam(
+    alist(T ~ dpois(lambda),
+          log(lambda) <- a,
+          a ~ dnorm(3, 0.5)),
+    data = dat,
+    chains = 4,
+    log_lik = TRUE
+  )
+
+# interaction model
+m11.10 <- 
+  ulam(
+    alist(T ~ dpois(lambda),
+          log(lambda) <- a[cid] + b[cid]*P,
+          a[cid] ~ dnorm(3, 0.5),
+          b[cid] ~ dnorm(0, 0.2)),
+    data = dat,
+    chains = 4,
+    log_lik = TRUE
+  )
+
+# compare the models with PSIS
+compare(m11.9, m11.10, func = PSIS)
+```
+
+* Here we get another Pareto k warning for highly influential points --- this is somewhat expected, given the size of the dataset (n = 10). 
+* It's no surprise that the interaction model does better than the intercept model, however it may be surprising that the "effective number of parameters" for the intercept model is *more* than the interaction model!
+
+```{r}
+k <- PSIS(m11.10, pointwise = TRUE)$k
+plot(dat$P,
+     dat$T,
+     xlab = "log population (std)",
+     ylab = "total tools",
+     col = rangi2,
+     pch = ifelse(dat$cid == 1, 1, 16), 
+     lwd = 2,
+     ylim = c(0, 75),
+     cex = 1 + normalize(k))
+
+# set up the horizontal axis values to compute predictions at
+ns <- 100 
+P_seq <- seq(from = -1.4, to = 3, length.out = ns)
+
+# predictions for cid = 1 (low contact)
+lambda <- link(m11.10, data = data.frame(P = P_seq, cid = 1))
+lmu <- apply(lambda, 2, mean)
+lci <- apply(lambda, 2, PI)
+lines(P_seq, lmu, lty = 2, lwd = 1.5)
+shade(lci, P_seq)
+
+# predictions for cid = 2 (high contact)
+lambda <- link(m11.10, data = data.frame(P = P_seq, cid = 2))
+lmu <- apply(lambda, 2, mean)
+lci <- apply(lambda, 2, PI)
+lines(P_seq, lmu, lty = 1, lwd = 1.5)
+shade(lci, P_seq)
+```
+
+* Here, open points are low contact societies, filled are high contact societies, and the size of the points are scaled by the Pareto k values. 
+* Here's the same on the natural scale:
+
+```{r}
+plot(d$population,
+     d$total_tools,
+     xlab = "population",
+     ylab = "total tools",
+     col = rangi2,
+     pch = ifelse(dat$cid == 1, 1, 16), 
+     lwd = 2,
+     ylim = c(0, 75),
+     cex = 1 + normalize(k))
+
+# set up the horizontal axis values to compute predictions at
+ns <- 100 
+P_seq <- seq(from = -5, to = 3, length.out = ns)
+pop_seq <- exp(P_seq * 1.53 + 9) # 9/1.53 are the mean/sd of log(pop)
+
+# predictions for cid = 1 (low contact)
+lambda <- link(m11.10, data = data.frame(P = P_seq, cid = 1))
+lmu <- apply(lambda, 2, mean)
+lci <- apply(lambda, 2, PI)
+lines(pop_seq, lmu, lty = 2, lwd = 1.5)
+shade(lci, pop_seq)
+
+# predictions for cid = 2 (high contact)
+lambda <- link(m11.10, data = data.frame(P = P_seq, cid = 2))
+lmu <- apply(lambda, 2, mean)
+lci <- apply(lambda, 2, PI)
+lines(pop_seq, lmu, lty = 1, lwd = 1.5)
+shade(lci, pop_seq)
+```
+
+* There are several influential points/islands that break beyond the threshold of Pareto k < 0.5, but Hawaii is the most overtly influential at 1.01 (top right open circle). 
+* Poor models would drop Hawaii as an "outlier". We can do better with some careful thought. 
+* Look at the dashed, low contact line vs the dark high contact line --- the model currently thinks that (on average) low contact societies at higher populations will have a greater number of tools than high contact societies. From experience, we know this likely isn't true! 
+* This is an artifact of the statistical model we've built that allows for an intercept --- at 0 population, there will be *more than 0* tools built. This is a bit nonsensical!
+* Let's look at a scientific, rather than statistical, model. Tools develop over time --- innovation adds them to a population while processes of loss remove them. 
+* If we assume each person *adds* innovative power to a society with diminishing returns and tool loss is proportional to the number of tools without diminishing returns, we can model the change in the expected number of tools at one time step as:
+
+$$ 
+\begin{gather}
+\Delta T = \alpha P^\beta - \gamma T
+\end{gather}
+$$
+
+* Here, $P$ is the population size, $T$ is the number of tools, and $\alpha$, $\beta$, and $\gamma$ are parameters to be estimated. To find the equilibrium number of tools, we just solve for $T$:
+
+$$
+\begin{gather}
+\hat{T} = \frac{\alpha P^\beta}{\gamma} \\
+\end{gather}
+$$
+
+* Now, we can place this inside a Poisson model:
+
+$$
+\begin{gather}
+T_i \sim Poisson(\lambda_i) \\
+\lambda_i = \frac{\alpha P_i^\beta}{\gamma}
+\end{gather}
+$$
+
+* Note that there is no link! All we need to do to ensure a positive $\lambda$ is to make sure the parameters are positive. 
+* McElreath sets $\alpha$ to a lognormal prior and $\beta$ and $\gamma$ to exponential priors to do so:
+
+```{r}
+dat2 <- 
+  list(
+    T = d$total_tools,
+    P = d$population,
+    cid = d$contact_id
+  )
+
+m11.11 <-
+  ulam(
+    alist(T ~ dpois(lambda),
+          lambda <- exp(a[cid])*P^b[cid]/g,
+          a[cid] ~ dnorm(1, 1),
+          b[cid] ~ dexp(1),
+          g ~ dexp(1)),
+    data = dat2,
+    chains = 4,
+    log_lik = TRUE
+  )
+```
+
+* We can replot the posterior predictions on the standardized/natural scale & see that thinking a bit more carefully about the process can generate better predictions (see figure 11.10 on page 355). 
 
 
 
