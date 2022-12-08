@@ -277,7 +277,7 @@ m11.4 <-
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 2.7 seconds.
+    ## Chain 1 finished in 3.0 seconds.
     ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -290,7 +290,7 @@ m11.4 <-
     ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 2.9 seconds.
+    ## Chain 2 finished in 2.3 seconds.
     ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -303,7 +303,7 @@ m11.4 <-
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 2.5 seconds.
+    ## Chain 3 finished in 2.2 seconds.
     ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -316,11 +316,11 @@ m11.4 <-
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 2.4 seconds.
+    ## Chain 4 finished in 2.3 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 2.6 seconds.
-    ## Total execution time: 11.3 seconds.
+    ## Mean chain execution time: 2.4 seconds.
+    ## Total execution time: 11.1 seconds.
 
 ``` r
 # posterior parameter estimations
@@ -492,7 +492,7 @@ m11.5 <-
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 3.0 seconds.
+    ## Chain 1 finished in 3.6 seconds.
     ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -505,7 +505,7 @@ m11.5 <-
     ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 2.9 seconds.
+    ## Chain 2 finished in 3.3 seconds.
     ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -518,7 +518,7 @@ m11.5 <-
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 2.9 seconds.
+    ## Chain 3 finished in 3.6 seconds.
     ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -531,11 +531,11 @@ m11.5 <-
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 2.9 seconds.
+    ## Chain 4 finished in 4.0 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 2.9 seconds.
-    ## Total execution time: 12.4 seconds.
+    ## Mean chain execution time: 3.6 seconds.
+    ## Total execution time: 15.1 seconds.
 
 ``` r
 # finally, compare models w/PSIS
@@ -729,7 +729,7 @@ m11.6 <-
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 0.4 seconds.
+    ## Chain 1 finished in 0.2 seconds.
     ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -755,7 +755,7 @@ m11.6 <-
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 0.3 seconds.
+    ## Chain 3 finished in 0.4 seconds.
     ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -939,7 +939,7 @@ m11.7 <-
     ## 
     ## All 4 chains finished successfully.
     ## Mean chain execution time: 0.1 seconds.
-    ## Total execution time: 1.2 seconds.
+    ## Total execution time: 1.1 seconds.
 
 ``` r
 precis(m11.7, depth = 2)
@@ -1064,7 +1064,7 @@ m11.8 <-
     ## Chain 1 Iteration: 3800 / 4000 [ 95%]  (Sampling) 
     ## Chain 1 Iteration: 3900 / 4000 [ 97%]  (Sampling) 
     ## Chain 1 Iteration: 4000 / 4000 [100%]  (Sampling) 
-    ## Chain 1 finished in 1.3 seconds.
+    ## Chain 1 finished in 0.9 seconds.
     ## Chain 2 Iteration:    1 / 4000 [  0%]  (Warmup) 
     ## Chain 2 Iteration:  100 / 4000 [  2%]  (Warmup) 
     ## Chain 2 Iteration:  200 / 4000 [  5%]  (Warmup) 
@@ -1107,7 +1107,7 @@ m11.8 <-
     ## Chain 2 Iteration: 3800 / 4000 [ 95%]  (Sampling) 
     ## Chain 2 Iteration: 3900 / 4000 [ 97%]  (Sampling) 
     ## Chain 2 Iteration: 4000 / 4000 [100%]  (Sampling) 
-    ## Chain 2 finished in 1.1 seconds.
+    ## Chain 2 finished in 0.9 seconds.
     ## Chain 3 Iteration:    1 / 4000 [  0%]  (Warmup) 
     ## Chain 3 Iteration:  100 / 4000 [  2%]  (Warmup) 
     ## Chain 3 Iteration:  200 / 4000 [  5%]  (Warmup) 
@@ -1150,7 +1150,7 @@ m11.8 <-
     ## Chain 3 Iteration: 3800 / 4000 [ 95%]  (Sampling) 
     ## Chain 3 Iteration: 3900 / 4000 [ 97%]  (Sampling) 
     ## Chain 3 Iteration: 4000 / 4000 [100%]  (Sampling) 
-    ## Chain 3 finished in 1.0 seconds.
+    ## Chain 3 finished in 1.1 seconds.
     ## Chain 4 Iteration:    1 / 4000 [  0%]  (Warmup) 
     ## Chain 4 Iteration:  100 / 4000 [  2%]  (Warmup) 
     ## Chain 4 Iteration:  200 / 4000 [  5%]  (Warmup) 
@@ -1193,11 +1193,11 @@ m11.8 <-
     ## Chain 4 Iteration: 3800 / 4000 [ 95%]  (Sampling) 
     ## Chain 4 Iteration: 3900 / 4000 [ 97%]  (Sampling) 
     ## Chain 4 Iteration: 4000 / 4000 [100%]  (Sampling) 
-    ## Chain 4 finished in 1.1 seconds.
+    ## Chain 4 finished in 1.0 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 1.1 seconds.
-    ## Total execution time: 5.3 seconds.
+    ## Mean chain execution time: 1.0 seconds.
+    ## Total execution time: 4.6 seconds.
 
 ``` r
 precis(m11.8, depth = 2)
@@ -1537,80 +1537,7 @@ m11.9 <-
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 0.1 seconds.
-    ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
-    ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
-    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
-    ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
-    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
-    ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
-    ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
-    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
-    ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
-    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
-    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
-    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 0.1 seconds.
-    ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
-    ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
-    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
-    ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
-    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
-    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
-    ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
-    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
-    ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
-    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
-    ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
-    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 0.1 seconds.
-    ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
-    ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
-    ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
-    ## Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
-    ## Chain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) 
-    ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
-    ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
-    ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
-    ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
-    ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
-    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
-    ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 0.1 seconds.
-    ## 
-    ## All 4 chains finished successfully.
-    ## Mean chain execution time: 0.1 seconds.
-    ## Total execution time: 1.1 seconds.
-
-``` r
-# interaction model
-m11.10 <- 
-  ulam(
-    alist(T ~ dpois(lambda),
-          log(lambda) <- a[cid] + b[cid]*P,
-          a[cid] ~ dnorm(3, 0.5),
-          b[cid] ~ dnorm(0, 0.2)),
-    data = dat,
-    chains = 4,
-    log_lik = TRUE
-  )
-```
-
-    ## Running MCMC with 4 sequential chains, with 1 thread(s) per chain...
-    ## 
-    ## Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup) 
-    ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
-    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
-    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
-    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
-    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
-    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
-    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
-    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
-    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
-    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
-    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 0.1 seconds.
+    ## Chain 1 finished in 0.2 seconds.
     ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -1649,11 +1576,84 @@ m11.10 <-
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 0.1 seconds.
+    ## Chain 4 finished in 0.2 seconds.
     ## 
     ## All 4 chains finished successfully.
     ## Mean chain execution time: 0.2 seconds.
-    ## Total execution time: 1.3 seconds.
+    ## Total execution time: 1.6 seconds.
+
+``` r
+# interaction model
+m11.10 <- 
+  ulam(
+    alist(T ~ dpois(lambda),
+          log(lambda) <- a[cid] + b[cid]*P,
+          a[cid] ~ dnorm(3, 0.5),
+          b[cid] ~ dnorm(0, 0.2)),
+    data = dat,
+    chains = 4,
+    log_lik = TRUE
+  )
+```
+
+    ## Running MCMC with 4 sequential chains, with 1 thread(s) per chain...
+    ## 
+    ## Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 finished in 0.2 seconds.
+    ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 finished in 0.3 seconds.
+    ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 3 finished in 0.2 seconds.
+    ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 4 finished in 0.2 seconds.
+    ## 
+    ## All 4 chains finished successfully.
+    ## Mean chain execution time: 0.2 seconds.
+    ## Total execution time: 1.7 seconds.
 
 ``` r
 # compare the models with PSIS
@@ -1804,7 +1804,7 @@ m11.11 <-
   ulam(
     alist(T ~ dpois(lambda),
           lambda <- exp(a[cid])*P^b[cid]/g,
-          a[cid] ~ dnorm(1, 1),
+          a[cid] ~ dnorm(1,1),
           b[cid] ~ dexp(1),
           g ~ dexp(1)),
     data = dat2,
@@ -1827,7 +1827,7 @@ m11.11 <-
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 0.7 seconds.
+    ## Chain 1 finished in 1.1 seconds.
     ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -1840,7 +1840,7 @@ m11.11 <-
     ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 0.7 seconds.
+    ## Chain 2 finished in 1.4 seconds.
     ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -1853,7 +1853,7 @@ m11.11 <-
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 0.9 seconds.
+    ## Chain 3 finished in 1.4 seconds.
     ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -1866,12 +1866,625 @@ m11.11 <-
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 1.2 seconds.
+    ## Chain 4 finished in 1.3 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 0.9 seconds.
-    ## Total execution time: 4.4 seconds.
+    ## Mean chain execution time: 1.3 seconds.
+    ## Total execution time: 5.9 seconds.
+
+``` r
+precis(m11.11, depth = 2)
+```
+
+    ##           mean         sd       5.5%     94.5%     n_eff     Rhat4
+    ## a[1] 0.8603645 0.70340058 -0.2923004 1.9424214  713.6423 0.9988827
+    ## a[2] 0.9097771 0.84459370 -0.4480563 2.2357615  812.5804 1.0056822
+    ## b[1] 0.2621867 0.03452213  0.2091979 0.3164702 1043.1847 1.0026783
+    ## b[2] 0.2894508 0.10364372  0.1196835 0.4568086  774.6861 1.0033199
+    ## g    1.1362818 0.77676287  0.2810501 2.5728656  792.6123 0.9983612
 
 -   We can replot the posterior predictions on the standardized/natural
     scale & see that thinking a bit more carefully about the process can
     generate better predictions (see figure 11.10 on page 355).
+
+### 11.2.2 Negative binomial (gamma-Poisson) models
+
+-   Typically, there is a lot of unexplained variation in Poisson
+    models. Ignoring this can cause issues!
+-   A very common extension is to swap the Poisson distribution out with
+    a *Negative Binomial* distribution (this is really a Poisson
+    distribution in disguise, sometimes called a *Gamma-Poisson*
+    distribution, but you can think of it as the Poisson analogue of the
+    student-t model).
+
+### 11.2.3 Example: Exposure and the offset
+
+-   $\lambda$ is the expected value, but it is also commonly thought of
+    as the rate (both are correct).
+-   This allows us to make Poisson models for which the *exposure*
+    varies across cases.
+-   Let’s use the example of a monastery completing manuscripts — we can
+    model the rate of manuscripts per week using a Poisson model, where
+    $\lambda$ is the rate.
+-   We can rewrite the Poisson model in terms of $\mu / \tau$, the
+    number of events per unit time (or distance):
+
+$$
+\begin{gather}
+y_i \sim Poisson(\lambda_i) \\
+log(\lambda_i) = \alpha + \beta x_i \\
+\lambda_i = \frac{\mu_i}{\tau_i} \\
+log(\frac{\mu_i}{\tau_i}) = \alpha + \beta x_i \\
+log(\mu_i) - log(\tau_i) = \alpha + \beta x_i \\
+log(\mu_i) = log(\tau_i) + \alpha + \beta x_i
+\end{gather}
+$$
+
+-   Here, $\tau$ are “exposures”. It’ll be easier to walk through the
+    monk example — let’s simulate a true rate $\lambda$ of 1.5
+    manuscripts per day for *your* monastery:
+
+``` r
+num_days <- 30
+y <- rpois(num_days, 1.5)
+```
+
+-   Let’s say you want to buy another monastery that doesn’t keep daily
+    records, just weekly totals. Since we know the true underlying daily
+    rate, we can simulate the weekly totals based on the exposure of 7
+    days:
+
+``` r
+num_weeks <- 4
+y_new <- rpois(num_weeks, 0.5 * 7)
+```
+
+-   To analyze `y_new` and `y` together, we just add the logarithm of
+    the exposure to a linear model.
+
+``` r
+y_all <- c(y, y_new)
+exposure <- c(rep(1, 30), rep(7, 4))
+monastery <- c(rep(0, 30), rep(1, 4))
+d <- data.frame(y = y_all, days = exposure, monastery = monastery)
+
+# add the offset
+d$log_days <- log(d$days)
+
+# fit the model
+m11.12 <- 
+  quap(
+    alist(y ~ dpois(lambda),
+          log(lambda) <- log_days + a + b*monastery,
+          a ~ dnorm(0, 1),
+          b ~ dnorm(0, 1)),
+    data = d
+  )
+
+# sample posterior *daily* lambda for each monastery, 
+# even the one that just used weekly totals!
+post <- extract.samples(m11.12)
+lambda_old <- exp(post$a)
+lambda_new <- exp(post$a + post$b)
+precis(data.frame(lambda_old, lambda_new))
+```
+
+    ##                 mean        sd      5.5%     94.5%   histogram
+    ## lambda_old 1.4882083 0.2209782 1.1588263 1.8657799  ▁▂▇▇▃▁▁▁▁▁
+    ## lambda_new 0.3540796 0.1111759 0.2072613 0.5514514 ▁▁▇▇▃▁▁▁▁▁▁
+
+## 11.3 Multinomial and categorical models
+
+-   The binomial is relevant when there are only two categories, but
+    what about when there are more (like drawing red, blue, or green
+    marbles from a bag)?
+-   When there are more than two type of unordered events possible and
+    the probability of each type of event is constant across trials, the
+    maximum entropy distribution is the *multinomial distribution*.
+-   The binomial is really just a special case of the multinomial where
+    the number of categories = 2.
+-   When there are $K$ types of events with probabilities
+    $p_1, \dots, p_K$ then the probability of observing
+    $y_1, \dots, y_K$ events out of $n$ trials is:
+
+$$
+\begin{gather}
+Pr(y_1, \dots, y_K | n, p_1, \dots, p_k) = \frac{n!}{\prod_i y_i!} \prod_{i = 1}^K p_i^{y_i}
+\end{gather}
+$$
+
+-   Building a GLM from a multinomial likelihood is complicated. There
+    are even two different approaches to constructing the likelihood!
+-   The conventional and natural link is the *multinomial logit* (aka
+    *softmax*), which takes a vector of *scores* for each event type $K$
+    and computes the probability of an individual event $K$ as:
+
+$$
+\begin{gather}
+Pr(k|s_1, \dots, s_k) = \frac{exp(s_k)}{\sum_{i = 1}^K \ exp(s_i)}
+\end{gather}
+$$
+
+-   This gives us the *multinomial logistic regression*.
+-   This setup yields $K - 1$ models, and we can use as many or as few
+    predictors in each of the models (there are often good reaons to do
+    so!). They can be the same predictors across each, or they can vary.
+
+### 11.3.1 Predictors matched to outcomes
+
+-   Let’s say that we want to model the career choice for a group of
+    young adults, with one of the predictor variables being expected
+    income. $\beta_{income}$ will appear in each model but different
+    models with have different values for the parameter.
+
+``` r
+# simulate career choices for 500 individuals
+N <- 500              # number of individuals
+income <- c(1, 2, 5)  # expected income of each career
+score <- 0.5 * income # scores for each career, based on income
+
+# convert scores to probabilities:
+p <- softmax(score[1], score[2], score[3])
+
+# simulate choices
+# outcome holds event type values, not counts
+career <- rep(NA, N)
+
+# sample chosen career for each individual
+set.seed(34302)
+for (i in 1:N) career[i] <- sample(1:3, size = 1, prob = p)
+```
+
+-   Let’s write a categorical model for this directly in Stan (I won’t
+    run here, but this’ll just show the nice syntax highlighting):
+
+``` stan
+data{
+  int N; // number of individuals
+  int K; // number of possible careers
+  int career[N]; // outcome (of length N)
+  vector[K] career_income;
+}
+parameters{
+  vector[K - 1] a; // intercepts (for each model)
+  real<lower = 0> b; // parameter for association of income with choice
+}
+model{
+  vector[K] p; // probability for each career
+  vector[K] s; // score for each career
+  a ~ normal(0, 1);
+  b ~ normal(0, 0.5);
+  s[1] = a[1] + b*career_income[1]; 
+  s[2] = a[2] + b*career_income[2]; 
+  s[3] = 0; // pivot/baseline/whatever you wanna call it
+  p = softmax(s);
+  career ~ categorical(p);
+}
+```
+
+-   Nice, now that I have that syntax highlighting, let’s re-write as a
+    string to use directly in the rmd file.
+
+``` r
+code_m11.13 <- "
+data{
+  int N; // number of individuals
+  int K; // number of possible careers
+  int career[N]; // outcome (of length N)
+  vector[K] career_income;
+}
+parameters{
+  vector[K - 1] a; // intercepts (for each model)
+  real<lower = 0> b; // parameter for association of income with choice
+}
+model{
+  vector[K] p; // probability for each career
+  vector[K] s; // score for each career
+  a ~ normal(0, 1);
+  b ~ normal(0, 0.5);
+  s[1] = a[1] + b*career_income[1]; 
+  s[2] = a[2] + b*career_income[2]; 
+  s[3] = 0; // pivot/baseline/whatever you wanna call it
+  p = softmax(s);
+  career ~ categorical(p);
+}
+"
+
+# setup data
+dat_list <- 
+  list(
+    N = N, 
+    K = 3, 
+    career = career, 
+    career_income = income
+  )
+
+# invoke stan
+m11.13 <-
+  stan(
+    model_code = code_m11.13,
+    data = dat_list,
+    chains = 4
+  )
+```
+
+    ## Running MCMC with 4 sequential chains...
+    ## 
+    ## Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 finished in 0.5 seconds.
+    ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 finished in 0.3 seconds.
+    ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 3 finished in 0.2 seconds.
+    ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 4 finished in 0.2 seconds.
+    ## 
+    ## All 4 chains finished successfully.
+    ## Mean chain execution time: 0.3 seconds.
+    ## Total execution time: 2.0 seconds.
+
+``` r
+precis(m11.13, depth = 2)
+```
+
+    ##            mean        sd         5.5%      94.5%    n_eff    Rhat4
+    ## a[1] -2.1351730 0.1899310 -2.463382750 -1.8500771 457.3537 1.004422
+    ## a[2] -1.7864944 0.2566300 -2.260360050 -1.4622395 399.4038 1.006153
+    ## b     0.1304199 0.1201464  0.006356879  0.3758068 357.5296 1.006321
+
+-   I’m getting different (but consistent) values than McElreath here…
+-   The parameter interpretation is all *relative* to the baseline
+    category — in this case, career 3. The predictions will be the same,
+    but parameter values will change if we change the baseline category.
+-   Let’s conduct a counterfactual simulation to compare a
+    counterfactual career when income is changed.
+
+``` r
+post <- extract.samples(m11.13)
+
+# setup logit scores
+s1 <- with(post, a[,1] + b*income[1])
+s2_orig <- with(post, a[,2] + b*income[2])
+s2_new <- with(post, a[,2] + b*income[2]*2) # counterfactual doubling of income for career 2
+
+# probabilities for original and counterfacutal
+p_orig <- sapply(1:length(post$b), function(i) softmax(c(s1[i], s2_orig[i], 0)))
+p_new <- sapply(1:length(post$b), function(i) softmax(c(s1[i], s2_new[i], 0)))
+
+# summarise
+p_diff <- p_new[2,] - p_orig[2,]
+precis(p_diff)
+```
+
+    ##              mean         sd        5.5%     94.5% histogram
+    ## p_diff 0.04139493 0.04311854 0.001717241 0.1282635    ▇▂▁▁▁▁
+
+### 11.3.2 Predictors matched to observations
+
+-   Now let’s consider the case where each observed outcome has unique
+    predictor values.
+
+``` r
+N <- 500
+
+# simulate a new parameter, family income, for each individual
+family_income <- runif(N)
+
+# assign a unique coefficient for each type of event
+b <- c(-2, 0, 2)
+
+career <- rep(NA, N)
+for (i in 1:N) {
+  
+  score <- 0.5 * (1:3) + b*family_income[i]
+  p <- softmax(score[1], score[2], score[3])
+  career[i] <- sample(1:3, size = 1, prob = p)
+  
+}
+```
+
+``` stan
+data{
+  int N; // number of observations
+  int K; // number of outcome values
+  int career[N]; // outcome
+  real family_income[N];
+}
+parameters{
+  vector[K - 1] a; // intercepts
+  vector[K - 1] b; // coefficients on family income
+}
+model{
+  vector[K] p;
+  vector[K] s;
+  a ~ normal(0, 1.5);
+  b ~ normal(0, 1);
+  for (i in 1:N) {
+    for (j in 1:(K - 1)) s[j] = a[j] + b[j]*family_income[i];
+    s[K] = 0; // the pivot
+    p = softmax(s);
+    career[i] ~ categorical(p);
+  }
+}
+```
+
+``` r
+code_m11.14 <- "
+data{
+  int N; // number of observations
+  int K; // number of outcome values
+  int career[N]; // outcome
+  real family_income[N];
+}
+parameters{
+  vector[K - 1] a; // intercepts
+  vector[K - 1] b; // coefficients on family income
+}
+model{
+  vector[K] p;
+  vector[K] s;
+  a ~ normal(0, 1.5);
+  b ~ normal(0, 1);
+  for (i in 1:N) {
+    for (j in 1:(K - 1)) s[j] = a[j] + b[j]*family_income[i];
+    s[K] = 0; // the pivot
+    p = softmax(s);
+    career[i] ~ categorical(p);
+  }
+}
+"
+
+# prep data for stan
+dat_list <-
+  list(
+    N = N,
+    K = 3,
+    career = career, 
+    family_income = family_income
+  )
+
+# invoke stan
+m11.14 <- 
+  stan(
+    model_code = code_m11.14,
+    data = dat_list,
+    chains = 4
+  )
+```
+
+    ## Running MCMC with 4 sequential chains...
+    ## 
+    ## Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 finished in 9.7 seconds.
+    ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 finished in 5.3 seconds.
+    ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 3 finished in 5.3 seconds.
+    ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 4 finished in 20.4 seconds.
+    ## 
+    ## All 4 chains finished successfully.
+    ## Mean chain execution time: 10.2 seconds.
+    ## Total execution time: 41.5 seconds.
+
+``` r
+precis(m11.14, depth = 2)
+```
+
+    ##            mean        sd      5.5%      94.5%    n_eff    Rhat4
+    ## a[1] -0.7853270 0.2540806 -1.193373 -0.3825202 821.6602 1.005849
+    ## a[2] -0.8262777 0.2222138 -1.192846 -0.4865700 727.8675 1.002359
+    ## b[1] -3.4864449 0.5731062 -4.446450 -2.5696974 937.3647 1.003057
+    ## b[2] -1.1636177 0.3942613 -1.799044 -0.5491987 831.4157 1.002450
+
+### 11.3.3 Multinomial in disguise as Poisson
+
+-   It sounds crazy, but we can fit a multinomial/categorical model by
+    refactoring into a series of Poisson likelihoods!
+-   It’s actually both principled/commonplace, because the mathematics
+    justifies it and it’s computationally easier to use Poisson rather
+    than multinomial likelihoods.
+-   Let’s work with the UCB admissions data again:
+
+``` r
+d <- UCBadmit
+
+# binomial model of overall admission probability
+m_binom <- 
+  quap(
+    alist(admit ~ dbinom(applications, p),
+          logit(p) <- a,
+          a ~ dnorm(0, 1.5)),
+    data = d
+  )
+
+# poisson model of overall admission rate & rejection rate
+# reject is a reserved word in stan, so we can't use it as a variable name
+dat <- list(admit = d$admit, rej = d$reject)
+m_pois <-
+  ulam(
+    alist(admit ~ dpois(lambda1),
+          rej ~ dpois(lambda2),
+          log(lambda1) <- a1,
+          log(lambda2) <- a2,
+          c(a1, a2) ~ dnorm(0, 1.5)),
+    data = dat,
+    chains = 3,
+    cores = 3
+  )
+```
+
+    ## Running MCMC with 3 parallel chains, with 1 thread(s) per chain...
+    ## 
+    ## Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 1 finished in 0.2 seconds.
+    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 finished in 0.2 seconds.
+    ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 3 finished in 0.2 seconds.
+    ## 
+    ## All 3 chains finished successfully.
+    ## Mean chain execution time: 0.2 seconds.
+    ## Total execution time: 0.5 seconds.
+
+-   The implied probability from the admission/rejection *rates* in the
+    poisson model is given by:
+
+$$
+\begin{gather}
+p_{admit} = \frac{\lambda_1}{\lambda_1 + \lambda_2} = \frac{exp(a_1)}{exp(a_1) + exp(a_2)}
+\end{gather}
+$$
+
+``` r
+# posterior mean admission probability from poisson model
+k <- coef(m_pois)
+a1 <- k['a1']
+a2 <- k['a2']
+exp(a1)/(exp(a1) + exp(a2))
+```
+
+    ##        a1 
+    ## 0.3876331
+
+``` r
+# posterior mean admission probability from binomial model
+inv_logit(coef(m_binom))
+```
+
+    ##         a 
+    ## 0.3878045
+
+-   They’re basically the same!
+-   This can be extended to the multinomial model as well. See the
+    overthinking box on page 365 for a mathematical justification.
+
+## 11.4 Summary
+
+-   This chapter covered some of the most common GLMs for count models.
+-   It’s important to never convert counts to proportions before
+    modeling, since this destroys information about sample size!
+-   The log or logit links distort the linear models so that the outcome
+    scale is correct — it’s important to simulate counterfactuals to get
+    an understanding of the model!
