@@ -1,0 +1,326 @@
+---
+title: "Monsters and Mixtures"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo = TRUE,
+  warning = FALSE,
+  message = FALSE,
+  dpi = 500,
+  fig.width = 9,
+  fig.height = 6
+)
+```
+
+* This chapter is all about constructing hybrid statistical models by piecing together smipler components of previous chapters. 
+* There are three common and useful examples:
+  1. **Over-dispersion**: extensions of binomial and Poisson models to cope with unmeasured sources of variation. 
+  2. **Zero-inlated/zero-augmented models**: mixes a binary event with an ordinary GLM.
+  3. **Ordered categorical models**: like the name suggests, models where the outcome has an implied order to the categories. 
+* This is not an exhaustive list! There are many more. 
+
+## 12.1 Over-dispersed counts
+
+* Earlier, "outliers" in normal models were able to be dealt with the student-t likelihood, which is a mixture of normal likelihoods. We can do something similar in count models!
+* When counts are more variable than a pure process, they exhibit *over-dispersion*. 
+* For example, the expected value of a binomial process is $Np$ and the variance/dispersion is $Np(1 - p)$.
+* When the observed variance exceeds this (after conditioning on variables) it implies that some omitted variable is producing additional dispersion!
+* The best solution would be to be able to discover the source of dispersion and include it in the model, but that often isn't possible. Even without, however, we can mitigate the effects of over-dispersion. 
+* We'll consider *continuous mixture* models where the linear model isn't attached to the observations themselves but instead to a distribution of observations. 
+
+### 12.1.1 Beta-binomial
+
+* A *beta-binomial* model is a mixture of binomial distributions that assumes each binomial count has its own probability of success. 
+* The beta distribution can be used to describe a distribution of probabilities --- this also makes the math easier, since it's the conjugate pair for the binomial. 
+
+```{r}
+library(rethinking)
+
+beta_plot <- function(pbar, theta) {
+  
+  curve(dbeta2(x, pbar, theta),
+        from = 0,
+        to = 1,
+        xlab = "probability",
+        ylab = "density")
+  
+}
+
+beta_plot(0.5, 5)
+beta_plot(0.8, 10)
+```
+
+* Let's build out a model for `UCBadmit`, where the admission rate is modeled purely on gender.
+
+$$
+\begin{gather}
+A_i \sim BetaBinomial(N_i, \overline{p_i}, \theta) \\
+logit(\overline{p_i}) = \alpha_{GID[i]} \\
+\alpha_j \sim Normal(0, 1.5) \\
+\theta = \phi + 2 \\ 
+\phi \sim Exponential(1)
+\end{gather}
+$$
+
+```{r}
+# load data
+data("UCBadmit")
+d <- UCBadmit
+
+# prep for stan
+d$gid <- ifelse(d$applicant.gender == "male", 1L, 2L)
+dat <- list(A = d$admit, N = d$applications, gid = d$gid)
+
+# model!
+m12.1 <- 
+  ulam(
+    alist(A ~ dbetabinom(N, pbar, theta),
+          logit(pbar) <- a[gid],
+          a[gid] ~ dnorm(0, 1.5),
+          transpars> theta <<- phi + 2.0,
+          phi ~ dexp(1)),
+    data = dat,
+    chains = 4
+  )
+```
+
+* Here, McElreath added `transpars>` (transformed parameters) so that Stan will return `theta` in the samples. 
+
+```{r}
+post <- extract.samples(m12.1) 
+post$da <- post$a[,1] - post$a[,2]
+precis(post, depth = 2)
+```
+
+* Here, `a[1]` and `a[2]` are the log-odds of admission for male/female applicants. The difference between the two, `da` is highly uncertain and basically centered around 0. 
+* In the previous chapter, a binomial model for these data that omitted department ended up being misleading, since there's an indirect path from gender to admission through department. Here, the model is not confounded, despite not containing the department variable! How?
+* The beta-binomial model allows each row to have its own unobserved intercept:
+
+```{r}
+ucb_beta <- function(gid) {
+  
+  # draw posterior mean beta distribution
+  curve(dbeta2(x, mean(logistic(post$a[,gid])), mean(post$theta)),
+        from = 0, 
+        to = 1,
+        ylab = "Density",
+        xlab = "Probability of Admission",
+        ylim = c(0, 3),
+        lwd = 2)
+  
+  # draw 50 samples from the posterior
+  for (i in 1:50) {
+    
+    p <- logistic(post$a[i, gid])
+    theta <- post$theta[i]
+    curve(dbeta2(x, p, theta),
+          add = TRUE,
+          col = col.alpha("black", 0.2))
+    
+  }
+  
+  if (gid == 1) gender <- "Male" else gender <- "Female"
+  
+  mtext(paste("Distribution of", gender, "Admission Rates"))
+  
+}
+
+ucb_beta(1)
+ucb_beta(2)
+postcheck(m12.1)
+```
+
+### 12.1.2 Negative-binomial or Gamma-Poisson
+
+* A *negative-binomial* model is more usefully described as a *gamma-Poisson* model and assumes that each Poisson count observation has its own rate. 
+* This is similar to the beta-binomial model, where the beta distribution describes a distribution of probabilities and the gamma distribution describes a distribution of rates (+ the conjugate pairing makes the math easier). 
+* A gamma-Poisson distribution has two terms --- one for the mean rate, $\lambda$ and another for the dispersion/scale of the rates, $\phi$. 
+
+$$
+\begin{gather}
+y_i \sim \text{Gamma-Poisson}(\lambda_i, \phi)
+\end{gather}
+$$
+
+* Here, the variance is described by $\lambda + \frac{\lambda^2}{\phi}$, so larger values for $\phi$ mean the distribution is more similar to a pure Poisson process. 
+* Let's look back at the island civilization tool model:
+
+```{r}
+# load and prep data for stan
+data("Kline")
+d <- Kline
+d$P <- standardize(log(d$population))
+d$contact_id <- ifelse(d$contact == "high", 2L, 1L)
+
+dat2 <-
+  list(
+    tools = d$total_tools,
+    P = d$population,
+    cid = d$contact_id
+  )
+
+# model!
+m12.2 <- ulam(
+  alist(tools ~ dgampois(lambda, phi),
+        lambda <- exp(a[cid]) * P^b[cid]/g,
+        a[cid] ~ dnorm(1, 1),
+        b[cid] ~ dexp(1),
+        g ~ dexp(1),
+        phi ~ dexp(1)),
+  data = dat2,
+  chains = 4, 
+  log_lik = TRUE
+)
+
+precis(m12.2, depth = 2)
+```
+
+* See figure 12.2 on page 375 for a comparison of the outputs from `m11.11` and `m12.2`.
+
+### 12.1.3 Over-dispersion, entropy, and information criteria
+
+* Both the beta-binomial and gamma-Poisson are similarly the maximum entropy distributions as their binomial/Poisson counterparts. 
+* In terms of model comparison, you can treat a beta-binomial like a binomial and a gamma-Poisson like a Poisson.
+* You shouldn't, however, use WAIC or PSIS for these models, since beta-binomial/gamma-Poisson models cannot be aggregated/disaggregated across rows without changing causal assumptions. 
+* Multilevel models help reduce this obstacle, since they can handle heterogeneity in probabilities/rates at any level of aggregation. 
+
+## 12.2 Zero-inflated outcomes
+
+* Often, things we measure are not pure processes, but are mixtures of multiple processes. Whenever there are multiple causes for the same observation, then a *mixture model* may be useful. 
+* Count variables are especially prone to mixture models --- very often a count of 0 can arise in more than one way (i.e., the rate of events is low or that the process to generate events hasn't even started). 
+
+### 12.2.1 Example: Zero-inflated Poisson
+
+* Recall the monk manuscript writing example from chapter 11. Let's say that some days, instead of working on manuscripts, the monks take the day of to go drinking. 
+* On those days --- no manuscripts will be produced. On the days they are working, there will still be some days that no manuscripts are produced, but that is due to the rate of the poisson model!
+* A mixture model can help solve this problem (see figure 12.3 on page 377 for the process diagram). 
+
+$$
+\begin{gather}
+\text{Pr}(0|p, \lambda) = \text{Pr}(\text{drink}|p) + \text{Pr}(\text{work}|p) \times \text{Pr}(0|\lambda) \\
+\text{Pr}(0|p, \lambda) = p + (1 - p)\ \text{exp} (-\lambda) \\
+\text{and ...} \\
+\text{Pr}(y|y > 0, p, \lambda) = \text{Pr}(\text{drink}|p)(0) + \text{Pr}(\text{work}|p) \ \text{Pr}(y|\lambda) \\
+\text{Pr}(y|y > 0, p, \lambda) = (1 - p) \frac{\lambda^y - \text{exp}(-\lambda)}{y!}
+\end{gather}
+$$
+
+* This is just a lot of math to say the following:
+
+>The probability of observing a zero is the probability that the monks didn't drink OR $(+)$ the probability that the monks worked AND $(\times)$ failed to finish anything. 
+
+* We can define ZIPoisson as the above distribution with parameters $p$ (the probability of 0) and $\lambda$ (the mean of the Poisson).
+
+$$
+\begin{gather}
+y_i \sim \text{ZIPoisson}(p_i, \lambda_i) \\
+\text{logit}(p_i) = \alpha_p + \beta_p x_i \\
+\text{log}(\lambda_i) = \alpha_{\lambda} + \beta_{\lambda} x_i
+\end{gather}
+$$
+
+* Notice two things:
+  1. There are two linear models and two link functions.
+  2. The parameters of the linear models differ --- the association between a variable may be different for $p$ and $\lambda$. Also, you don't need to use the same predictors in both models!
+  
+```{r}
+# let's simulate some data!
+prob_drink <- 0.2 # 20% of days are taken off for drinking
+rate_work <- 1 # average 1 manuscript per day when actually working
+
+# sample over one year
+N <- 365
+
+# simulate the days monks drink
+set.seed(365)
+drink <- rbinom(N, 1, prob_drink)
+
+# simulate the manuscripts completed
+y <- (1 - drink) * rpois(N, rate_work)
+
+# plot!
+simplehist(y, xlab = "manuscripts completed", lwd = 4)
+zeros_drink <- sum(drink)
+zeros_work <- sum(y == 0 & drink == 0)
+zeros_total <- sum(y == 0)
+lines(c(0, 0), c(zeros_work, zeros_total), col = rangi2, lwd = 4)
+
+# model
+m12.3 <-
+  ulam(
+    alist(y ~ dzipois(p, lambda),
+          logit(p) <- ap,
+          log(lambda) <- al,
+          ap ~ dnorm(-1.5, 1), # we think monks are less likely to drink 50% of the time
+          al ~ dnorm(1, 0.5)),
+    data = list(y = y),
+    chains = 4
+  )
+
+# posterior summary
+precis(m12.3)
+
+# convert to the natural scale
+post <- extract.samples(m12.3)
+mean(inv_logit(post$ap)) # probability of drinking
+mean(exp(post$al)) # rate finishing manuscripts when not drinking
+```
+
+## 12.3 Ordered categorical outcomes
+
+* It's very common to have a discrete outcome, like a count, but in which values indicate ordered levels (*ahem*, **NPS**). 
+* Unlike counts, the differences in values are not necessarily equal. It may be much more difficult to move someone's response from 9 -> 10 than from 3 -> 4. 
+* We want to any associated predictor variable to move predictions progressively through the multinomial categories (e.g., if the preference for black/white movies is positively associated with age, the model should sequentially move predictions upwards as age increases). 
+* The solution to this challenge is the *cumulative link* function, in which the probability of a value is the probability of that value *or any smaller value*. 
+
+### 12.3.1 Example: Moral intuition
+
+* Let's consider the trolley problem --- someone can pull a lever that saves five people but kills one or do nothing. How morally permissible is it to pull the lever? 
+* Let's consider three principles of unconscious reasoning that may explain variations in responses to this question:
+  1. **The action principle**: harm caused by action is morally worse than harm caused by omission.
+  2. **The intention principle**: harm intended as the outcome is morally worse than harm foreseen as a side effect.
+  3. **The contact principle**: Physical contact to cause harm is morally worse than harm without physical contact. 
+
+```{r}
+data("Trolley")
+d <- Trolley
+```
+
+### 12.3.2 Describing an ordered distribution with intercepts
+
+```{r}
+simplehist(d$response, xlim = c(1, 7), xlab = "response")
+
+# discrete proportion of each response value
+pr_k <- table(d$response)/nrow(d)
+
+# convert to cumulative proportions
+cum_pr_k <- cumsum(pr_k)
+
+# plot
+plot(
+  1:7, 
+  cum_pr_k, 
+  type = "b", 
+  xlab = "response", 
+  ylab = "cumulative proportion",
+  ylim = c(0, 1)
+)
+
+# logit plot
+plot(
+  1:7,
+  riekelib::logit(cum_pr_k) |> round(2),
+  xlab = "response",
+  ylab = "log-cumulative odds",
+  ylim = c(-2, 2)
+)
+```
+
+
+
+
+
+
