@@ -319,8 +319,208 @@ plot(
 )
 ```
 
+* Here, each of the plots on the log-cumulative odds can be thought of as an "intercept" unique to each possible outcome value $k$. The largest response, 7, doesn't appear on the log-cumulative odds scale because it's one on the probability scale/infinity on the log scale. 
+* This is okay, because we only need $K - 1$ intercepts for $K = 7$ possible outcomes. 
+* There are a lot of conventions for ordered-logit models, but here's how McElreath describes it:
+
+$$
+\begin{gather}
+R_i \sim \text{Ordered-logit} (\phi_i, \kappa) \\
+\phi_i = 0 \\
+\kappa_k \sim Normal(0, 1.5)
+\end{gather}
+$$
+
+* We can also express it even more literally:
+
+$$
+\begin{gather}
+R_i \sim \text{Categorical}(p) \\
+p_1 = q_1 \\ 
+p_k = q_k - q_{k-1} \ \ \ \ \ \ \ \text{for} \ K > k > 1 \\
+p_K = 1 - q{k - 1} \\
+\text{logit}(q_k) = \kappa_k - \phi_i \\
+\phi_i = \text{terms of linear model} \\
+\kappa_k \sim Normal(0, 1.5)
+\end{gather}
+$$
+
+* This second form is a bit cruel, but exposes that the ordered logit model is really just a categorical distribution that takes a vector $p = \{p_1, \dots, p_{k-1}\}$ for probabilities. 
+
+```{r, eval=FALSE}
+m12.4 <- 
+  ulam(
+    alist(R ~ dordlogit(0, cutpoints),
+          cutpoints ~ dnorm(0, 1.5)),
+    data = list(R = d$response),
+    chains = 4,
+    cores = 4
+  )
+```
+
+```{r, echo=FALSE}
+m12.4 <- readr::read_rds("m12.4.rds")
+```
 
 
+* Damn that took a while. Here's how the posterior of the cutpoints looks on the log-cumulative scale:
+
+```{r}
+precis(m12.4, depth = 2)
+```
+
+* The 0 is a placeholder for the linear model that we'll construct later. 
+* We can generate this model with `quap()` as well, but we'll have to provide `start` values explicitly:
+
+```{r}
+m12.4q <- 
+  quap(
+    alist(response ~ dordlogit(0, c(a1, a2, a3, a4, a5, a6)),
+          c(a1, a2, a3, a4, a5, a6) ~ dnorm(0, 1.5)),
+    data = d,
+    start = list(a1 = -2, a2 = -1, a3 = 0, a4 = 1, a5 = 2, a6 = 2.5)
+  )
+
+precis(m12.4q)
+```
+
+* To get the cumulative probabilities back:
+
+```{r}
+round(inv_logit(coef(m12.4)), 3)
+```
+
+### 12.3.3 Adding predictor variables 
+
+* So far, `m12.4` is really just a Bayesian representation of a histogram. Let's add predictors. 
+* The mathematical representation of each cumulative logit is:
+
+$$
+\begin{gather}
+\text{log} \ \frac{\text{Pr}(y_i \le k)}{1 - \text{Pr}(y_i \le k)} = \alpha_k - \phi_i \\
+\phi_i = \beta x_i
+\end{gather}
+$$
+
+* $\phi$ is subtracted from $\alpha$ to ensure that a positive $\beta$ results in a positive change in the ordered outcome.
+
+```{r}
+pk <- dordlogit(1:7, 0, coef(m12.4))
+pk
+
+# these give average outcome of:
+sum(pk*(1:7))
+
+# subtract 0.5 from each
+pk <- dordlogit(1:7, 0, coef(m12.4)-0.5)
+pk
+sum(pk*(1:7))
+
+# that's why we subtract phi!
+```
+
+* Back to the trolley data --- we can use predictors to explain variation in the response. In this case, we'll use `action`, `intention`, and `contact`. 
+* There are 6 total possible combinations in the dataset:
+  1. No action, contact, or intention
+  2. Action
+  3. Contact
+  4. Intention
+  5. Action and intention
+  6. Contact and intention
+* The last two are interactions --- let's write this up in a bit of an odd way that'll make it easier to debug later:
+
+$$
+\begin{gather}
+\text{log} \ \frac{\text{Pr}(y_i \le k)}{1 - \text{Pr}(y_i \le k)} = \alpha_k - \phi_i \\
+\phi_i = \beta_A A_i + \beta_C C_i + B_{I,i} I_i \\
+B_{I,i} = \beta_I + \beta_{IA} A_i + \beta_{IC} C_i
+\end{gather}
+$$
+
+* We could substitute $B_I$ into the equation for $\phi$ without changing anything, this just makes the notation a bit clearer.
+
+```{r}
+dat <-
+  list(
+    R = d$response,
+    A = d$action,
+    I = d$intention,
+    C = d$contact
+  )
+```
+
+```{r, echo=FALSE}
+m12.5 <- readr::read_rds("m12.5.rds")
+```
+
+```{r, eval=FALSE}
+m12.5 <-
+  ulam(
+    alist(R ~ dordlogit(phi, cutpoints),
+          phi <- bA*A + bC*C + BI*I,
+          BI <- bI + bIA*A + bIC*C,
+          c(bA, bI, bC, bIA, bIC) ~ dnorm(0, 0.5),
+          cutpoints ~ dnorm(0, 1.5)),
+    data = dat,
+    chains = 4,
+    cores = 4
+  )
+```
+
+```{r}
+precis(m12.5)
+```
+
+```{r}
+precis_plot(precis(m12.5))
+```
+
+* All parameters are negative --- the interaction between intention and contact is the worst in terms of lowering the response. 
+* Let's plot some data that contains different combinations of predictors & look at the response:
+
+```{r}
+# create an empty plot
+plot(
+  NULL,
+  type = "n",
+  xlab = "intention",
+  ylab = "probability",
+  xlim = c(0, 1),
+  ylim = c(0, 1),
+  xaxp = c(0, 1, 1),
+  yaxp = c(0, 1, 2)
+)
+
+# prep data
+kA <- 0
+kC <- 0
+kI <- 0:1
+pdat <- data.frame(A = kA, C = kC, I = kI)
+phi <- link(m12.5, data = pdat)$phi
+
+# plot samples 
+post <- extract.samples(m12.5)
+for (s in 1:50) {
+  
+  pk <- pordlogit(1:6, phi[s,], post$cutpoints[s,])
+  for (i in 1:6) lines(kI, pk[,i], col = grau(0.1))
+  
+}
+```
+
+* This shows the cumulative probabilities as intention is changed.
+* We can also plot a histogram of the response using `sim()`
+
+```{r}
+kA <- 0
+kC <- 1
+kI <- 0:1
+pdat <- data.frame(A = kA, C = kC, I = kI)
+s <- sim(m12.5, data = pdat)
+simplehist(s, xlab = "response")
+```
+
+## 12.4 Ordered categorical predictors
 
 
 

@@ -113,7 +113,7 @@ m12.1 <-
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 0.3 seconds.
+    ## Chain 1 finished in 0.2 seconds.
     ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -156,7 +156,7 @@ m12.1 <-
     ## 
     ## All 4 chains finished successfully.
     ## Mean chain execution time: 0.2 seconds.
-    ## Total execution time: 1.9 seconds.
+    ## Total execution time: 1.5 seconds.
 
 -   Here, McElreath added `transpars>` (transformed parameters) so that
     Stan will return `theta` in the samples.
@@ -167,12 +167,12 @@ post$da <- post$a[,1] - post$a[,2]
 precis(post, depth = 2)
 ```
 
-    ##             mean        sd       5.5%     94.5%       histogram
-    ## a[1]  -0.4290155 0.3884849 -1.0377471 0.2068656   ▁▁▁▂▃▇▇▇▅▂▂▁▁
-    ## a[2]  -0.3247134 0.4153179 -0.9826741 0.3410041 ▁▁▁▁▂▅▇▇▇▃▂▁▁▁▁
-    ## phi    1.0347497 0.8160561  0.1071035 2.6004500   ▇▇▃▂▂▁▁▁▁▁▁▁▁
-    ## theta  3.0347497 0.8160561  2.1071053 4.6004500   ▇▇▃▂▂▁▁▁▁▁▁▁▁
-    ## da    -0.1043021 0.5625613 -0.9780437 0.7916987        ▁▁▃▇▅▂▁▁
+    ##             mean        sd        5.5%     94.5%     histogram
+    ## a[1]  -0.4537322 0.4050041 -1.07846040 0.1787442       ▁▁▇▇▂▁▁
+    ## a[2]  -0.3279514 0.4150538 -0.96956496 0.3439370       ▁▁▃▇▂▁▁
+    ## phi    1.0147090 0.8087759  0.08323976 2.4605250 ▇▇▅▂▂▁▁▁▁▁▁▁▁
+    ## theta  3.0147090 0.8087759  2.08324305 4.4605250 ▇▇▅▂▂▁▁▁▁▁▁▁▁
+    ## da    -0.1257808 0.5712884 -1.02736077 0.7560067    ▁▁▁▃▇▇▂▁▁▁
 
 -   Here, `a[1]` and `a[2]` are the log-odds of admission for
     male/female applicants. The difference between the two, `da` is
@@ -309,7 +309,7 @@ m12.2 <- ulam(
     ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 0.5 seconds.
+    ## Chain 2 finished in 0.6 seconds.
     ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -335,23 +335,23 @@ m12.2 <- ulam(
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 0.5 seconds.
+    ## Chain 4 finished in 0.4 seconds.
     ## 
     ## All 4 chains finished successfully.
     ## Mean chain execution time: 0.6 seconds.
-    ## Total execution time: 3.1 seconds.
+    ## Total execution time: 3.0 seconds.
 
 ``` r
 precis(m12.2, depth = 2)
 ```
 
-    ##           mean         sd        5.5%     94.5%     n_eff    Rhat4
-    ## a[1] 0.9382833 0.83343811 -0.43210201 2.2565351 1040.7623 1.001052
-    ## a[2] 1.0804288 0.94593187 -0.42954208 2.4950511 1353.8774 0.999898
-    ## b[1] 0.2425519 0.09927092  0.08816549 0.4010911  648.0695 1.001876
-    ## b[2] 0.2559066 0.13302830  0.05942911 0.4766992  892.9532 1.000956
-    ## g    1.0549679 0.87590001  0.19618674 2.6322510  906.8250 1.002323
-    ## phi  3.7226259 1.68760007  1.53487140 6.7478833 1209.6542 1.001541
+    ##           mean         sd        5.5%     94.5%     n_eff     Rhat4
+    ## a[1] 0.9175663 0.78285571 -0.33152204 2.0620098 1139.2199 0.9992323
+    ## a[2] 1.0219225 0.93384778 -0.47028331 2.4546672 1016.2549 1.0020678
+    ## b[1] 0.2480249 0.08852023  0.10988486 0.3887975 1160.0771 1.0015674
+    ## b[2] 0.2661962 0.12661933  0.06769291 0.4794084  805.4336 1.0027818
+    ## g    1.0577662 0.80479875  0.21456304 2.5347692 1014.8143 1.0001771
+    ## phi  3.7564187 1.66857905  1.60782660 6.6913873 1228.6423 1.0027308
 
 -   See figure 12.2 on page 375 for a comparison of the outputs from
     `m11.11` and `m12.2`.
@@ -502,7 +502,7 @@ m12.3 <-
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 0.7 seconds.
+    ## Chain 3 finished in 0.8 seconds.
     ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -515,11 +515,11 @@ m12.3 <-
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 0.7 seconds.
+    ## Chain 4 finished in 0.9 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 0.7 seconds.
-    ## Total execution time: 3.5 seconds.
+    ## Mean chain execution time: 0.8 seconds.
+    ## Total execution time: 3.9 seconds.
 
 ``` r
 # posterior summary
@@ -619,3 +619,264 @@ plot(
 ```
 
 ![](chapter_12_notes_files/figure-gfm/unnamed-chunk-8-3.png)<!-- -->
+
+-   Here, each of the plots on the log-cumulative odds can be thought of
+    as an “intercept” unique to each possible outcome value $k$. The
+    largest response, 7, doesn’t appear on the log-cumulative odds scale
+    because it’s one on the probability scale/infinity on the log scale.
+-   This is okay, because we only need $K - 1$ intercepts for $K = 7$
+    possible outcomes.
+-   There are a lot of conventions for ordered-logit models, but here’s
+    how McElreath describes it:
+
+$$
+\begin{gather}
+R_i \sim \text{Ordered-logit} (\phi_i, \kappa) \\
+\phi_i = 0 \\
+\kappa_k \sim Normal(0, 1.5)
+\end{gather}
+$$
+
+-   We can also express it even more literally:
+
+$$
+\begin{gather}
+R_i \sim \text{Categorical}(p) \\
+p_1 = q_1 \\ 
+p_k = q_k - q_{k-1} \ \ \ \ \ \ \ \text{for} \ K > k > 1 \\
+p_K = 1 - q{k - 1} \\
+\text{logit}(q_k) = \kappa_k - \phi_i \\
+\phi_i = \text{terms of linear model} \\
+\kappa_k \sim Normal(0, 1.5)
+\end{gather}
+$$
+
+-   This second form is a bit cruel, but exposes that the ordered logit
+    model is really just a categorical distribution that takes a vector
+    $p = \{p_1, \dots, p_{k-1}\}$ for probabilities.
+
+``` r
+m12.4 <- 
+  ulam(
+    alist(R ~ dordlogit(0, cutpoints),
+          cutpoints ~ dnorm(0, 1.5)),
+    data = list(R = d$response),
+    chains = 4,
+    cores = 4
+  )
+```
+
+-   Damn that took a while. Here’s how the posterior of the cutpoints
+    looks on the log-cumulative scale:
+
+``` r
+precis(m12.4, depth = 2)
+```
+
+    ##                    mean         sd       5.5%      94.5%    n_eff     Rhat4
+    ## cutpoints[1] -1.9161160 0.03051743 -1.9651171 -1.8669451 1438.376 1.0013539
+    ## cutpoints[2] -1.2666099 0.02404824 -1.3048627 -1.2279734 1894.959 1.0003599
+    ## cutpoints[3] -0.7178999 0.02137176 -0.7532194 -0.6849070 2042.242 1.0002298
+    ## cutpoints[4]  0.2483339 0.01992731  0.2159665  0.2799734 2498.423 0.9989386
+    ## cutpoints[5]  0.8901811 0.02205264  0.8552044  0.9242784 2535.977 0.9997201
+    ## cutpoints[6]  1.7701744 0.02930053  1.7235395  1.8168206 2307.285 0.9996744
+
+-   The 0 is a placeholder for the linear model that we’ll construct
+    later.
+-   We can generate this model with `quap()` as well, but we’ll have to
+    provide `start` values explicitly:
+
+``` r
+m12.4q <- 
+  quap(
+    alist(response ~ dordlogit(0, c(a1, a2, a3, a4, a5, a6)),
+          c(a1, a2, a3, a4, a5, a6) ~ dnorm(0, 1.5)),
+    data = d,
+    start = list(a1 = -2, a2 = -1, a3 = 0, a4 = 1, a5 = 2, a6 = 2.5)
+  )
+
+precis(m12.4q)
+```
+
+    ##          mean         sd       5.5%      94.5%
+    ## a1 -1.9151111 0.02998740 -1.9630367 -1.8671854
+    ## a2 -1.2659285 0.02421690 -1.3046318 -1.2272252
+    ## a3 -0.7182221 0.02136931 -0.7523744 -0.6840698
+    ## a4  0.2477890 0.02021625  0.2154795  0.2800984
+    ## a5  0.8896250 0.02208010  0.8543368  0.9249133
+    ## a6  1.7688071 0.02843564  1.7233615  1.8142528
+
+-   To get the cumulative probabilities back:
+
+``` r
+round(inv_logit(coef(m12.4)), 3)
+```
+
+    ## cutpoints[1] cutpoints[2] cutpoints[3] cutpoints[4] cutpoints[5] cutpoints[6] 
+    ##        0.128        0.220        0.328        0.562        0.709        0.854
+
+### 12.3.3 Adding predictor variables
+
+-   So far, `m12.4` is really just a Bayesian representation of a
+    histogram. Let’s add predictors.
+-   The mathematical representation of each cumulative logit is:
+
+$$
+\begin{gather}
+\text{log} \ \frac{\text{Pr}(y_i \le k)}{1 - \text{Pr}(y_i \le k)} = \alpha_k - \phi_i \\
+\phi_i = \beta x_i
+\end{gather}
+$$
+
+-   $\phi$ is subtracted from $\alpha$ to ensure that a positive $\beta$
+    results in a positive change in the ordered outcome.
+
+``` r
+pk <- dordlogit(1:7, 0, coef(m12.4))
+pk
+```
+
+    ## [1] 0.12829531 0.09154282 0.10801748 0.23391077 0.14716117 0.14555181 0.14552064
+
+``` r
+# these give average outcome of:
+sum(pk*(1:7))
+```
+
+    ## [1] 4.198838
+
+``` r
+# subtract 0.5 from each
+pk <- dordlogit(1:7, 0, coef(m12.4)-0.5)
+pk
+```
+
+    ## [1] 0.08195200 0.06401242 0.08234182 0.20910722 0.15891284 0.18444631 0.21922739
+
+``` r
+sum(pk*(1:7))
+```
+
+    ## [1] 4.729265
+
+``` r
+# that's why we subtract phi!
+```
+
+-   Back to the trolley data — we can use predictors to explain
+    variation in the response. In this case, we’ll use `action`,
+    `intention`, and `contact`.
+-   There are 6 total possible combinations in the dataset:
+    1.  No action, contact, or intention
+    2.  Action
+    3.  Contact
+    4.  Intention
+    5.  Action and intention
+    6.  Contact and intention
+-   The last two are interactions — let’s write this up in a bit of an
+    odd way that’ll make it easier to debug later:
+
+$$
+\begin{gather}
+\text{log} \ \frac{\text{Pr}(y_i \le k)}{1 - \text{Pr}(y_i \le k)} = \alpha_k - \phi_i \\
+\phi_i = \beta_A A_i + \beta_C C_i + B_{I,i} I_i \\
+B_{I,i} = \beta_I + \beta_{IA} A_i + \beta_{IC} C_i
+\end{gather}
+$$
+
+-   We could substitute $B_I$ into the equation for $\phi$ without
+    changing anything, this just makes the notation a bit clearer.
+
+``` r
+dat <-
+  list(
+    R = d$response,
+    A = d$action,
+    I = d$intention,
+    C = d$contact
+  )
+```
+
+``` r
+m12.5 <-
+  ulam(
+    alist(R ~ dordlogit(phi, cutpoints),
+          phi <- bA*A + bC*C + BI*I,
+          BI <- bI + bIA*A + bIC*C,
+          c(bA, bI, bC, bIA, bIC) ~ dnorm(0, 0.5),
+          cutpoints ~ dnorm(0, 1.5)),
+    data = dat,
+    chains = 4,
+    cores = 4
+  )
+```
+
+``` r
+precis(m12.5)
+```
+
+    ##           mean         sd       5.5%      94.5%     n_eff     Rhat4
+    ## bIC -1.2304165 0.09455167 -1.3807452 -1.0779030  807.3215 1.0029400
+    ## bIA -0.4338161 0.07536262 -0.5542232 -0.3167599 1074.7963 0.9996623
+    ## bC  -0.3459866 0.06563178 -0.4480572 -0.2395965  961.0757 1.0028795
+    ## bI  -0.2923971 0.05487303 -0.3818046 -0.2011549  827.1790 1.0011248
+    ## bA  -0.4723521 0.05173630 -0.5564895 -0.3898588  849.6476 1.0018808
+
+``` r
+precis_plot(precis(m12.5))
+```
+
+![](chapter_12_notes_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+
+-   All parameters are negative — the interaction between intention and
+    contact is the worst in terms of lowering the response.
+-   Let’s plot some data that contains different combinations of
+    predictors & look at the response:
+
+``` r
+# create an empty plot
+plot(
+  NULL,
+  type = "n",
+  xlab = "intention",
+  ylab = "probability",
+  xlim = c(0, 1),
+  ylim = c(0, 1),
+  xaxp = c(0, 1, 1),
+  yaxp = c(0, 1, 2)
+)
+
+# prep data
+kA <- 0
+kC <- 0
+kI <- 0:1
+pdat <- data.frame(A = kA, C = kC, I = kI)
+phi <- link(m12.5, data = pdat)$phi
+
+# plot samples 
+post <- extract.samples(m12.5)
+for (s in 1:50) {
+  
+  pk <- pordlogit(1:6, phi[s,], post$cutpoints[s,])
+  for (i in 1:6) lines(kI, pk[,i], col = grau(0.1))
+  
+}
+```
+
+![](chapter_12_notes_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+
+-   This shows the cumulative probabilities as intention is changed.
+-   We can also plot a histogram of the response using `sim()`
+
+``` r
+kA <- 0
+kC <- 1
+kI <- 0:1
+pdat <- data.frame(A = kA, C = kC, I = kI)
+s <- sim(m12.5, data = pdat)
+simplehist(s, xlab = "response")
+```
+
+![](chapter_12_notes_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+
+## 12.4 Ordered categorical predictors
