@@ -139,7 +139,7 @@ m12.1 <-
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 0.2 seconds.
+    ## Chain 3 finished in 0.3 seconds.
     ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -156,7 +156,7 @@ m12.1 <-
     ## 
     ## All 4 chains finished successfully.
     ## Mean chain execution time: 0.2 seconds.
-    ## Total execution time: 1.5 seconds.
+    ## Total execution time: 1.7 seconds.
 
 -   Here, McElreath added `transpars>` (transformed parameters) so that
     Stan will return `theta` in the samples.
@@ -167,12 +167,12 @@ post$da <- post$a[,1] - post$a[,2]
 precis(post, depth = 2)
 ```
 
-    ##             mean        sd        5.5%     94.5%     histogram
-    ## a[1]  -0.4537322 0.4050041 -1.07846040 0.1787442       ▁▁▇▇▂▁▁
-    ## a[2]  -0.3279514 0.4150538 -0.96956496 0.3439370       ▁▁▃▇▂▁▁
-    ## phi    1.0147090 0.8087759  0.08323976 2.4605250 ▇▇▅▂▂▁▁▁▁▁▁▁▁
-    ## theta  3.0147090 0.8087759  2.08324305 4.4605250 ▇▇▅▂▂▁▁▁▁▁▁▁▁
-    ## da    -0.1257808 0.5712884 -1.02736077 0.7560067    ▁▁▁▃▇▇▂▁▁▁
+    ##             mean        sd       5.5%     94.5%      histogram
+    ## a[1]  -0.4420148 0.3979151 -1.0868850 0.1812110 ▁▁▁▂▃▅▇▇▅▂▁▁▁▁
+    ## a[2]  -0.3154094 0.4056810 -0.9964372 0.2982597        ▁▁▃▇▃▁▁
+    ## phi    1.0205078 0.8217415  0.0915374 2.5799573   ▇▇▅▂▁▁▁▁▁▁▁▁
+    ## theta  3.0205078 0.8217415  2.0915348 4.5799573   ▇▇▅▂▁▁▁▁▁▁▁▁
+    ## da    -0.1266054 0.5766707 -1.0393172 0.7950266       ▁▁▅▇▇▂▁▁
 
 -   Here, `a[1]` and `a[2]` are the log-odds of admission for
     male/female applicants. The difference between the two, `da` is
@@ -296,7 +296,7 @@ m12.2 <- ulam(
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 0.6 seconds.
+    ## Chain 1 finished in 0.5 seconds.
     ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -309,7 +309,7 @@ m12.2 <- ulam(
     ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 0.6 seconds.
+    ## Chain 2 finished in 0.5 seconds.
     ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -322,7 +322,7 @@ m12.2 <- ulam(
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 0.7 seconds.
+    ## Chain 3 finished in 0.4 seconds.
     ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -335,23 +335,23 @@ m12.2 <- ulam(
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 0.4 seconds.
+    ## Chain 4 finished in 0.5 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 0.6 seconds.
-    ## Total execution time: 3.0 seconds.
+    ## Mean chain execution time: 0.5 seconds.
+    ## Total execution time: 2.5 seconds.
 
 ``` r
 precis(m12.2, depth = 2)
 ```
 
     ##           mean         sd        5.5%     94.5%     n_eff     Rhat4
-    ## a[1] 0.9175663 0.78285571 -0.33152204 2.0620098 1139.2199 0.9992323
-    ## a[2] 1.0219225 0.93384778 -0.47028331 2.4546672 1016.2549 1.0020678
-    ## b[1] 0.2480249 0.08852023  0.10988486 0.3887975 1160.0771 1.0015674
-    ## b[2] 0.2661962 0.12661933  0.06769291 0.4794084  805.4336 1.0027818
-    ## g    1.0577662 0.80479875  0.21456304 2.5347692 1014.8143 1.0001771
-    ## phi  3.7564187 1.66857905  1.60782660 6.6913873 1228.6423 1.0027308
+    ## a[1] 0.9460800 0.82233516 -0.33911356 2.2755665  933.6561 0.9995377
+    ## a[2] 1.0078956 0.96182294 -0.51841474 2.5480037 1056.8075 1.0015906
+    ## b[1] 0.2463654 0.09511725  0.09746376 0.4013604  506.8810 1.0070448
+    ## b[2] 0.2699631 0.13007630  0.06422481 0.4857704  669.9433 1.0104508
+    ## g    1.0733141 0.82329378  0.21412897 2.6568226  712.3243 1.0047303
+    ## phi  3.6715685 1.58022439  1.62135355 6.4959518 1403.5138 1.0026883
 
 -   See figure 12.2 on page 375 for a comparison of the outputs from
     `m11.11` and `m12.2`.
@@ -502,7 +502,7 @@ m12.3 <-
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 0.8 seconds.
+    ## Chain 3 finished in 0.7 seconds.
     ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -515,11 +515,11 @@ m12.3 <-
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 0.9 seconds.
+    ## Chain 4 finished in 0.7 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 0.8 seconds.
-    ## Total execution time: 3.9 seconds.
+    ## Mean chain execution time: 0.7 seconds.
+    ## Total execution time: 3.4 seconds.
 
 ``` r
 # posterior summary
@@ -880,3 +880,248 @@ simplehist(s, xlab = "response")
 ![](chapter_12_notes_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
 
 ## 12.4 Ordered categorical predictors
+
+-   A cumulative link handles ordered categorical outcomes, but what
+    about ordered predictors? Treating them like any other continuous
+    predictor isn’t ideal.
+
+``` r
+levels(d$edu)
+```
+
+    ## [1] "Bachelor's Degree"    "Elementary School"    "Graduate Degree"     
+    ## [4] "High School Graduate" "Master's Degree"      "Middle School"       
+    ## [7] "Some College"         "Some High School"
+
+-   Here, there are 8 different levels, though they aren’t already in
+    proper order. Let’s fix that.
+
+``` r
+edu_levels <- c(6, 1, 8, 4, 7, 2, 5, 3)
+d$edu_new <- edu_levels[d$edu]
+str(d)
+```
+
+    ## 'data.frame':    9930 obs. of  13 variables:
+    ##  $ case     : Factor w/ 30 levels "cfaqu","cfbur",..: 1 2 3 4 5 6 7 8 9 10 ...
+    ##  $ response : int  4 3 4 3 3 3 5 4 4 4 ...
+    ##  $ order    : int  2 31 16 32 4 9 29 12 23 22 ...
+    ##  $ id       : Factor w/ 331 levels "96;434","96;445",..: 1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ age      : int  14 14 14 14 14 14 14 14 14 14 ...
+    ##  $ male     : int  0 0 0 0 0 0 0 0 0 0 ...
+    ##  $ edu      : Factor w/ 8 levels "Bachelor's Degree",..: 6 6 6 6 6 6 6 6 6 6 ...
+    ##  $ action   : int  0 0 0 0 0 0 1 1 1 1 ...
+    ##  $ intention: int  0 0 0 1 1 1 0 0 0 0 ...
+    ##  $ contact  : int  1 1 1 1 1 1 0 0 0 0 ...
+    ##  $ story    : Factor w/ 12 levels "aqu","boa","box",..: 1 4 8 3 4 11 1 2 3 4 ...
+    ##  $ action2  : int  1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ edu_new  : num  2 2 2 2 2 2 2 2 2 2 ...
+
+-   Now, `edu_new` is an indicator from 1-8. With 8 levels, we’ll need 7
+    parameters — the first level (Elementary School) will be absorbed
+    into the intercept.
+-   The terms in the linear model can be expressed by:
+
+$$
+\begin{gather}
+\phi_i = \beta_E \sum_{j = 0}^{E_i - 1} \delta_j + \text{other terms in linear model}
+\end{gather}
+$$
+
+-   Here, $E_i$ is the completed education level of individual $i$ and
+    $\delta_j$ is the effect of completing that education level.
+-   $\beta_E$ is maximized when education is at the max level, because
+    then the sum of $\delta_j$ is 1. This setup also helps ensure that
+    the effects are always incremental.
+-   This is all a bit bizarre, let’s look at a model for some more
+    clarity.
+
+$$
+\begin{gather}
+R_i \sim \text{Ordered-logit}(\phi_i, \kappa) \\
+\phi_i = \beta_E \sum_{j = 0}^{E_i - 1} \delta_j + \beta_A A_I + \beta_I I_i + \beta_C C_i \\
+\kappa_k \sim \text{Normal}(0, 1.5) \\
+\beta_A,\beta_I,\beta_C,\beta_E \sim \text{Normal}(0, 1) \\
+\delta \sim \text{Dirichlet}(\alpha)
+\end{gather}
+$$
+
+-   The last line uses a *Dirichlet distribution* as a prior for
+    $\delta$ — the Dirichlet distribution is a multivariate extension of
+    the beta distribution.
+-   Here, the distribution is defined by a vector of pseudo-counts for
+    each category, $\alpha$. If we set the values of $\alpha$ to be the
+    same, we are assuming a uniform prior. Let’s simulate a weak prior
+    where each value for $\alpha$ is 2.
+
+``` r
+set.seed(1805)
+delta <- gtools::rdirichlet(10, alpha = rep(2, 7))
+str(delta)
+```
+
+    ##  num [1:10, 1:7] 0.1053 0.2504 0.1917 0.1241 0.0877 ...
+
+``` r
+h <- 3
+plot(NULL, xlim = c(1, 7), ylim = c(0, 0.4), xlab = "index", ylab = "probability")
+for (i in 1:nrow(delta)) {
+  
+  lines(
+    1:7,
+    delta[i,],
+    type = "b",
+    pch = ifelse(i == h, 16, 1),
+    lwd = ifelse(i == h, 4, 1.5),
+    col = ifelse(i == h, "black", col.alpha("black", 0.7))
+  )
+  
+}
+```
+
+![](chapter_12_notes_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+
+``` r
+# prep data for stan
+dat <-
+  list(
+    R = d$response,
+    action = d$action,
+    intention = d$intention,
+    contact = d$contact,
+    E = as.integer(d$edu_new),
+    alpha = rep(2, 7)
+  )
+```
+
+``` r
+# this straight up didn't evaluate, sent a note to ISD. Here is the workaround.
+m12.6 <- 
+  ulam(
+    alist(R ~ ordered_logistic(phi, kappa),
+          phi <- bE*sum(delta_j[1:E]) + bA*action + bI*intention + bC*contact,
+          kappa ~ normal(0, 1.5),
+          c(bA, bI, bC, bE) ~ normal(0, 1),
+          vector[8]: delta_j <<- append_row(0, delta),
+          simplex[7]: delta ~ dirichlet(alpha)),
+    data = dat,
+    chains = 4,
+    cores = 4,
+    sample = FALSE
+  )
+
+# instead passed it over to rstan
+m12.6_rstan <- 
+  rstan::stan(
+    model_code = stancode(m12.6), 
+    data = dat,
+    chains = 4,
+    iter = 1000,
+    cores = 4
+  )
+```
+
+> Something is going wonky between Stan/ulam/ISD. I’ve reached out to
+> ISD to help resolve, but in the interim I’ve got a workaround where
+> I’m generating the model code via `ulam(sample = FALSE)` then passing
+> that over to `rstan::stan()`.
+
+``` r
+precis(m12.6_rstan, depth = 2)
+```
+
+    ##                 mean         sd         5.5%       94.5%    n_eff     Rhat4
+    ## kappa[1] -3.07727575 0.15173995 -3.343479359 -2.86394114 1150.473 1.0036781
+    ## kappa[2] -2.39494453 0.15079016 -2.667102278 -2.18520278 1165.370 1.0036007
+    ## kappa[3] -1.81223250 0.15032485 -2.077269560 -1.60350188 1176.298 1.0034395
+    ## kappa[4] -0.79105532 0.14876859 -1.050809379 -0.58528798 1171.812 1.0032056
+    ## kappa[5] -0.12244453 0.14889347 -0.382920833  0.08386527 1182.634 1.0032481
+    ## kappa[6]  0.78427853 0.14778677  0.528055997  0.98758180 1183.160 1.0032621
+    ## bE       -0.31652899 0.16876563 -0.610377408 -0.07187664 1194.031 1.0018641
+    ## bC       -0.95515682 0.05385484 -1.039448168 -0.86778242 2500.094 1.0010207
+    ## bI       -0.71738206 0.03641905 -0.773721423 -0.65727416 2783.615 0.9998955
+    ## bA       -0.70353464 0.04205401 -0.767902919 -0.63532405 2381.284 1.0010541
+    ## delta[1]  0.22734298 0.13487698  0.048387142  0.47489468 1532.175 1.0014053
+    ## delta[2]  0.14370236 0.08883507  0.031293494  0.30217110 3151.129 0.9989118
+    ## delta[3]  0.19234128 0.10576513  0.048850562  0.38635549 2589.470 1.0008160
+    ## delta[4]  0.16926541 0.09513300  0.043219423  0.33949053 2374.352 1.0008762
+    ## delta[5]  0.04249350 0.04833308  0.005789054  0.12390681 1256.123 1.0006776
+    ## delta[6]  0.09830487 0.06424407  0.020502736  0.21803413 2111.470 1.0007436
+    ## delta[7]  0.12654959 0.07560555  0.030370279  0.26577957 2058.481 1.0012651
+
+-   There’s a bit of involvement in the call to `alist()`. There’s a mix
+    of Stan code in there as well — see page 394 for a more detailed
+    explanation.
+-   One thing to note is that Stan provides a *simplex* type — this just
+    coerces the vector `delta` to sum to 1.
+
+``` r
+precis_plot(precis(m12.6_rstan, depth = 2))
+```
+
+![](chapter_12_notes_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
+
+-   Each delta associated with an education level incrementally moves up
+    the probability ladder, but `bE` is negative — more educated
+    individuals disapproved more!
+-   This association with education is smaller than the treatment
+    effects (C/I/A). Be careful to not consider this a causal effect —
+    education is not a randomized treatment variable!
+
+``` r
+# let's look at a pairs plot
+delta_labels <- c("Elem", "MidSch", "SHS", "HSG", "SCol", "Bach", "Mast", "Grad")
+pairs(m12.6_rstan, pars = "delta", labels = delta_labels)
+```
+
+![](chapter_12_notes_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
+
+-   All pairs of education levels are negatively correlated — this makes
+    sense, since they have to sum to one (as one gets larger the rest
+    must implicitly get smaller).
+-   Let’s look at what we might get if we treat the education level as a
+    regular ole continuous variable (normalized).
+
+``` r
+# doing my workaround trick for ulam...
+dat$edu_norm <- normalize(d$edu_new)
+m12.7 <-
+  ulam(
+    alist(R ~ ordered_logistic(mu, cutpoints),
+          mu <- bE*edu_norm + bA*action + bI*intention + bC*contact,
+          c(bA, bI, bC, bE) ~ normal(0, 1),
+          cutpoints ~ normal(0, 1.5)),
+    data = dat,
+    chains = 4, 
+    cores = 4,
+    sample = FALSE
+  )
+```
+
+``` r
+m12.7_rstan <-
+  rstan::stan(
+    model_code = stancode(m12.7),
+    data = dat,
+    iter = 1000,
+    chains = 4,
+    cores = 4
+  )
+```
+
+``` r
+precis(m12.7_rstan)
+```
+
+    ##           mean         sd       5.5%       94.5%    n_eff     Rhat4
+    ## bE -0.09751338 0.08745338 -0.2440609  0.04239059 1280.400 0.9991593
+    ## bC -0.95440189 0.04998042 -1.0344612 -0.87340002 1554.772 0.9989396
+    ## bI -0.71595370 0.03631100 -0.7734466 -0.65846596 1908.439 0.9994452
+    ## bA -0.70438860 0.04033714 -0.7723382 -0.64174821 1558.250 1.0005620
+
+-   This model finds that education is much more weakly associated with
+    rating — possibly because the effect isn’t actually linear like it
+    assumes!
+-   From a causal perspective, there’s a lurking concern with whether
+    the association between education is spurious (is there a causal
+    backdoor through age?).

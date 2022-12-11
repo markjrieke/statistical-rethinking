@@ -522,5 +522,170 @@ simplehist(s, xlab = "response")
 
 ## 12.4 Ordered categorical predictors
 
+* A cumulative link handles ordered categorical outcomes, but what about ordered predictors? Treating them like any other continuous predictor isn't ideal.
 
+```{r}
+levels(d$edu)
+```
 
+* Here, there are 8 different levels, though they aren't already in proper order. Let's fix that.
+
+```{r}
+edu_levels <- c(6, 1, 8, 4, 7, 2, 5, 3)
+d$edu_new <- edu_levels[d$edu]
+str(d)
+```
+
+* Now, `edu_new` is an indicator from 1-8. With 8 levels, we'll need 7 parameters --- the first level (Elementary School) will be absorbed into the intercept. 
+* The terms in the linear model can be expressed by:
+
+$$
+\begin{gather}
+\phi_i = \beta_E \sum_{j = 0}^{E_i - 1} \delta_j + \text{other terms in linear model}
+\end{gather}
+$$
+
+* Here, $E_i$ is the completed education level of individual $i$ and $\delta_j$ is the effect of completing that education level. 
+* $\beta_E$ is maximized when education is at the max level, because then the sum of $\delta_j$ is 1. This setup also helps ensure that the effects are always incremental.
+* This is all a bit bizarre, let's look at a model for some more clarity.
+
+$$
+\begin{gather}
+R_i \sim \text{Ordered-logit}(\phi_i, \kappa) \\
+\phi_i = \beta_E \sum_{j = 0}^{E_i - 1} \delta_j + \beta_A A_I + \beta_I I_i + \beta_C C_i \\
+\kappa_k \sim \text{Normal}(0, 1.5) \\
+\beta_A,\beta_I,\beta_C,\beta_E \sim \text{Normal}(0, 1) \\
+\delta \sim \text{Dirichlet}(\alpha)
+\end{gather}
+$$
+
+* The last line uses a *Dirichlet distribution* as a prior for $\delta$ --- the Dirichlet distribution is a multivariate extension of the beta distribution. 
+* Here, the distribution is defined by a vector of pseudo-counts for each category, $\alpha$. If we set the values of $\alpha$ to be the same, we are assuming a uniform prior. Let's simulate a weak prior where each value for $\alpha$ is 2. 
+
+```{r}
+set.seed(1805)
+delta <- gtools::rdirichlet(10, alpha = rep(2, 7))
+str(delta)
+
+h <- 3
+plot(NULL, xlim = c(1, 7), ylim = c(0, 0.4), xlab = "index", ylab = "probability")
+for (i in 1:nrow(delta)) {
+  
+  lines(
+    1:7,
+    delta[i,],
+    type = "b",
+    pch = ifelse(i == h, 16, 1),
+    lwd = ifelse(i == h, 4, 1.5),
+    col = ifelse(i == h, "black", col.alpha("black", 0.7))
+  )
+  
+}
+```
+
+```{r}
+# prep data for stan
+dat <-
+  list(
+    R = d$response,
+    action = d$action,
+    intention = d$intention,
+    contact = d$contact,
+    E = as.integer(d$edu_new),
+    alpha = rep(2, 7)
+  )
+```
+
+```{r, echo=FALSE}
+m12.6_rstan <- readr::read_rds("m12.6_rstan.rds")
+```
+
+```{r, eval=FALSE}
+# this straight up didn't evaluate, sent a note to ISD. Here is the workaround.
+m12.6 <- 
+  ulam(
+    alist(R ~ ordered_logistic(phi, kappa),
+          phi <- bE*sum(delta_j[1:E]) + bA*action + bI*intention + bC*contact,
+          kappa ~ normal(0, 1.5),
+          c(bA, bI, bC, bE) ~ normal(0, 1),
+          vector[8]: delta_j <<- append_row(0, delta),
+          simplex[7]: delta ~ dirichlet(alpha)),
+    data = dat,
+    chains = 4,
+    cores = 4,
+    sample = FALSE
+  )
+
+# instead passed it over to rstan
+m12.6_rstan <- 
+  rstan::stan(
+    model_code = stancode(m12.6), 
+    data = dat,
+    chains = 4,
+    iter = 1000,
+    cores = 4
+  )
+```
+
+>Something is going wonky between Stan/ulam/ISD. I've reached out to ISD to help resolve, but in the interim I've got a workaround where I'm generating the model code via `ulam(sample = FALSE)` then passing that over to `rstan::stan()`. 
+
+```{r}
+precis(m12.6_rstan, depth = 2)
+```
+
+* There's a bit of involvement in the call to `alist()`. There's a mix of Stan code in there as well --- see page 394 for a more detailed explanation. 
+* One thing to note is that Stan provides a *simplex* type --- this just coerces the vector `delta` to sum to 1. 
+
+```{r}
+precis_plot(precis(m12.6_rstan, depth = 2))
+```
+
+* Each delta associated with an education level incrementally moves up the probability ladder, but `bE` is negative --- more educated individuals disapproved more!
+* This association with education is smaller than the treatment effects (C/I/A). Be careful to not consider this a causal effect --- education is not a randomized treatment variable!
+
+```{r}
+# let's look at a pairs plot
+delta_labels <- c("Elem", "MidSch", "SHS", "HSG", "SCol", "Bach", "Mast", "Grad")
+pairs(m12.6_rstan, pars = "delta", labels = delta_labels)
+```
+
+* All pairs of education levels are negatively correlated --- this makes sense, since they have to sum to one (as one gets larger the rest must implicitly get smaller). 
+* Let's look at what we might get if we treat the education level as a regular ole continuous variable (normalized).
+
+```{r}
+# doing my workaround trick for ulam...
+dat$edu_norm <- normalize(d$edu_new)
+m12.7 <-
+  ulam(
+    alist(R ~ ordered_logistic(mu, cutpoints),
+          mu <- bE*edu_norm + bA*action + bI*intention + bC*contact,
+          c(bA, bI, bC, bE) ~ normal(0, 1),
+          cutpoints ~ normal(0, 1.5)),
+    data = dat,
+    chains = 4, 
+    cores = 4,
+    sample = FALSE
+  )
+```
+
+```{r, echo=FALSE}
+m12.7_rstan <- readr::read_rds("m12.7_rstan.rds")
+```
+
+```{r, eval=FALSE}
+m12.7_rstan <-
+  rstan::stan(
+    model_code = stancode(m12.7),
+    data = dat,
+    iter = 1000,
+    chains = 4,
+    cores = 4
+  )
+```
+
+```{r}
+precis(m12.7_rstan)
+```
+
+* This model finds that education is much more weakly associated with rating --- possibly because the effect isn't actually linear like it assumes!
+* From a causal perspective, there's a lurking concern with whether the association between education is spurious (is there a causal backdoor through age?). 
