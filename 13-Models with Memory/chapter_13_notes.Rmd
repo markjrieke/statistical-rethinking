@@ -194,3 +194,133 @@ $$
 
 * This can be done in `ulam()` with `dhalfnorm()` with a parameter for the lower bound of 0: `lower = 0`. 
 
+## 13.2 Varying effects and the underfitting/overfitting trade-off
+
+* Varying intercepts are just regularized estimates, but adaptively regularized by estimating how diverse the clusters are while also estimating the features of each cluster.
+* Varying effects provide more accurate estimates of the cluster intercepts. This is because they do a better job of trading off between overfitting/underfitting. 
+* Let's look at predicting the survival of frogs from several ponds using a few different methods:
+  1. Complete pooling --- assume the population does not vary at all from pond to pond.
+  2. No pooling --- assume that each pond tells us nothing about any other pond. 
+  3. Partial pooling --- using an adaptive regularizing prior (like the last section). 
+* Complete pooling will underfit the data, since the estimate for $\alpha$ across all ponds is unlikely to fit any particular pond well.
+* No pooling will overfit the data, since there is little data about each pond in particular.
+* Partial pooling strikes a balance!
+
+### 13.2.1 The model
+
+* We'll be simulating data from this model, then use each strategy to see how well it recovers the parameters:
+
+$$
+\begin{gather}
+S_i \sim \text{Binomial}(N_i, p_i) \\
+\text{logit}(p_i) = \alpha_{POND[i]} \\
+\alpha_j \sim \text{Normal}(\overline{\alpha}, \sigma) \\
+\overline{\alpha} \sim \text{Normal}(0, 1.5) \\
+\sigma \sim \text{Exponential}(1)
+\end{gather}
+$$
+
+* We'll need to assign values to:
+  * $\overline{\alpha}$, the average log-odds of survival in the entire population of ponds. 
+  * $\sigma$, the standard deviation of the distribution of log-odds of survival among ponds.
+  * $\alpha$, a vector of individual pond intercepts, one for each pond. 
+  * $N_i$, a sample size for each pond.
+  
+### 13.2.2 Assign values to the parameters
+
+```{r}
+# specify parameters
+a_bar <- 1.5
+sigma <- 1.5
+nponds <- 60
+Ni <- as.integer(rep(c(5, 10, 25, 35), each = 15))
+
+# setup df
+set.seed(5005)
+a_pond <- rnorm(nponds, mean = a_bar, sd = sigma)
+d_sim <- data.frame(pond = 1:nponds, Ni = Ni, true_a = a_pond)
+```
+
+* We've used `as.integer()` when creating `Ni`. R doesn't care too much about this being a `"numeric"` rather than an `"integer"`, but Stan does!
+
+### 13.2.3 Simulate survivors
+
+```{r}
+d_sim$Si <- rbinom(nponds, prob = logistic(d_sim$true_a), size = d_sim$Ni)
+```
+
+### 13.2.4 Compute the no-pooling estimates
+
+```{r}
+d_sim$p_nopool <- d_sim$Si / d_sim$Ni
+```
+
+* The no pooling estimate we've added here is the same thing we'd get if we'd fit a model with flat priors that induce no regularization. 
+
+### 13.2.5 Compute the partial-pooling estimate
+
+```{r}
+# prep for stan
+dat <- 
+  list(
+    Si = d_sim$Si, 
+    Ni = d_sim$Ni, 
+    pond = d_sim$pond
+  )
+
+# model!
+m13.3 <-
+  ulam(
+    alist(Si ~ dbinom(Ni, p),
+          logit(p) <- a_pond[pond],
+          a_pond[pond] ~ dnorm(a_bar, sigma),
+          a_bar ~ dnorm(0, 1.5),
+          sigma ~ dexp(1)),
+    data = dat,
+    chains = 4
+  )
+
+# display output
+precis(m13.3, depth = 2)
+
+# extract means for comparison
+post <- extract.samples(m13.3)
+d_sim$p_partpool <- apply(inv_logit(post$a_pond), 2, mean)
+
+# true per-pond survival probabilities
+d_sim$p_true <- inv_logit(d_sim$true_a)
+
+# compute error between estimates and true effects
+nopool_error <- abs(d_sim$p_nopool - d_sim$p_true)
+partpool_error <- abs(d_sim$p_partpool - d_sim$p_true)
+
+# plot!
+plot(
+  1:60, 
+  nopool_error,
+  xlab = "pond",
+  ylab = "absolute error",
+  col = rangi2,
+  pch = 16
+)
+
+points(1:60, partpool_error)
+```
+
+* The blue points are the no-pooling estimates, the black circles show the varying effect estimates. 
+* At the high end, the partially pooled/no pooled estimates are similar, but at the low end, the partially pooled estimates are way better!
+
+```{r}
+nopool_avg <- aggregate(nopool_error, list(d_sim$Ni), mean)
+partpool_avg <- aggregate(partpool_error, list(d_sim$Ni), mean)
+
+nopool_avg
+
+partpool_avg
+```
+
+* Smaller tanks (with less information) are shrunk more towards the mean than large tanks (with lots more info). 
+
+
+
+
