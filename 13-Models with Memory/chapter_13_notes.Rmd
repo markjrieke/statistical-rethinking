@@ -321,6 +321,166 @@ partpool_avg
 
 * Smaller tanks (with less information) are shrunk more towards the mean than large tanks (with lots more info). 
 
+## 13.3 More than one type of cluster
+
+* We can (and often should) include more than one type of cluster in a model.
+* Let's look back at the chimpanzee lever-pulling data --- each chimp is its own cluster, but there are also clusters of experimental groups.
+* The data structure in `data(chimpanzees)` is *cross-classified*, since actors are not nested within unique blocks. The model specification will still be the same for MCMC.
+
+### 13.3.1 Multilevel chimpanzees
+
+* Let's add varying intercepts to our chimpanzee model (recall that we had 4 treatment cases):
+
+$$
+\begin{gather}
+L_i \sim \text{Binomial}(1, p_i) \\
+\text{logit}(p_i) = \alpha_{ACTOR[i]} + \gamma_{BLOCK[i]} + \beta_{TREATMENT[i]} \\
+\beta_j \sim \text{Normal}(0, 0.5) \\ 
+\alpha_j \sim \text{Normal}(\overline{\alpha}, \sigma_{\alpha}) \\
+\gamma_j \sim \text{Normal}(0, \sigma_{\gamma}) \\
+\overline{\alpha} \sim \text{Normal}(0, 1.5) \\
+\sigma_{\alpha} \sim \text{Exponential}(1) \\
+\sigma_{\gamma} \sim \text{Exponential}(1)
+\end{gather}
+$$
+
+* Note that there is only one global mean variable, $\overline{\alpha}$. We can't identify a separate mean for each varying intercept type, since both are added to the same linear prediction. 
+* Doing so won't be the end of the world, but would be like the right/left leg example from Chapter 6. 
+
+```{r}
+# load data
+data("chimpanzees")
+d <- chimpanzees
+d$treatment <- 1 + d$prosoc_left + 2*d$condition
+
+# prep for stan
+dat_list <-
+  list(
+    pulled_left = d$pulled_left,
+    actor = d$actor,
+    block_id = d$block,
+    treatment = as.integer(d$treatment)
+  )
+
+# model!
+set.seed(13)
+m13.4 <-
+  ulam(
+    alist(
+      # model
+      pulled_left ~ dbinom(1, p),
+      logit(p) <- a[actor] + g[block_id] + b[treatment],
+      
+      # prior
+      b[treatment] ~ dnorm(0, 0.5),
+      
+      # adaptive priors
+      a[actor] ~ dnorm(a_bar, sigma_a),
+      g[block_id] ~ dnorm(0, sigma_g),
+      
+      # hyper-priors
+      a_bar ~ dnorm(0, 1.5),
+      sigma_a ~ dexp(1),
+      sigma_g ~ dexp(1)
+    ),
+    
+    data = dat_list,
+    chains = 4,
+    cores = 4,
+    log_lik = TRUE
+  )
+```
+
+* In the book, McElreath expected 22 divergent transitions. McElreath notes that this is fine, but the sampler had some trouble efficiently exploring the posterior. We'll fix this later.
+* Let's explore the model --- this is the most complicated model we've put together so far:
+
+```{r}
+precis(m13.4, depth = 2)
+precis_plot(precis(m13.4, depth = 2))
+```
+
+* A couple things worth noting:
+  1. `n_eff` varies quite a lot across parameters. This is common in complex models and may be a result of the sampler spending a lot of time near a boundary for one parameter (here, that's `sigma_g` spending too much time near 0). 
+  2. Compare `sigma_a` to `sigma_g` --- the estimated variation among actors is a lot larger than the estimated variation among blocks. The chimps vary, but the blocks are all the same. 
+
+```{r}
+# fit a model that ignores block
+set.seed(14)
+m13.5 <-
+  ulam(
+    alist(pulled_left ~ dbinom(1, p),
+          logit(p) <- a[actor] + b[treatment],
+          b[treatment] ~ dnorm(0, 0.5),
+          a[actor] ~ dnorm(a_bar, sigma_a),
+          a_bar ~ dnorm(0, 1.5),
+          sigma_a ~ dexp(1)),
+    data = dat_list,
+    chains = 4,
+    cores = 4,
+    log_lik = TRUE
+  )
+
+# compare to the model with both clusters
+compare(m13.4, m13.5)
+```
+
+* Here, the `pWAIC` column reports the effective number of parameters. `m13.4` has 7 more parameters than `m13.5`, but only 2 more effective parameters, because the posterior distribution for `sigma_g` ended up close to 0.
+* This means that each of the 6 `g` parameters are pretty inflexible, while the `a` parameters resulted in less shrinkage. 
+* The difference in `WAIC` between the models is small --- the block parameters contribute little additional information to the model.
+* There is nothing to gain by selecting either model, but the comparison tells a rich story: whether we include block or not hardly matters, and the `g` and `sigma_g` parameters tell us why. 
+
+### 13.3.2 Even more clusters
+
+* Let's fit again with a varying effect for treatment (this will piss off certain folks with a specific background in statistical semantics). 
+
+```{r}
+set.seed(15)
+m13.6 <-
+  ulam(
+    alist(
+      # model
+      pulled_left ~ dbinom(1, p),
+      logit(p) <- a[actor] + g[block_id] + b[treatment],
+      
+      # adaptive priors
+      b[treatment] ~ dnorm(0, sigma_b),
+      a[actor] ~ dnorm(a_bar, sigma_a),
+      g[block_id] ~ dnorm(0, sigma_g),
+      
+      # hyper-priors
+      a_bar ~ dnorm(0, 1.5),
+      sigma_a ~ dexp(1),
+      sigma_g ~ dexp(1),
+      sigma_b ~ dexp(1)
+    ),
+    
+    data = dat_list,
+    chains = 4, 
+    cores = 4,
+    log_lik = TRUE
+  )
+
+precis(m13.6, depth = 2)
+precis_plot(precis(m13.6, depth = 2))
+compare(m13.4, m13.6)
+```
+
+* Here, we don't get a whole lot of additonal info by setting the intercept to vary by treatment --- we do get divergent transitions though. Let's deal with those.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
