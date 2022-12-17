@@ -467,16 +467,190 @@ compare(m13.4, m13.6)
 
 * Here, we don't get a whole lot of additonal info by setting the intercept to vary by treatment --- we do get divergent transitions though. Let's deal with those.
 
+## 13.4 Divergent transitions and non-centered priors
 
+* Divergent transitions are commonplace in multilevel models (don't I know!). 
+* Recall that HMC simulates each parameter as a particle in a physics system. In this system, the total energy should be conserved, but sometimes the calculation shows different energy values between the start/end of a step.
+* This a divergence --- it tends to happen when the posterior is very steep in some region of the parameter space. 
+* Divergent transitions are rejected --- they don't directly damage the approximation of the posterior, but they do hurt it indirectly, since the region where the divergence occurred is hard to explore correctly.
+* There are two easy tricks to reducing the impact of divergent transitions:
+  1. Amp up Stan's `adapt_delta` parameter --- do more warmup with a higher target acceptance rate.
+  2. *Reparameterize* the model.
+  
+### 13.4.1 The Devil's Funnel
 
+* Let's look at an example of a joint distribution with two variables:
 
+$$
+\begin{gather}
+\nu \sim \text{Normal}(0, 3) \\
+x \sim \text{Normal}(0, \text{exp}(\nu))
+\end{gather}
+$$
 
+* Here's a basic fit of this joint distribution with `ulam()`
 
+```{r}
+m13.7 <-
+  ulam(
+    alist(v ~ normal(0, 3),
+          x ~ normal(0, exp(v))),
+    data = list(N = 1),
+    chains = 4
+  )
 
+precis(m13.7)
+```
 
+* This looks like an easy problem with only two parameters, but we get loads of divergent transitions!
 
+```{r}
+traceplot(m13.7)
+```
 
+* This is an example of The Devil's Funnel --- at low values of $\nu$, the distribution of $x$ contracts around 0 in a very steep valley (see figure 13.5 on page 422). 
+* Steep surfaces are difficult to simulate, because the simulation isn't continuous but instead happens in discrete steps. If the steps are too big, the simulation will overshoot. 
+* Here, we can reparameterize to fix!
+* The distribution of $x$ is conditional on $\nu$, so we'd call this a *centered parameterization*.
+* The *non-centered parameterization* of this would move the embedded parameter, $\nu$, out of the definition of the other parameter. 
 
+$$
+\begin{gather}
+\nu \sim \text{Normal}(0, 3) \\
+z \sim \text{Normal}(0, 1) \\
+x = z \ \text{exp}(\nu)
+\end{gather}
+$$
+
+* Now, when we run this through HMC, instead of sampling $x$ directly, the sampler draws from $\nu$ and $z$, which is much easier to sample from (just two normal distributions!). The right hand side of figure 13.5 on page 422 shows this.
+
+```{r}
+m13.7nc <-
+  ulam(
+    alist(v ~ normal(0, 3),
+          z ~ normal(0, 1),
+          gq> real[1]:x <<- z*exp(v)),
+    data = list(N = 1),
+    chains = 4
+  )
+
+precis(m13.7nc)
+```
+
+* This is much better! Non-centered parameterizations are often helpful for multilevel models, but there are times when centered parameterizations are better, so it's beneficial to be familiar with both. 
+
+### 13.4.2 Non-centered chimpanzees
+
+* For a real example, the adaptive priors in `m13.4` make it a multilevel model with parameters inside of them. This is causing regions of steep curvatures and divergent transitions that we can fix by non-centering.
+* Before attempting to fix with reparameterization, we ought to try increasing the `adapt_delta` control.
+* Higher `adapt_delta` means a smaller step size, so we may more accurately approximate a curved surface.
+
+```{r}
+set.seed(13)
+m13.4b <-
+  ulam(
+    m13.4,
+    chains = 4,
+    cores = 4,
+    control = list(adapt_delta = 0.99)
+  )
+
+divergent(m13.4b)
+```
+
+* That knocked down the number of divergent transitions, but didn't get rid of them all. And the `n_eff` is pretty low (around 300 when we sampled 2000 times!):
+
+```{r}
+precis(m13.4b, depth = 2)
+```
+
+* The non-centered version can do much better! There are three centered/embedded parameters to smuggle out of the priors: $\overline{\alpha}$, $\sigma_{\alpha}$, and $\sigma_{\gamma}$. 
+
+$$
+\begin{gather}
+L_i \sim \text{Binomial}(1, p_i) \\
+\text{logit}(p_i) = \underbrace{\overline{\alpha} + z_{\text{ACTOR}[i]} \ \sigma_\alpha}_{\alpha_{\text{ACTOR}[i]}} + \underbrace{x_{\text{BLOCK}[i]} \ \sigma_\gamma}_{\gamma_{\text{BLOCK}[i]}} + \beta_{\text{TREATMENT}[i]} \\
+\beta_j \sim \text{Normal}(0, 0.5) \\
+z_j \sim \text{Normal}(0, 1) \\
+x_j \sim \text{Normal}(0, 1) \\
+\overline{\alpha} \sim \text{Normal}(0, 1.5) \\
+\sigma_\alpha \sim \text{Exponential}(1) \\
+\sigma_\gamma \sim \text{Exponential}(1)
+\end{gather}
+$$
+
+* Here, the vector $z$ gives the standardized intercept for each actor and the vector $x$ gives the standardized intercept for each block.
+* Inside the linear model, all the parameters reappear, but the actor/block intercepts are no longer sampled from embedded parameters!
+
+```{r}
+set.seed(13)
+m13.4nc <-
+  ulam(
+    alist(
+      # model, nc!
+      pulled_left ~ dbinom(1, p),
+      logit(p) <- a_bar + z[actor]*sigma_a + # actor intercepts
+                  x[block_id]*sigma_g +      # block intercepts
+                  b[treatment],
+      
+      # prior
+      b[treatment] ~ dnorm(0, 0.5),
+      
+      # adaptive priors
+      z[actor] ~ dnorm(0, 1),
+      x[block_id] ~ dnorm(0, 1),
+      
+      # hyper-priors
+      a_bar ~ dnorm(0, 1.5),
+      sigma_a ~ dexp(1),
+      sigma_g ~ dexp(1),
+      
+      # generated quantiles
+      gq> vector[actor]:a <<- a_bar + z*sigma_a,
+      gq> vector[block_id]:g <<- x*sigma_g
+    ),
+    
+    data = dat_list,
+    chains = 4,
+    cores = 4
+  )
+```
+
+* Now, the `n_eff` is generally better:
+
+```{r}
+precis(m13.4nc, depth = 2)
+
+# get neff for centered/noncentered params in a single table
+precis_c <- precis(m13.4, depth = 2)
+precis_nc <- precis(m13.4nc, depth = 2)
+pars <- c(paste0("a[", 1:7, "]"),
+          paste0("g[", 1:6, "]"),
+          paste0("b[", 1:4, "]"),
+          "a_bar",
+          "sigma_a",
+          "sigma_g")
+
+neff_table <- cbind(precis_c[pars, "n_eff"], precis_nc[pars, "n_eff"])
+
+# plot
+plot(
+  neff_table,
+  xlim = range(neff_table),
+  ylim = range(neff_table),
+  xlab = "n_eff (centered)",
+  ylab = "n_eff (non-centered)",
+  lwd = 2
+)
+
+abline(a = 0, b = 1, lty = 2)
+```
+
+* For all but two parameters, the n_eff is greater for the non-centered parameterization. 
+* Typically, for a cluster with low variation like the blocks in `m13.4`, the non-centered version will perform better. 
+* If you have a large number of units inside a cluster, but not much data for each unit, then the non-centered is also usually better. 
+* Being able to switch between the two, however, is useful!
+* You can also obviously reparameterize distributions other than the Gaussian.
 
 
 
