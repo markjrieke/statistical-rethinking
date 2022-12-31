@@ -90,7 +90,7 @@ m13.1 <-
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 0.4 seconds.
+    ## Chain 1 finished in 0.5 seconds.
     ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -103,7 +103,7 @@ m13.1 <-
     ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 0.4 seconds.
+    ## Chain 2 finished in 0.5 seconds.
     ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -116,7 +116,7 @@ m13.1 <-
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 0.4 seconds.
+    ## Chain 3 finished in 0.5 seconds.
     ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -132,62 +132,62 @@ m13.1 <-
     ## Chain 4 finished in 0.4 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 0.4 seconds.
-    ## Total execution time: 2.3 seconds.
+    ## Mean chain execution time: 0.5 seconds.
+    ## Total execution time: 2.6 seconds.
 
 ``` r
 precis(m13.1, depth = 2)
 ```
 
-    ##               mean        sd        5.5%       94.5%    n_eff     Rhat4
-    ## a[1]   1.721265655 0.7686124  0.59850539  3.00446225 3174.265 0.9988769
-    ## a[2]   2.401487810 0.9089611  1.06546065  3.90004485 3776.175 0.9986916
-    ## a[3]   0.769733624 0.6555250 -0.25385245  1.82691885 5726.362 0.9986712
-    ## a[4]   2.402858612 0.8836321  1.09787290  3.86424820 3444.822 0.9989760
-    ## a[5]   1.688628978 0.7879202  0.51437806  3.03285245 3570.885 0.9987680
-    ## a[6]   1.714051622 0.7580692  0.54248533  2.98609935 4996.490 0.9991713
-    ## a[7]   2.399921723 0.9219802  1.03207625  3.98561070 3906.327 0.9986916
-    ## a[8]   1.730893883 0.7519066  0.57932705  3.00634205 4623.629 0.9985772
-    ## a[9]  -0.361501960 0.5915007 -1.30918710  0.56533427 4052.986 0.9991770
-    ## a[10]  1.730079286 0.7690728  0.55488443  2.99977030 4279.713 0.9987017
-    ## a[11]  0.749908686 0.6211445 -0.17030056  1.74706915 4438.983 0.9989371
-    ## a[12]  0.370071639 0.5936163 -0.56064072  1.31095290 4426.742 0.9990035
-    ## a[13]  0.771712823 0.6360442 -0.20784280  1.82348675 3955.920 0.9991759
-    ## a[14] -0.005397595 0.5990741 -0.96317397  0.95922038 4027.596 0.9982380
-    ## a[15]  1.709238267 0.7566207  0.57884472  2.96062415 5839.605 0.9996632
-    ## a[16]  1.704729496 0.7558958  0.58909431  2.97583990 4088.487 0.9990322
-    ## a[17]  2.542146894 0.6917117  1.49966480  3.71229220 3650.754 0.9993457
-    ## a[18]  2.143639620 0.6214116  1.22566725  3.20601645 3495.370 0.9987062
-    ## a[19]  1.815473061 0.5503675  0.99654814  2.75122800 3464.376 0.9985261
-    ## a[20]  3.104045781 0.8089185  1.91290700  4.49172190 3480.550 0.9990269
-    ## a[21]  2.138025987 0.6047994  1.21783410  3.16845620 3653.030 0.9984856
-    ## a[22]  2.129205734 0.5848542  1.26989240  3.09673035 3174.928 0.9983593
-    ## a[23]  2.140282597 0.5922918  1.27625925  3.16909590 3416.638 1.0000539
-    ## a[24]  1.554327148 0.5064309  0.78583830  2.41908285 3971.831 0.9992115
-    ## a[25] -1.107303991 0.4448824 -1.83897505 -0.42722122 5262.080 0.9992318
-    ## a[26]  0.075567674 0.4014231 -0.55878310  0.71813349 5380.006 0.9986941
-    ## a[27] -1.543300330 0.5105600 -2.40863785 -0.79481675 3141.512 0.9990596
-    ## a[28] -0.555164436 0.4086903 -1.20776070  0.07869281 4443.893 0.9988430
-    ## a[29]  0.081010817 0.3964129 -0.56220036  0.70590041 4023.135 1.0011021
-    ## a[30]  1.301872631 0.4637145  0.59942831  2.06877695 5599.312 0.9988328
-    ## a[31] -0.714335613 0.4035348 -1.38398135 -0.09500573 4814.165 0.9986504
-    ## a[32] -0.396763915 0.4048540 -1.08148455  0.25504603 4620.540 0.9986032
-    ## a[33]  2.824163255 0.6525011  1.84446855  3.99424935 4643.719 0.9998294
-    ## a[34]  2.470255695 0.5741393  1.58748865  3.44107390 3889.772 0.9985571
-    ## a[35]  2.451703191 0.5616932  1.61985600  3.39102025 4014.171 0.9990443
-    ## a[36]  1.907308921 0.4843753  1.14876280  2.72405155 3780.871 0.9984213
-    ## a[37]  1.915140342 0.5009978  1.17191670  2.74170305 5388.734 0.9982331
-    ## a[38]  3.384379590 0.8274808  2.17239480  4.78501045 2792.536 0.9995205
-    ## a[39]  2.449855877 0.5753375  1.61627195  3.41193240 3199.828 0.9995535
-    ## a[40]  2.158680448 0.5009827  1.40867085  2.99853265 3700.866 1.0012257
-    ## a[41] -1.903433410 0.4678685 -2.66524825 -1.21488490 4920.719 0.9988921
-    ## a[42] -0.644811802 0.3488824 -1.20053865 -0.11293872 4371.757 0.9995421
-    ## a[43] -0.512505138 0.3429813 -1.05780880  0.01430411 4471.711 0.9984675
-    ## a[44] -0.386879361 0.3526368 -0.94457594  0.14589563 5578.977 0.9983138
-    ## a[45]  0.520126357 0.3383013 -0.03231372  1.06709050 4211.146 0.9984964
-    ## a[46] -0.636170257 0.3505882 -1.21132825 -0.08863769 4768.094 0.9988750
-    ## a[47]  1.907501394 0.4680755  1.21406655  2.69342990 3963.638 0.9989832
-    ## a[48] -0.051854901 0.3400653 -0.59282421  0.49123237 4015.610 0.9996455
+    ##               mean        sd       5.5%       94.5%    n_eff     Rhat4
+    ## a[1]   1.700479500 0.7887162  0.5070037  3.04236695 4403.108 0.9995898
+    ## a[2]   2.417027799 0.9049143  1.0587426  3.95754300 4588.071 0.9983482
+    ## a[3]   0.768139859 0.6842861 -0.2929276  1.89781895 4790.781 0.9988669
+    ## a[4]   2.412460650 0.9383307  1.0356913  4.02517925 5541.249 0.9987555
+    ## a[5]   1.712267528 0.7847265  0.5256442  3.04223185 4550.576 0.9988267
+    ## a[6]   1.719931215 0.7928336  0.5235716  3.02013480 3393.201 0.9993671
+    ## a[7]   2.394667543 0.8815309  1.0813018  3.89118770 3380.635 0.9993157
+    ## a[8]   1.710972896 0.7659825  0.5758478  3.00584565 3525.135 0.9997786
+    ## a[9]  -0.373428557 0.6178822 -1.3445139  0.62143575 5826.394 0.9990670
+    ## a[10]  1.703205465 0.7739432  0.5486362  2.97208145 5053.840 0.9989920
+    ## a[11]  0.756112824 0.6638846 -0.2637839  1.83864380 4517.452 0.9982698
+    ## a[12]  0.376856686 0.5809826 -0.5093072  1.34651210 4328.423 0.9996242
+    ## a[13]  0.735666564 0.6160900 -0.2153404  1.74869445 5912.456 0.9985371
+    ## a[14] -0.001988707 0.6037378 -0.9621815  0.96761505 4431.178 0.9991725
+    ## a[15]  1.714189115 0.7821686  0.6169842  3.05617650 3773.411 0.9987270
+    ## a[16]  1.702327245 0.7456272  0.5987266  2.95371490 4907.418 0.9987964
+    ## a[17]  2.552257607 0.6821778  1.5439953  3.69318475 2676.098 0.9994171
+    ## a[18]  2.143712346 0.5956001  1.2335942  3.20789845 3944.151 0.9991559
+    ## a[19]  1.819031709 0.5679765  0.9541487  2.77674160 3886.937 0.9983747
+    ## a[20]  3.094078983 0.8120214  1.8829017  4.47240000 3735.085 0.9984503
+    ## a[21]  2.139885589 0.5830502  1.2556593  3.10954835 5287.579 0.9984810
+    ## a[22]  2.125059525 0.6027027  1.2268674  3.11044515 3913.776 0.9996947
+    ## a[23]  2.129780407 0.5980149  1.2467491  3.12520145 4983.633 0.9987304
+    ## a[24]  1.530761510 0.4923086  0.7848602  2.33832725 3962.781 0.9989220
+    ## a[25] -1.093559560 0.4307271 -1.8107701 -0.44285650 5539.215 0.9991243
+    ## a[26]  0.068482302 0.4168000 -0.6068098  0.74944451 6082.327 0.9984400
+    ## a[27] -1.541696364 0.5167387 -2.4365635 -0.75161801 4513.359 0.9985845
+    ## a[28] -0.554319077 0.3916626 -1.2050923  0.04828916 4201.508 0.9982041
+    ## a[29]  0.084855527 0.4103554 -0.5988266  0.74936939 6602.060 0.9985298
+    ## a[30]  1.314739564 0.4822204  0.5925474  2.12191500 5047.215 0.9990449
+    ## a[31] -0.726543956 0.4211832 -1.4072790 -0.06497538 5765.343 0.9989683
+    ## a[32] -0.383327106 0.4055485 -1.0426692  0.24308925 4140.427 0.9987347
+    ## a[33]  2.849641203 0.6560532  1.8556689  3.97812590 4180.188 0.9983925
+    ## a[34]  2.451336728 0.5696447  1.6078300  3.42084825 3959.487 0.9991687
+    ## a[35]  2.452191884 0.5762067  1.6063803  3.43865055 5088.521 0.9999087
+    ## a[36]  1.891494351 0.4797413  1.1759974  2.66472785 3307.387 0.9987888
+    ## a[37]  1.901580978 0.5071237  1.1561832  2.74739185 3951.683 0.9984702
+    ## a[38]  3.335624390 0.7628331  2.1916845  4.61077265 3828.794 0.9987848
+    ## a[39]  2.471525768 0.5958352  1.5908663  3.49583845 4275.079 0.9994280
+    ## a[40]  2.148996350 0.5079094  1.3828492  2.99897220 3817.485 0.9983936
+    ## a[41] -1.903467736 0.4791681 -2.6814560 -1.19705640 4670.873 0.9995863
+    ## a[42] -0.640891252 0.3614946 -1.2363882 -0.07770522 4631.320 0.9989427
+    ## a[43] -0.508750614 0.3440298 -1.0805974  0.03689256 5174.797 0.9989402
+    ## a[44] -0.390946016 0.3302895 -0.9130374  0.13432322 4464.368 0.9992811
+    ## a[45]  0.497127419 0.3443826 -0.0610501  1.05485140 4822.419 0.9991463
+    ## a[46] -0.634389743 0.3313873 -1.1705188 -0.09993799 4975.464 0.9988170
+    ## a[47]  1.917558966 0.4929114  1.1521530  2.72695135 3226.498 0.9997053
+    ## a[48] -0.051321844 0.3307753 -0.5758490  0.46003856 3470.571 0.9994032
 
 -   Here is nothing new — we have 48 different estimates of alpha, one
     for each tank.
@@ -245,7 +245,7 @@ m13.2 <-
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 0.4 seconds.
+    ## Chain 1 finished in 0.6 seconds.
     ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -258,7 +258,7 @@ m13.2 <-
     ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 0.4 seconds.
+    ## Chain 2 finished in 0.5 seconds.
     ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -271,7 +271,7 @@ m13.2 <-
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 0.4 seconds.
+    ## Chain 3 finished in 0.5 seconds.
     ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -284,19 +284,19 @@ m13.2 <-
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 0.4 seconds.
+    ## Chain 4 finished in 0.7 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 0.4 seconds.
-    ## Total execution time: 2.3 seconds.
+    ## Mean chain execution time: 0.6 seconds.
+    ## Total execution time: 3.1 seconds.
 
 ``` r
 compare(m13.1, m13.2)
 ```
 
-    ##           WAIC       SE    dWAIC      dSE    pWAIC       weight
-    ## m13.2 199.9224 7.275981  0.00000       NA 20.93209 0.9995362345
-    ## m13.1 215.2738 4.697748 15.35134 4.083799 26.03611 0.0004637655
+    ##           WAIC       SE   dWAIC      dSE    pWAIC       weight
+    ## m13.2 200.7816 7.115864  0.0000       NA 21.24165 0.9995229437
+    ## m13.1 216.0764 4.381793 15.2948 3.794304 26.17237 0.0004770563
 
 -   `m13.2` has only \~21 effective parameters! The prior shrinks all
     the intercept estimates towards the mean $\overline{\alpha}$.
@@ -307,9 +307,9 @@ compare(m13.1, m13.2)
 precis(m13.2)
 ```
 
-    ##           mean        sd      5.5%    94.5%    n_eff    Rhat4
-    ## a_bar 1.342726 0.2596861 0.9493176 1.766511 2721.304 1.001850
-    ## sigma 1.614282 0.2127130 1.2953447 1.974401 1580.487 1.000319
+    ##           mean        sd      5.5%    94.5%    n_eff     Rhat4
+    ## a_bar 1.344013 0.2462554 0.9646372 1.750061 2863.730 0.9983345
+    ## sigma 1.605299 0.2047881 1.3059543 1.939233 1589.651 1.0019174
 
 -   `sigma` is a regularizing prior, like from earlier chapters, but now
     the amount of regularization has been learned from the model itself!
@@ -528,7 +528,7 @@ m13.3 <-
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 0.4 seconds.
+    ## Chain 1 finished in 0.5 seconds.
     ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -554,7 +554,7 @@ m13.3 <-
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 0.4 seconds.
+    ## Chain 3 finished in 0.5 seconds.
     ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -567,11 +567,11 @@ m13.3 <-
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 0.4 seconds.
+    ## Chain 4 finished in 0.5 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 0.4 seconds.
-    ## Total execution time: 2.4 seconds.
+    ## Mean chain execution time: 0.5 seconds.
+    ## Total execution time: 2.8 seconds.
 
 ``` r
 # display output
@@ -789,55 +789,55 @@ m13.4 <-
     ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
-    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
-    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
-    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
     ## Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
-    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
     ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
-    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
-    ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) 
-    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
     ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
-    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
     ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
-    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
-    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
     ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
-    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
-    ## Chain 1 finished in 3.5 seconds.
     ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 3.8 seconds.
-    ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 1 finished in 6.0 seconds.
+    ## Chain 3 finished in 5.9 seconds.
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 4.6 seconds.
+    ## Chain 4 finished in 7.1 seconds.
     ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 4.7 seconds.
+    ## Chain 2 finished in 7.4 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 4.2 seconds.
-    ## Total execution time: 5.0 seconds.
+    ## Mean chain execution time: 6.6 seconds.
+    ## Total execution time: 7.6 seconds.
 
 -   In the book, McElreath expected 22 divergent transitions. McElreath
     notes that this is fine, but the sampler had some trouble
@@ -914,30 +914,30 @@ m13.5 <-
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
-    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
-    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
     ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
     ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
     ## Chain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
     ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
     ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
     ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
-    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
     ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
     ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
     ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
-    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
     ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
-    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
@@ -946,22 +946,22 @@ m13.5 <-
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
-    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 4 finished in 5.1 seconds.
     ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 2.7 seconds.
-    ## Chain 3 finished in 2.7 seconds.
-    ## Chain 4 finished in 2.7 seconds.
+    ## Chain 2 finished in 5.3 seconds.
+    ## Chain 3 finished in 5.2 seconds.
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 2.9 seconds.
+    ## Chain 1 finished in 5.3 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 2.7 seconds.
-    ## Total execution time: 3.1 seconds.
+    ## Mean chain execution time: 5.2 seconds.
+    ## Total execution time: 5.6 seconds.
 
 ``` r
 # compare to the model with both clusters
@@ -1027,55 +1027,55 @@ m13.6 <-
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
-    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
-    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
     ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
-    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
     ## Chain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
     ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
-    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
-    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
     ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
     ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
     ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
     ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
-    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
     ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
-    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
-    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
-    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
-    ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
-    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
-    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 5.0 seconds.
-    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
-    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 3 finished in 8.7 seconds.
+    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 5.7 seconds.
-    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
-    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 6.1 seconds.
+    ## Chain 4 finished in 9.7 seconds.
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 6.2 seconds.
+    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 finished in 10.2 seconds.
+    ## Chain 2 finished in 10.3 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 5.8 seconds.
-    ## Total execution time: 6.5 seconds.
+    ## Mean chain execution time: 9.7 seconds.
+    ## Total execution time: 10.6 seconds.
 
 ``` r
 precis(m13.6, depth = 2)
@@ -1179,7 +1179,7 @@ m13.7 <-
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 0.1 seconds.
+    ## Chain 1 finished in 0.2 seconds.
     ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -1192,7 +1192,7 @@ m13.7 <-
     ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 0.1 seconds.
+    ## Chain 2 finished in 0.2 seconds.
     ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -1205,7 +1205,7 @@ m13.7 <-
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 0.1 seconds.
+    ## Chain 3 finished in 0.2 seconds.
     ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
     ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
@@ -1221,8 +1221,8 @@ m13.7 <-
     ## Chain 4 finished in 0.2 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 0.1 seconds.
-    ## Total execution time: 1.2 seconds.
+    ## Mean chain execution time: 0.2 seconds.
+    ## Total execution time: 1.6 seconds.
 
 ``` r
 precis(m13.7)
@@ -1334,7 +1334,7 @@ m13.7nc <-
     ## 
     ## All 4 chains finished successfully.
     ## Mean chain execution time: 0.1 seconds.
-    ## Total execution time: 1.1 seconds.
+    ## Total execution time: 1.3 seconds.
 
 ``` r
 precis(m13.7nc)
@@ -1387,49 +1387,49 @@ m13.4b <-
     ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
     ## Chain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) 
-    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
-    ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
     ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
-    ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
     ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
     ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
     ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
-    ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
-    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
-    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
-    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
-    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
-    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
-    ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
-    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
-    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
-    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 6.1 seconds.
-    ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 6.3 seconds.
+    ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
     ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 6.4 seconds.
+    ## Chain 2 finished in 8.6 seconds.
+    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 3 finished in 8.9 seconds.
+    ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 4 finished in 9.0 seconds.
     ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 19.7 seconds.
+    ## Chain 1 finished in 26.7 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 9.6 seconds.
-    ## Total execution time: 19.9 seconds.
+    ## Mean chain execution time: 13.3 seconds.
+    ## Total execution time: 26.9 seconds.
 
 ``` r
 divergent(m13.4b)
@@ -1539,49 +1539,49 @@ m13.4nc <-
     ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
-    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) 
     ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
-    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
     ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
     ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
-    ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
     ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
-    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
-    ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
     ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
     ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
     ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
-    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
-    ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
-    ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
-    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
-    ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 4.7 seconds.
     ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
-    ## Chain 1 finished in 5.0 seconds.
+    ## Chain 1 finished in 7.8 seconds.
     ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 4 finished in 8.1 seconds.
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 5.5 seconds.
+    ## Chain 3 finished in 8.4 seconds.
     ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 5.7 seconds.
+    ## Chain 2 finished in 8.7 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 5.2 seconds.
-    ## Total execution time: 5.9 seconds.
+    ## Mean chain execution time: 8.2 seconds.
+    ## Total execution time: 9.0 seconds.
 
 -   Now, the `n_eff` is generally better:
 
@@ -1661,3 +1661,234 @@ abline(a = 0, b = 1, lty = 2)
 -   Being able to switch between the two, however, is useful!
 -   You can also obviously reparameterize distributions other than the
     Gaussian.
+
+## 13.5 Multilevel posterior predictions
+
+-   Producing implied predictions from a model’s fit is, once again, a
+    useful endeavor.
+-   Implied predictions are needed to consider causal effects.
+-   Another role for constructing implied predictions is for computing
+    *information criteria*, like AIC or WAIC, which provide estimates of
+    out-of-sample accuracy (via KL divergence).
+
+### 13.5.1 Posterior prediction for same clusters
+
+-   When working with the same clusters that were used to fit a model,
+    varying intercepts are just parameters.
+-   For multilevel models, we shouldn’t expect the model to retrodict
+    the data used to train it (this is actually the whole point of
+    partial pooling — shrinking estimates towards a global mean when
+    there is little data guards us from poor out-of-sample predictions).
+-   Let’s compute posterior predictions for actor 2 using `m13.4`
+
+``` r
+# setup data
+chimp <- 2
+d_pred <-
+  list(
+    actor = rep(chimp, 4),
+    treatment = 1:4,
+    block_id = rep(1, 4)
+  )
+
+# extract mean samples using link
+p <- link(m13.4, data = d_pred)
+p_mu <- apply(p, 2, mean)
+p_ci <- apply(p, 2, PI)
+```
+
+-   Alternatively, we can perform the same calculation manually using
+    the posterior samples.
+
+``` r
+# posterior samples
+post <- extract.samples(m13.4)
+str(post)
+```
+
+    ## List of 6
+    ##  $ b      : num [1:2000, 1:4] 0.4218 -0.1674 -0.9765 -0.0286 -0.5614 ...
+    ##  $ a      : num [1:2000, 1:7] -1.076 -0.459 0.598 -0.279 -0.431 ...
+    ##  $ g      : num [1:2000, 1:6] 0.2566 0.2619 -0.0221 -0.109 -0.122 ...
+    ##  $ a_bar  : num [1:2000(1d)] 0.8458 0.0142 -0.1317 -0.1878 0.8999 ...
+    ##  $ sigma_a: num [1:2000(1d)] 4.61 1.33 3.2 1.84 2.13 ...
+    ##  $ sigma_g: num [1:2000(1d)] 0.77 0.225 0.067 0.113 0.164 ...
+    ##  - attr(*, "source")= chr "ulam posterior: 2000 samples from object"
+
+``` r
+# posterior density for actor 5
+dens(post$a[,5])
+```
+
+![](chapter_13_notes_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+
+``` r
+# posterior prediction function
+p_link <- function(treatment, actor = 1, block_id = 1) {
+  
+  logodds <- 
+    with(
+      post,
+      a[,actor] + g[,block_id] + b[,treatment]
+    )
+  
+  return(inv_logit(logodds))
+  
+}
+
+p_raw <- sapply(1:4, function(i) p_link(i, actor = 2, block_id = 1))
+p_mu <- apply(p_raw, 2, mean)
+p_ci <- apply(p_raw, 2, PI)
+```
+
+-   At some point, you’ll run into a model that `link()` won’t be able
+    to handle correctly. You can always work directly with the samples
+    to get posterior predictions out.
+
+### 13.5.2 Posterior prediction for new clusters
+
+-   Let’s suppose you want to predict how chimpanzees in another
+    population would respond to the lever pulling experiment.
+-   The actor intercepts don’t give you what you need, since those
+    intercepts are for the particular chimps from the original
+    experiment.
+-   One way to think about this is to generate predictions for a new,
+    previously unobserved, *average* actor (aka, a chimpanzee with an
+    intercept exactly at `a_bar`, $\overline{\alpha}$).
+-   There will still be uncertainty around this “average” chimp, but it
+    will be misleadingly smaller than it really should be.
+
+``` r
+p_link_abar <- function(treatment) {
+  
+  logodds <- with(post, a_bar + b[,treatment])
+  return(inv_logit(logodds))
+  
+}
+```
+
+-   This link ignores `block`, since we are extrapolating to new blocks
+    and making the assumption that the average block effect is zero.
+
+``` r
+post <- extract.samples(m13.4)
+p_raw <- sapply(1:4, function(i) p_link_abar(i))
+p_mu <- apply(p_raw, 2, mean)
+p_ci <- apply(p_raw, 2, PI)
+
+plot(
+  NULL,
+  xlab = "treatment",
+  ylab = "proportion pulled left",
+  ylim = c(0, 1),
+  xaxt = "n",
+  xlim = c(1, 4)
+)
+
+axis(
+  1, 
+  at = 1:4, 
+  labels = c("R/N", "L/N", "R/P", "L/P")
+)
+
+lines(1:4, p_mu)
+shade(p_ci, 1:4)
+```
+
+![](chapter_13_notes_files/figure-gfm/unnamed-chunk-27-1.png)<!-- -->
+
+-   This shows the variation around the *average* actor — to show the
+    variation among individual (unobserved) actors, we’ll also need to
+    use `sigma_a` $\sigma_{\alpha}$ in the calculation.
+
+``` r
+a_sim <- 
+  with(
+    post,
+    rnorm(length(post$a_bar), a_bar, sigma_a)
+  )
+
+p_link_asim <- function(treatment) {
+  
+  logodds <- with(post, a_sim + b[,treatment])
+  return(inv_logit(logodds))
+  
+}
+
+p_raw_asim <- sapply(1:4, function(i) p_link_asim(i))
+
+plot(
+  NULL,
+  xlab = "treatment",
+  ylab = "proportion pulled left",
+  ylim = c(0, 1),
+  xaxt = "n",
+  xlim = c(1, 4)
+)
+
+axis(
+  1, 
+  at = 1:4,
+  labels = c("R/N", "L/N", "R/P", "L/P")
+)
+
+for (i in 1:100) lines(1:4, p_raw_asim[i,], col = grau(0.25), lwd = 2)
+```
+
+![](chapter_13_notes_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
+
+-   Here, each trend is a simulated actor — the uncertainty around
+    individual actor outputs is far greater than the “average” actor
+    output!
+-   Now the question is, which is better? Well, it depends.
+-   The predictions for an average actor help visuazlize the impact of
+    treatment.
+-   The predictions that are marginal of actor illustrate how variable
+    different chimpanzees are, according to the model.
+
+### 13.5.3 Post-stratification
+
+-   A common problem is how to use a non-representative sample of a
+    population to generate representative predictions from the same
+    population.
+-   For example, we may survey voters about their voting intentions. One
+    subgroup may respond at a greater rate than others, so our survey
+    average will reflect this response bias.
+-   *Post-stratification* helps address — the idea is to fit a model and
+    estimate the voting intention for each slice of a demographic cake
+    (i.e., race, age, educational attainment), then re-weight the
+    estimated voting intentions based on general census information.
+-   When combined with multilevel modeling, this is called *Multilevel
+    Regression and Post-Stratification*/*MRP* (or “Mister P”).
+-   Let’s say we have estimates $p_i$ for each demographic category $i$.
+    The post-stratified prediction for the whole population is just the
+    reweighting of the number of individuals in the general population:
+
+$$
+\begin{gather}
+\frac{\sum_i N_i p_i}{\sum_i N_i}
+\end{gather}
+$$
+
+-   Post-stratification doesn’t always work. Say, for example, selection
+    bias itself is caused by the outcome of interest.
+-   For example, we can work with a variable like age — if age $A$
+    influences whether or not someone responds $R$ and is also
+    associated with voting intention $V$, then we can still estimate the
+    influence of $A$ on $V: \ R \leftarrow A \rightarrow V$.
+-   On the other hand, if $V \rightarrow R$, there is little hope.
+-   Say only supporters respond — then $V = 1$ for all respondents!
+-   A general framework for this sort of generalizing to a population is
+    *transportability* — post-stratification is a special case of this
+    framework.
+-   See *External validity: From do-calculus to transportability across
+    populations* for more.
+
+## 13.6 Summary
+
+-   This chapter introduced the motivation, implementation, and
+    interpretation of basic multilevel models.
+-   We focused just on varying intercepts which can be thought of as
+    pooling information within each cluster.
+-   The next chapter extends these concepts to additional types of
+    parameters and models.

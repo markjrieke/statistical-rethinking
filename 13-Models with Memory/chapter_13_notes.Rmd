@@ -652,9 +652,171 @@ abline(a = 0, b = 1, lty = 2)
 * Being able to switch between the two, however, is useful!
 * You can also obviously reparameterize distributions other than the Gaussian.
 
+## 13.5 Multilevel posterior predictions 
 
+* Producing implied predictions from a model's fit is, once again, a useful endeavor. 
+* Implied predictions are needed to consider causal effects.
+* Another role for constructing implied predictions is for computing *information criteria*, like AIC or WAIC, which provide estimates of out-of-sample accuracy (via KL divergence). 
 
+### 13.5.1 Posterior prediction for same clusters
 
+* When working with the same clusters that were used to fit a model, varying intercepts are just parameters. 
+* For multilevel models, we shouldn't expect the model to retrodict the data used to train it (this is actually the whole point of partial pooling --- shrinking estimates towards a global mean when there is little data guards us from poor out-of-sample predictions). 
+* Let's compute posterior predictions for actor 2 using `m13.4`
 
+```{r}
+# setup data
+chimp <- 2
+d_pred <-
+  list(
+    actor = rep(chimp, 4),
+    treatment = 1:4,
+    block_id = rep(1, 4)
+  )
 
+# extract mean samples using link
+p <- link(m13.4, data = d_pred)
+p_mu <- apply(p, 2, mean)
+p_ci <- apply(p, 2, PI)
+```
 
+* Alternatively, we can perform the same calculation manually using the posterior samples.
+
+```{r}
+# posterior samples
+post <- extract.samples(m13.4)
+str(post)
+
+# posterior density for actor 5
+dens(post$a[,5])
+
+# posterior prediction function
+p_link <- function(treatment, actor = 1, block_id = 1) {
+  
+  logodds <- 
+    with(
+      post,
+      a[,actor] + g[,block_id] + b[,treatment]
+    )
+  
+  return(inv_logit(logodds))
+  
+}
+
+p_raw <- sapply(1:4, function(i) p_link(i, actor = 2, block_id = 1))
+p_mu <- apply(p_raw, 2, mean)
+p_ci <- apply(p_raw, 2, PI)
+```
+
+* At some point, you'll run into a model that `link()` won't be able to handle correctly. You can always work directly with the samples to get posterior predictions out. 
+
+### 13.5.2 Posterior prediction for new clusters
+
+* Let's suppose you want to predict how chimpanzees in another population would respond to the lever pulling experiment. 
+* The actor intercepts don't give you what you need, since those intercepts are for the particular chimps from the original experiment. 
+* One way to think about this is to generate predictions for a new, previously unobserved, *average* actor (aka, a chimpanzee with an intercept exactly at `a_bar`, $\overline{\alpha}$). 
+* There will still be uncertainty around this "average" chimp, but it will be misleadingly smaller than it really should be. 
+
+```{r}
+p_link_abar <- function(treatment) {
+  
+  logodds <- with(post, a_bar + b[,treatment])
+  return(inv_logit(logodds))
+  
+}
+```
+
+* This link ignores `block`, since we are extrapolating to new blocks and making the assumption that the average block effect is zero. 
+
+```{r}
+post <- extract.samples(m13.4)
+p_raw <- sapply(1:4, function(i) p_link_abar(i))
+p_mu <- apply(p_raw, 2, mean)
+p_ci <- apply(p_raw, 2, PI)
+
+plot(
+  NULL,
+  xlab = "treatment",
+  ylab = "proportion pulled left",
+  ylim = c(0, 1),
+  xaxt = "n",
+  xlim = c(1, 4)
+)
+
+axis(
+  1, 
+  at = 1:4, 
+  labels = c("R/N", "L/N", "R/P", "L/P")
+)
+
+lines(1:4, p_mu)
+shade(p_ci, 1:4)
+```
+
+* This shows the variation around the *average* actor --- to show the variation among individual (unobserved) actors, we'll also need to use `sigma_a` $\sigma_{\alpha}$ in the calculation.
+
+```{r}
+a_sim <- 
+  with(
+    post,
+    rnorm(length(post$a_bar), a_bar, sigma_a)
+  )
+
+p_link_asim <- function(treatment) {
+  
+  logodds <- with(post, a_sim + b[,treatment])
+  return(inv_logit(logodds))
+  
+}
+
+p_raw_asim <- sapply(1:4, function(i) p_link_asim(i))
+
+plot(
+  NULL,
+  xlab = "treatment",
+  ylab = "proportion pulled left",
+  ylim = c(0, 1),
+  xaxt = "n",
+  xlim = c(1, 4)
+)
+
+axis(
+  1, 
+  at = 1:4,
+  labels = c("R/N", "L/N", "R/P", "L/P")
+)
+
+for (i in 1:100) lines(1:4, p_raw_asim[i,], col = grau(0.25), lwd = 2)
+```
+
+* Here, each trend is a simulated actor --- the uncertainty around individual actor outputs is far greater than the "average" actor output!
+* Now the question is, which is better? Well, it depends.
+* The predictions for an average actor help visuazlize the impact of treatment. 
+* The predictions that are marginal of actor illustrate how variable different chimpanzees are, according to the model. 
+
+### 13.5.3 Post-stratification
+
+* A common problem is how to use a non-representative sample of a population to generate representative predictions from the same population.
+* For example, we may survey voters about their voting intentions. One subgroup may respond at a greater rate than others, so our survey average will reflect this response bias.
+* *Post-stratification* helps address --- the idea is to fit a model and estimate the voting intention for each slice of a demographic cake (i.e., race, age, educational attainment), then re-weight the estimated voting intentions based on general census information. 
+* When combined with multilevel modeling, this is called *Multilevel Regression and Post-Stratification*/*MRP* (or "Mister P"). 
+* Let's say we have estimates $p_i$ for each demographic category $i$. The post-stratified prediction for the whole population is just the reweighting of the number of individuals in the general population:
+
+$$
+\begin{gather}
+\frac{\sum_i N_i p_i}{\sum_i N_i}
+\end{gather}
+$$
+
+* Post-stratification doesn't always work. Say, for example, selection bias itself is caused by the outcome of interest.
+* For example, we can work with a variable like age --- if age $A$ influences whether or not someone responds $R$ and is also associated with voting intention $V$, then we can still estimate the influence of $A$ on $V: \ R \leftarrow A \rightarrow V$.
+* On the other hand, if $V \rightarrow R$, there is little hope. 
+* Say only supporters respond --- then $V = 1$ for all respondents!
+* A general framework for this sort of generalizing to a population is *transportability* --- post-stratification is a special case of this framework.
+* See *External validity: From do-calculus to transportability across populations* for more.
+
+## 13.6 Summary
+
+* This chapter introduced the motivation, implementation, and interpretation of basic multilevel models. 
+* We focused just on varying intercepts which can be thought of as pooling information within each cluster.
+* The next chapter extends these concepts to additional types of parameters and models. 
