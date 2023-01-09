@@ -12,8 +12,8 @@ $$
 $$
 
 -   The time of day may matter as well — if all cafes experience a
-    similar slow down in the afternoon ($A_i$), we can model using our
-    previous methods:
+    similar slow down in the afternoon we can model using our previous
+    methods:
 
 $$
 \begin{gather}
@@ -201,6 +201,8 @@ library(rethinking)
     ##     rstudent
 
 ``` r
+set_ulam_cmdstan(FALSE)
+
 # simulate intercepts/slopes
 N_cafes <- 20
 set.seed(5)
@@ -248,3 +250,347 @@ for (i in c(0.1, 0.3, 0.5, 0.8, 0.99))
 ```
 
 ![](chapter_14_notes_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+### 14.1.2 Simulate observations
+
+-   The above gives the properties of 20 individual cafes.
+-   Now let’s simulate 10 visits at each — 5 in the morning and 5 in the
+    afternoon.
+
+``` r
+set.seed(22)
+N_visits <- 10
+afternoon <- rep(0:1, N_visits * N_cafes/2)
+cafe_id <- rep(1:N_cafes, each = N_visits)
+mu <- a_cafe[cafe_id] + b_cafe[cafe_id]*afternoon
+sigma <- 0.5 # std dev within cafes
+wait <- rnorm(N_visits * N_cafes, mu, sigma)
+d <- data.frame(cafe = cafe_id, afternoon = afternoon, wait = wait)
+
+str(d)
+```
+
+    ## 'data.frame':    200 obs. of  3 variables:
+    ##  $ cafe     : int  1 1 1 1 1 1 1 1 1 1 ...
+    ##  $ afternoon: int  0 1 0 1 0 1 0 1 0 1 ...
+    ##  $ wait     : num  3.97 3.86 4.73 2.76 4.12 ...
+
+-   Some rethinking — here we’re simulating data then analyzing with a
+    model that reflects the exact correct structure of the data
+    generating process. In the real world, we’re never so lucky.
+-   We’re always forced to analyze data with a model that is
+    *misspecified* — that is, the model is different than the true data
+    generating process.
+
+### 14.1.3 The varying slopes model
+
+-   Now let’s do the reverse!
+
+$$
+\begin{gather}
+W_i \sim \text{Normal}(\mu_i, \sigma) \\
+\mu_i = \alpha_{\text{CAFE}[i]} + \beta_{\text{CAFE}[i]} A_i \\
+\begin{bmatrix}
+\alpha_{\text{CAFE}} \\
+\beta_{\text{CAFE}}
+\end{bmatrix}
+\sim \text{MVNormal}
+\left(\begin{bmatrix} \alpha \\ \beta \end{bmatrix}, \text{S}\right) \\
+\text{S} = \begin{pmatrix} \sigma_\alpha & 0 \\ 0 & \sigma_\beta \end{pmatrix} \text{R} \begin{pmatrix} \sigma_\alpha & 0 \\ 0 & \sigma_\beta \end{pmatrix} \\
+\alpha \sim \text{Normal}(5, 2) \\
+\beta \sim \text{Normal}(-1, 0.5) \\
+\sigma \sim \text{Exponential}(1) \\
+\sigma_\alpha \sim \text{Exponential}(1) \\
+\sigma_\beta \sim \text{Exponential}(1) \\
+\text{R} \sim \text{LKJcorr}(2)
+\end{gather}
+$$
+
+-   Okay, lots to unpack here — the wait time $W_i$ is defined by a
+    linear model.
+-   The terms of that linear model stat that each cafe has an intercept
+    $\alpha_{\text{CAFE}}$ and slope $\beta_{\text{CAFE}}$ whose prior
+    distribution is defined by the two-dimensional Gaussian with means
+    $\alpha$ and $\beta$ and covariance matrix $\text{S}$.
+-   This prior will adaptively regularize the individual intercepts,
+    slopes, and the correlation among them.
+-   $\text{S}$ can be factored into separate standard deviations
+    $\sigma_\alpha$ and $\sigma_\beta$ and a correlation matrix
+    $\text{R}$.
+-   Then come all our hyper-priors that do the adaptive regularization.
+-   The prior for $\text{R}$ is a “distribution of matrices”. In our
+    case, $\text{R}$ looks like this:
+
+$$
+\begin{gather}
+R = \begin{pmatrix} 1 & \rho \\ \rho & 1 \end{pmatrix}
+\end{gather}
+$$
+
+-   $\rho$ is the correlation between intercepts and slopes (in larger
+    matrices with additional varying slopes, it gets more complicated).
+-   A $\text{LKJcorr}$ distribution takes a single parameter $\eta$ to
+    control how skeptical the prior is of extremely high correlations.
+-   $\eta = 1$ is a flat prior and $\eta = 2$ means that the prior is
+    weakly skeptical of extreme correlations near -1 or +1.
+-   Here’s a few visualizations just for kicks:
+
+``` r
+R <- rlkjcorr(1e4, K = 2, eta = 2)
+dens(R[,1,2], xlab = "correlation")
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+-   Let’s model! (note the use of `c()`)
+
+``` r
+set.seed(867530)
+m14.1 <-
+  ulam(
+    alist(
+      # model
+      wait ~ normal(mu, sigma),
+      mu <- a_cafe[cafe] + b_cafe[cafe] * afternoon,
+      
+      # priors
+      c(a_cafe, b_cafe)[cafe] ~ multi_normal(c(a, b), Rho, sigma_cafe),
+      
+      # hyper-priors
+      a ~ normal(5, 2),
+      b ~ normal(-1, 0.5),
+      sigma_cafe ~ exponential(1),
+      sigma ~ exponential(1),
+      Rho ~ lkj_corr(2)
+    ),
+    
+    data = d,
+    chains = 4,
+    cores = 4
+  )
+```
+
+-   The `multi_normal` distribution takes a vector of means, `c(a, b)`,
+    a correlation matrix, `Rho`, and a vector of standard deviations,
+    `sigma_cafe`, then constructs the matrix internally.
+-   The `stancode()` shows how.
+
+``` r
+stancode(m14.1)
+```
+
+    ## data{
+    ##      vector[200] wait;
+    ##     array[200] int afternoon;
+    ##     array[200] int cafe;
+    ## }
+    ## parameters{
+    ##      vector[20] b_cafe;
+    ##      vector[20] a_cafe;
+    ##      real a;
+    ##      real b;
+    ##      vector<lower=0>[2] sigma_cafe;
+    ##      real<lower=0> sigma;
+    ##      corr_matrix[2] Rho;
+    ## }
+    ## model{
+    ##      vector[200] mu;
+    ##     Rho ~ lkj_corr( 2 );
+    ##     sigma ~ exponential( 1 );
+    ##     sigma_cafe ~ exponential( 1 );
+    ##     b ~ normal( -1 , 0.5 );
+    ##     a ~ normal( 5 , 2 );
+    ##     {
+    ##     vector[2] YY[20];
+    ##     vector[2] MU;
+    ##     MU = [ a , b ]';
+    ##     for ( j in 1:20 ) YY[j] = [ a_cafe[j] , b_cafe[j] ]';
+    ##     YY ~ multi_normal( MU , quad_form_diag(Rho , sigma_cafe) );
+    ##     }
+    ##     for ( i in 1:200 ) {
+    ##         mu[i] = a_cafe[cafe[i]] + b_cafe[cafe[i]] * afternoon[i];
+    ##     }
+    ##     wait ~ normal( mu , sigma );
+    ## }
+
+-   Let’s jump into inspecting the posterior distribution.
+
+``` r
+plot_posterior_correlation <- function(model, eta) {
+  
+  post <- extract.samples(model)
+  dens(post$Rho[,1,2], xlim = c(-1, 1), col = rangi2, lwd = 1) # posterior
+  R <- rlkjcorr(1e4, K = 2, eta) # prior
+  dens(R[,1,2], add = TRUE, lty = 2)
+  
+}
+
+plot_posterior_correlation(m14.1, 2)
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+-   The posterior distribution of correlation between intercepts and
+    slopes is mostly negative, whereas the prior is spread evenly.
+-   Per McElreath’s suggestion, let’s fit models with different priors
+    for the correlation.
+
+``` r
+# flat prior model
+m14.1_flat <-
+  ulam(
+    alist(
+      # model
+      wait ~ normal(mu, sigma),
+      mu <- a_cafe[cafe] + b_cafe[cafe]*afternoon,
+      
+      # priors
+      c(a_cafe, b_cafe)[cafe] ~ multi_normal(c(a, b), Rho, sigma_cafe),
+      
+      # hyper-priors
+      a ~ normal(5, 2),
+      b ~ normal(-1, 0.5),
+      sigma_cafe ~ exponential(1),
+      sigma ~ exponential(1),
+      Rho ~ lkj_corr(1)
+    ),
+    
+    data = d,
+    chains = 4,
+    cores = 4
+  )
+
+plot_posterior_correlation(m14.1_flat, 1)
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+``` r
+# strongly regularized
+m14.1_strong <-
+  ulam(
+    alist(
+      # model
+      wait ~ normal(mu, sigma),
+      mu <- a_cafe[cafe] + b_cafe[cafe]*afternoon,
+      
+      # priors
+      c(a_cafe, b_cafe)[cafe] ~ multi_normal(c(a, b), Rho, sigma_cafe),
+      a ~ normal(5, 2),
+      b ~ normal(-1, 0.5),
+      sigma_cafe ~ exponential(1),
+      sigma ~ exponential(1),
+      Rho ~ lkj_corr(4)
+    ),
+    
+    data = d,
+    chains = 4, 
+    cores = 4
+  )
+
+plot_posterior_correlation(m14.1_strong, 4)
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
+
+-   Next, let’s consider shrinkage. Information is pooled across
+    intercepts and slopes of each cafe through an inferred correlation.
+-   Let’s plot the posterior mean varying effects compared to the raw
+    unpooled estimates to see the consequence of shrinkage.
+
+``` r
+# compute the unpooled estimates directly from the data
+a1 <- sapply(1:N_cafes, function(i) mean(wait[cafe_id == i & afternoon == 0]))
+b1 <- sapply(1:N_cafes, function(i) mean(wait[cafe_id == i & afternoon == 1])) - a1
+
+# extract posterior means of partially pooled estimates
+post <- extract.samples(m14.1)
+a2 <- apply(post$a_cafe, 2, mean)
+b2 <- apply(post$b_cafe, 2, mean)
+
+# plot both & connect with lines
+plot(
+  a1, 
+  b1,
+  xlab = "intercept",
+  ylab = "slope",
+  pch = 16, 
+  col = rangi2,
+  ylim = c(min(b1) - 0.1, max(b1) + 0.1),
+  xlim = c(min(a1) - 0.1, max(a1) + 0.1)
+)
+points(a2, b2, pch = 1)
+for (i in 1:N_cafes) lines(c(a1[i], a2[i]), c(b1[i], b2[i]))
+
+# compute the posterior mean bivariate gaussian
+Mu_est <- c(mean(post$a), mean(post$b))
+rho_est <- mean(post$Rho[,1,2])
+sa_est <- mean(post$sigma_cafe[,1])
+sb_est <- mean(post$sigma_cafe[,2])
+cov_ab <- sa_est*sb_est*rho_est
+Sigma_est <- matrix(c(sa_est^2, cov_ab, cov_ab, sb_est^2), ncol = 2)
+
+# draw contours
+for (i in c(0.1, 0.3, 0.5, 0.7, 0.9))
+  lines(ellipse::ellipse(Sigma_est, centre = Mu_est, level = i),
+        col = col.alpha("black", 0.2))
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+-   The open points are the posterior means & the blue points are
+    unpooled estimates.
+-   Note that shrinkage is not always in a direct line towards the
+    center.
+-   We can also look at the same information on the outcome scale
+
+``` r
+# convert varying effects to waiting times
+wait_morning_1 <- a1
+wait_afternoon_1 <- a1 + b1
+wait_morning_2 <- a2
+wait_afternoon_2 <- a2 + b2
+
+# plot both & connect with lines
+plot(
+  wait_morning_1,
+  wait_afternoon_1,
+  xlab = "morning wait",
+  ylab = "afternoon wait",
+  pch = 16,
+  col = rangi2,
+  xlim = c(min(wait_morning_1) - 0.1, max(wait_morning_1) + 0.1),
+  ylim = c(min(wait_afternoon_1) - 0.1, max(wait_afternoon_1) + 0.1)
+)
+points(wait_morning_2, wait_afternoon_2, pch = 1)
+for (i in 1:N_cafes)
+  lines(c(wait_morning_1[i], wait_morning_2[i]),
+        c(wait_afternoon_1[i], wait_afternoon_2[i]))
+
+# add line for y = x
+abline(a = 0, b = 1, lty = 2)
+
+# add shrinkage distribution by simulation
+v <- MASS::mvrnorm(1e4, Mu_est, Sigma_est)
+v[,2] <- v[,1] + v[,2] # calculate afternoon wait
+Sigma_est2 <- cov(v)
+Mu_est2 <- Mu_est
+Mu_est2[2] <- Mu_est[1] + Mu_est[2]
+
+# draw contours
+for (i in c(0.1, 0.3, 0.5, 0.7, 0.9))
+  lines(ellipse::ellipse(Sigma_est2, centre = Mu_est2, level = i),
+        col = col.alpha("black", 0.5))
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+-   Appreciate the fact that shrinkage on the parameter scale
+    *naturally* produces shrinkage on the scale we actually care about:
+    the outcome scale.
+-   Also, there is an implied population of wait times shown by the gray
+    contours.
+-   That population is potively correlated — cafes with long morning
+    waits tend to also have long afternoon waits. But the wait times in
+    the morning across the board are generally longer than the afternoon
+    (under the dashed line).
