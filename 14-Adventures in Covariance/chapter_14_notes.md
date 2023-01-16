@@ -744,7 +744,7 @@ trankplot(m14.2, pars = paste0("beta[", 1:3, ",1]"))
     the linear model.
 -   How in the world do we do this with covariance matrices?
 -   The basic strategy is the same, just extrapolated to matrices —
-    makeing z-scores for each random of effect. Now, however, we need a
+    making z-scores for each random of effect. Now, however, we need a
     matrix of z-scores.
 -   We then multiply the z-scores into a covariance matrix so we get the
     random effects on the right scale for the linear model.
@@ -1315,3 +1315,649 @@ instrumentalVariables(wages, exposure = "E", outcome = "W")
     influencing health.
 -   In general, we always need scientific knowledge outside of data to
     make sense of the data.
+
+### 14.3.2 Other designs
+
+-   Instrumental variables are essentially natural experiments that
+    impersonate randomized experiments.
+-   There are potentially other ways to find natural experiments — not
+    all instrumental variables. For example, there is something called
+    the *Front-Door Criterion* (in addition to the backdoor criterion
+    that was introduced in Chapter 6):
+
+``` r
+front_door <- 
+  dagitty(
+    "dag{
+      U [unobserved]
+      U -> X
+      U -> Y
+      X -> Z
+      Z -> Y
+    }"
+  )
+
+coordinates(front_door) <-
+  list(x = c(X = 1, Z = 2, U = 2, Y = 3),
+       y = c(X = 1, Z = 1, U = 0, Y = 1))
+
+drawdag(front_door)
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-30-1.png)<!-- -->
+
+-   Here, we’re interested in the causal influence of $X$ on $Y$, but
+    there’s an unobserved confound $U$.
+-   If we can find a mediator $Z$ then we can possibly estimate the
+    causal effect of $X$ on $Y$.
+-   This front door criterion isn’t often used, but a more common design
+    is a *Regression Discontinuity* (or *RDD*).
+-   Suppose we want to estimate the effect of winning an academic award
+    on future success — this is confounded by many unobserved factors.
+-   But if we compare individuals who were just below the cutoff to
+    individuals who were just above, these should be similar in the
+    unobserved factors.
+-   RDD fits one trend for individuals just above the cutoff and another
+    to individuals just below.
+
+## 14.4 Social relations as correlated varying effects
+
+-   The basic strategy of using covariance matrices to represent
+    populations of correlated effects is a superpower that lets you
+    accomplish tons of scientific & modeling goals.
+-   Let’s look at the Koster Leckie data with the goal of modeling gift
+    exchanges between dyads of houses in a Nicaraguan community.
+
+``` r
+data(KosterLeckie)
+plot(kl_dyads$giftsAB, kl_dyads$giftsBA)
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-31-1.png)<!-- -->
+
+-   The overall correlation os 0.24, but this isn’t a great measure of
+    the balance of exchange.
+-   Gifts can be explained by both the special relationship in each dyad
+    (some tend to exchange gifts frequently) as well as the fact that
+    some households tend to give/receive a lot across all dyads (for
+    example, a poor household might not give many gifts but may receive
+    many).
+-   We want to separate balanced exchange from generalized differences
+    in giving/receiving so we’ll use a *Social Relations Model* (SRM) to
+    treat them separately.
+-   Gifts from $A \rightarrow B$ will be Poisson distributed with a
+    combination of varying effects:
+
+$$
+\begin{align*}
+y_{A \rightarrow B} & \sim \text{Poisson}(\lambda_{AB}) \\
+\text{log} \ \lambda_{AB} & = \alpha + g_A + r_B + d_{AB}
+\end{align*}
+$$
+
+-   Here, $\alpha$ is the average gift giving across all dyads, $g_A$ is
+    the generalized giving tendency of household $A$ regardless of dyad,
+    $r_B$ is the generalized receiving tendency of household $B$
+    regardless of dyad, and $d_{AB}$ is the dyad-specific rate that $A$
+    gives to $B$.
+-   The corresponding model for the other direction is:
+
+$$
+\begin{align*}
+y_{B \rightarrow A} & \sim \text{Poisson}(\lambda_{BA}) \\
+\text{log} \ \lambda_{BA} & = \alpha + g_B + r_A + d_{BA}
+\end{align*}
+$$
+
+-   Altogether, this implies that each household $H$ needs varying
+    effects for $g_H$ and $r_H$ and each dyad $AB$ needs two varying
+    effects $d_{AB}$ and $d_{BA}$.
+-   We also want to allow $g$ and $r$ to be correlated — do people who
+    give a lot also get a lot?
+-   Similarly, we want to allow the dyad effects to be correlated — is
+    there balance within the dyads?
+-   We can do this with two different multinormal priors:
+
+$$
+\begin{align*}
+\begin{pmatrix} g_i \\ r_i \end{pmatrix} & \sim \text{MVNormal} \begin{pmatrix} \begin{pmatrix} 0 \\ 0 \end{pmatrix} , \begin{pmatrix} \sigma_d^2 & \sigma_g \sigma_r \rho_{gr} \\ \sigma_g \sigma_r \rho_{gr} & \sigma_r^2 \end{pmatrix} \end{pmatrix} \\
+\begin{pmatrix} d_{ij} \\ d_{ji} \end{pmatrix} & \sim \text{MVNormal} \begin{pmatrix} \begin{pmatrix} 0 \\ 0 \end{pmatrix} , \begin{pmatrix} \sigma_d^2 & \sigma_d^2 \rho_d \\ \sigma_d^2 \rho_d & \sigma_d^2\end{pmatrix} \end{pmatrix}
+\end{align*}
+$$
+
+-   The covariance matrix for $g_i$ and $r_i$ is nothing new, but the
+    dyad with households $i$ and $j$ is a little funny. Because the
+    labels of households within a dyad are arbitrary, we only need one
+    dyad standard deviation parameter $\sigma_d$. But we do need
+    $\rho_d$ to estimate the correlation for homes within a dyad.
+
+``` r
+# prep data for stan
+kl_data <-
+  list(
+    N = nrow(kl_dyads),
+    N_households = max(kl_dyads$hidB),
+    did = kl_dyads$did,
+    hidA = kl_dyads$hidA,
+    hidB = kl_dyads$hidB,
+    giftsAB = kl_dyads$giftsAB,
+    giftsBA = kl_dyads$giftsBA
+  )
+
+# model!
+m14.7 <-
+  ulam(
+    alist(
+      # model
+      giftsAB ~ poisson(lambdaAB),
+      giftsBA ~ poisson(lambdaBA),
+      log(lambdaAB) <- a + gr[hidA,1] + gr[hidB,2] + d[did,1],
+      log(lambdaBA) <- a + gr[hidB,1] + gr[hidA,2] + d[did,2],
+      
+      # fixed effect prior
+      a ~ normal(0, 1),
+      
+      # gr matrix of varying effects
+      vector[2]:gr[N_households] ~ multi_normal(0, Rho_gr, sigma_gr),
+      Rho_gr ~ lkj_corr(4),
+      sigma_gr ~ exponential(1),
+      
+      # dyad effects
+      transpars> matrix[N,2]:d <- compose_noncentered(rep_vector(sigma_d, 2), L_Rho_d, z),
+      matrix[2,N]:z ~ normal(0, 1),
+      cholesky_factor_corr[2]:L_Rho_d ~ lkj_corr_cholesky(8),
+      sigma_d ~ exponential(1),
+      
+      # compute correlation matrix for dyads
+      gq> matrix[2,2]:Rho_d <<- Chol_to_Corr(L_Rho_d)
+    ),
+    
+    data = kl_data,
+    chains = 4,
+    cores = 4,
+    iter = 2000
+  )
+```
+
+-   Some model translation:
+    -   The first section defines the two outcomes of the linear model
+        for the direction of giving in each dyad. $g$ and $r$ are in the
+        same matrix, so the giving effect is `gr[hidA,1]` and the
+        receiving effect is `gr[hidA,2]`.
+    -   The second chunk is for the varying giving/receiving effects.
+    -   The third is for the dyad matrix & is non-centered. The special
+        piece is the `rep_vector(sigma_d,2)` call, which copies the
+        standard deviation into a vector of length 2.
+    -   Finally, there’s the generated quantities block for computing
+        the correlation matrix of the dyads. The model is parameterized
+        with a Cholesky factor, so if we want to interpret the
+        correlations among the effects then we need to to convert the
+        Cholesky factor back to a correlation matrix.
+
+``` r
+precis(m14.7, depth = 3, pars = c("Rho_gr", "sigma_gr"))
+```
+
+    ##                   mean           sd       5.5%       94.5%    n_eff     Rhat4
+    ## Rho_gr[1,1]  1.0000000 0.000000e+00  1.0000000  1.00000000      NaN       NaN
+    ## Rho_gr[1,2] -0.4128264 1.972881e-01 -0.7075526 -0.07481522 1263.049 1.0011568
+    ## Rho_gr[2,1] -0.4128264 1.972881e-01 -0.7075526 -0.07481522 1263.049 1.0011568
+    ## Rho_gr[2,2]  1.0000000 8.445322e-17  1.0000000  1.00000000 3746.764 0.9989995
+    ## sigma_gr[1]  0.8282594 1.395236e-01  0.6342510  1.07666634 1931.529 1.0004088
+    ## sigma_gr[2]  0.4181573 9.119028e-02  0.2870393  0.57431120  907.959 1.0030133
+
+-   The diagonals of covariance matrices are always 1, so we can ignore
+    these lines in the output.
+-   `Rho_gr[1,2]` and `Rho_gr[2,1]` are actually the same parameter
+    because the matrix is symmetric. The negative correlation implies
+    that households that give more tend to receive less (& vice versa).
+-   `sigma_gr[1]` shows that rates of giving are more variable than
+    rates of receiving `sigma_gr[2]`.
+
+``` r
+post <- extract.samples(m14.7)
+g <- sapply(1:25, function(i) post$a + post$gr[,i,1])
+r <- sapply(1:25, function(i) post$a + post$gr[,i,2])
+Eg_mu <- apply(exp(g), 2, mean)
+Er_mu <- apply(exp(r), 2, mean)
+
+plot(exp(g[,1]), exp(r[,1]))
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->
+
+-   The posterior plot above shows the uncertainty in household 1’s
+    giving/receiving rate — we can produce a cleaner visualization with
+    some contours.
+
+``` r
+plot(
+  NULL,
+  xlim = c(0, 8.6),
+  ylim = c(0, 8.6),
+  xlab = "generalized giving",
+  ylab = "generalized receiving",
+  lwd = 1.5
+)
+
+abline(a = 0, b = 1, lty = 2)
+
+for(i in 1:25) {
+  
+  Sigma <- cov(cbind(g[,i], r[,i]))
+  Mu <- c(mean(g[,i]), mean(r[,i]))
+  el <- ellipse::ellipse(Sigma, centre = Mu, level = 0.5)
+  lines(exp(el), col = col.alpha("black", 0.5))
+  
+}
+
+points(Eg_mu, Er_mu, pch = 21, bg = "white", lwd = 1.5)
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
+
+-   The covariance results in a negative relationship between giving &
+    receiving! This is reflective of the negative relationship we found
+    in the output from `precis()`.
+-   Note also the wider uncertainty among giving — this corresponds to
+    the standard deviation parameters.
+-   Let’s look at the dyad effects now:
+
+``` r
+precis(m14.7, depth = 3, pars = c("Rho_d", "sigma_d"))
+```
+
+    ##                 mean         sd      5.5%     94.5%     n_eff    Rhat4
+    ## Rho_d[1,1] 1.0000000 0.00000000 1.0000000 1.0000000       NaN      NaN
+    ## Rho_d[1,2] 0.8796603 0.03447442 0.8203463 0.9287663  966.3197 1.001729
+    ## Rho_d[2,1] 0.8796603 0.03447442 0.8203463 0.9287663  966.3197 1.001729
+    ## Rho_d[2,2] 1.0000000 0.00000000 1.0000000 1.0000000       NaN      NaN
+    ## sigma_d    1.1031251 0.05836288 1.0118644 1.1980340 1037.9416 1.001717
+
+-   There is strong positive correlation within dyads. There is also
+    more variation among dyads than there is among households in giving
+    rates. This implies that the pairs of households are balanced — if
+    one gives more on average the other likely gives more on average as
+    well (after accounting for generalized giving/receiving).
+
+``` r
+dy1 <- apply(post$d[,,1], 2, mean)
+dy2 <- apply(post$d[,,2], 2, mean)
+plot(dy1, dy2)
+abline(a = 0, b = 1, lty = 2)
+abline(h = 0, lty = 2)
+abline(v = 0, lty = 2)
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
+
+-   There is more information in the dataset that could be used to
+    explain the effects we’re seeing here.
+-   This is an example of a *social network* model — an important but
+    missing feature is *transitivity*.
+-   For example, if household A is friends with household B, and
+    household B is friends with household C, then households A/C are
+    also likely to be friends.
+-   Fitting such a model can be done using a *stochastic block model*
+    (to do so, we’ll need some more techniques from the next chapter).
+
+## 14.5 Continuous categories and the Gaussian process
+
+-   So far, all the varying effects have been defined over discrete,
+    unordered categories. But what about continuous dimensions of
+    variation like age or income or stature?
+-   We can extend the varying effects approach to continuous categories
+    using *Gaussian Process Regression* (which is unfortunately not a
+    helpful name).
+
+### 14.5.1 Example: Spatial autocorrelation in Oceanic tools
+
+-   Let’s look back at the tool complexity model from chapter 11 but add
+    in spatial relations.
+-   For example, if tools were exchanged among societies, then the total
+    number of tools for each island are not truly independent of one
+    another.
+
+``` r
+data("islandsDistMatrix")
+Dmat <- islandsDistMatrix
+colnames(Dmat) <- c("Ml", "Ti", "SC", "Ya", "Fi", "Tr", "Ch", "Mn", "To", "Ha")
+round(Dmat, 1)
+```
+
+    ##             Ml  Ti  SC  Ya  Fi  Tr  Ch  Mn  To  Ha
+    ## Malekula   0.0 0.5 0.6 4.4 1.2 2.0 3.2 2.8 1.9 5.7
+    ## Tikopia    0.5 0.0 0.3 4.2 1.2 2.0 2.9 2.7 2.0 5.3
+    ## Santa Cruz 0.6 0.3 0.0 3.9 1.6 1.7 2.6 2.4 2.3 5.4
+    ## Yap        4.4 4.2 3.9 0.0 5.4 2.5 1.6 1.6 6.1 7.2
+    ## Lau Fiji   1.2 1.2 1.6 5.4 0.0 3.2 4.0 3.9 0.8 4.9
+    ## Trobriand  2.0 2.0 1.7 2.5 3.2 0.0 1.8 0.8 3.9 6.7
+    ## Chuuk      3.2 2.9 2.6 1.6 4.0 1.8 0.0 1.2 4.8 5.8
+    ## Manus      2.8 2.7 2.4 1.6 3.9 0.8 1.2 0.0 4.6 6.7
+    ## Tonga      1.9 2.0 2.3 6.1 0.8 3.9 4.8 4.6 0.0 5.0
+    ## Hawaii     5.7 5.3 5.4 7.2 4.9 6.7 5.8 6.7 5.0 0.0
+
+-   This is the “as the crow flies” distance. Note the diagonal is all
+    0s & the matrix is symmetric about the diagonal.
+-   Recall the scientifically derived tool model from chapter 11:
+
+$$
+\begin{align*}
+T_i & \sim \text{Poisson}(\lambda_i) \\
+\lambda_i & = \frac{\alpha P_i^\beta}{\gamma}
+\end{align*}
+$$
+
+-   We want to have these $\lambda$ values adjusted by a varying
+    intercept parameter — we’ll use an exponentiated parameter to ensure
+    it stays above 0.
+
+$$
+\begin{align*}
+T_i & \sim \text{Poisson}(\lambda_i) \\
+\lambda_i & = \text{exp}(k_{\text{SOCIETY}[i]}) \frac{\alpha P_i^\beta}{\gamma}
+\end{align*}
+$$
+
+-   Here, $k_{\text{SOCIETY}[i]}$ is the varying intercept. Unlike
+    previous intercepts, however, it’ll be estimated in terms of
+    geographic distance rather than category membership.
+-   The heart of a Gaussian process is the multivariate prior for the
+    intercepts:
+
+$$
+\begin{align*}
+\begin{pmatrix} k_1 \\ k_2 \\ k_3 \\ \dots \\ k_{10} \end{pmatrix} & \sim \text{MVNormal} \begin{pmatrix} \begin{pmatrix} 0 \\ 0 \\ 0 \\ \dots \\ 0 \end{pmatrix} , \text{K} \end{pmatrix} \\
+\text{K}_{ij} & = \eta^2 \ \text{exp}(-\rho^2 D_{ij}^2) + \delta_{ij} \sigma^2
+\end{align*}
+$$
+
+-   The first line is the 10-dimensional prior for the intercepts (10
+    dimensions for the 10 societies in the distance matrix).
+-   The covariance matrix for these intercepts $\text{K}$ gives the
+    covariance between any pair of societies $i$ and $j$.
+-   The unfamiliar formula using $\eta$ $\rho$ and $\sigma$ models how
+    covariance among societies changes wit distances between them.
+-   $D_{ij}$ is the distance between the $i$-th and $j$-th societies. So
+    this function says that the covariance between any two societies
+    declines exponentially with the square of the distance between them
+    (and $\rho$ is the rate of decline).
+-   We don’t necessarily need to square the distance, but it’s often a
+    realistic property that covariance declines more quickly as distance
+    grows.
+-   Here’s a comparison of a linear and square distance fn:
+
+``` r
+# linear (dashed)
+curve(exp(-1*x), from = 0, to = 4, lty = 2)
+
+# squared (solid)
+curve(exp(-1*x^2), add = TRUE)
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-39-1.png)<!-- -->
+
+-   $\eta^2$ is the maximum covariance between any two societies.
+-   $\delta_{ij}\sigma^2$ provides extra covariance beyond $\eta^2$ when
+    $i = j$. The function $\delta_{ij}$ is equal to 1 when $i = j$ but 0
+    otherwise.
+    -   In the Oceanic data, this doesn’t matter because there’s only
+        one observation per society. But if we had more than one
+        observation per society, $\sigma$ would describe how those
+        observations covary.
+
+$$
+\begin{align*}
+\eta^2 & \sim \text{Exponential}(2) \\
+\rho^2 & \sim \text{Exponential}(0.5)
+\end{align*}
+$$
+
+-   `GPL2()` will allow us to use a square distance Gaussian process
+    prior.
+
+``` r
+data(Kline2)
+d <- Kline2
+d$society <- 1:10 
+
+dat_list <-
+  list(
+    T = d$total_tools,
+    P = d$population,
+    society = d$society,
+    Dmat = islandsDistMatrix
+  )
+
+m14.8 <-
+  ulam(
+    alist(
+      # model
+      T ~ dpois(lambda),
+      lambda <- (a*P^b/g)*exp(k[society]),
+      
+      # gaussian process prior
+      vector[10]:k ~ multi_normal(0, SIGMA),
+      matrix[10,10]:SIGMA <- cov_GPL2(Dmat, etasq, rhosq, 0.01),
+      
+      # priors
+      c(a, b, g) ~ dexp(1),
+      etasq ~ dexp(2),
+      rhosq ~ dexp(0.5)
+    ),
+    
+    data = dat_list,
+    chains = 4,
+    cores = 4,
+    iter = 2000
+  )
+```
+
+-   This sampled fine, but we can improve with a non-centered prior for
+    $k$.
+
+``` r
+precis(m14.8, depth = 3)
+```
+
+    ##              mean         sd        5.5%      94.5%     n_eff    Rhat4
+    ## k[1]  -0.16555981 0.32362112 -0.65097148 0.30381236  664.4249 1.004998
+    ## k[2]  -0.01411406 0.31639533 -0.48626306 0.45609951  603.1247 1.005760
+    ## k[3]  -0.06405856 0.30533625 -0.51968729 0.37507037  635.2280 1.005908
+    ## k[4]   0.35818222 0.28207258 -0.04877359 0.77685119  678.0959 1.002374
+    ## k[5]   0.07979226 0.27789978 -0.31642214 0.48762417  618.8043 1.004256
+    ## k[6]  -0.38637411 0.29011911 -0.83939361 0.01118857  668.6409 1.005344
+    ## k[7]   0.14831227 0.27031790 -0.24233934 0.53524228  665.1315 1.004638
+    ## k[8]  -0.21090216 0.27758351 -0.63433268 0.18073866  668.6471 1.004215
+    ## k[9]   0.26623368 0.26129431 -0.11036994 0.64068113  609.0194 1.003238
+    ## k[10] -0.17168045 0.35074425 -0.71922829 0.36411874  864.3025 1.002159
+    ## g      0.61023509 0.58674581  0.07006034 1.68813293 1633.6328 1.000915
+    ## b      0.27963221 0.08651818  0.13906524 0.41386625 1017.8133 1.001785
+    ## a      1.38216254 1.07505172  0.22740247 3.45419352 1939.3288 1.000182
+    ## etasq  0.20290359 0.20611680  0.03171730 0.55266798  936.7644 1.002286
+    ## rhosq  1.32652591 1.68191311  0.07934563 4.37518329 2078.7149 1.000156
+
+-   Let’s try to understand the parameters that describe the covariance
+    with distance: `rhosq` and `etasq`.
+
+``` r
+post <- extract.samples(m14.8)
+
+# plot the posterior median covariance function
+plot(NULL, 
+     xlab = "distance (thousand km)",
+     ylab = "covariance",
+     xlim = c(0, 10),
+     ylim = c(0, 2))
+
+# compute the posterior mean covariance
+x_seq <- seq(from = 0, to = 10, length.out = 100)
+pmcov <- sapply(x_seq, function(x) post$etasq*exp(-post$rhosq*x^2))
+pmcov_mu <- apply(pmcov, 2, mean)
+lines(x_seq, pmcov_mu, lwd = 3)
+
+# plot 50 functions sampled from the poster
+for (i in 1:50)
+  curve(post$etasq[i]*exp(-post$rhosq[i]*x^2), 
+        add = TRUE,
+        col = col.alpha(rangi2, 0.3))
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-42-1.png)<!-- -->
+
+-   There’s a fair amount of uncertainty around the mean posterior
+    spatial covariance.
+-   Let’s consider the correlations among societies as implied by the
+    posterior median by pushing paramters back through the generative
+    model:
+
+``` r
+# compute posterior median covariance among societies
+K <- matrix(0, nrow = 10, ncol = 10)
+for (i in 1:10)
+  for (j in 1:10)
+    K[i,j] <- median(post$etasq) * exp(-median(post$rhosq) * islandsDistMatrix[i,j]^2)
+
+diag(K) <- median(post$etasq) + 0.01
+
+# convert K to a correlation matrix
+Rho <- round(cov2cor(K), 2)
+
+# add row/colnames for convenience
+colnames(Rho) <- c("Ml", "Ti", "SC", "Ya", "Fi", "Tr", "Ch", "Mn", "To", "Ha")
+rownames(Rho) <- colnames(Rho)
+Rho
+```
+
+    ##      Ml   Ti   SC   Ya   Fi   Tr   Ch   Mn   To Ha
+    ## Ml 1.00 0.80 0.70 0.00 0.31 0.05 0.00 0.00 0.08  0
+    ## Ti 0.80 1.00 0.87 0.00 0.31 0.05 0.00 0.01 0.06  0
+    ## SC 0.70 0.87 1.00 0.00 0.17 0.11 0.01 0.02 0.02  0
+    ## Ya 0.00 0.00 0.00 1.00 0.00 0.01 0.16 0.14 0.00  0
+    ## Fi 0.31 0.31 0.17 0.00 1.00 0.00 0.00 0.00 0.61  0
+    ## Tr 0.05 0.05 0.11 0.01 0.00 1.00 0.09 0.56 0.00  0
+    ## Ch 0.00 0.00 0.01 0.16 0.00 0.09 1.00 0.32 0.00  0
+    ## Mn 0.00 0.01 0.02 0.14 0.00 0.56 0.32 1.00 0.00  0
+    ## To 0.08 0.06 0.02 0.00 0.61 0.00 0.00 0.00 1.00  0
+    ## Ha 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00  1
+
+-   There are a small set of islands that are highly correlated with one
+    another (Ml/Ti/SC). They also have similar tool totals — though
+    recall that this is taking into account the log-population.
+-   Hawaii on the other hand is so far from everything that its
+    correlation decays to 0 everywhere.
+
+``` r
+# scale point size to log-pop
+psize <- d$logpop/max(d$logpop)
+psize <- exp(psize*1.5) - 2
+
+# plot raw data and labels
+plot(
+  d$lon2,
+  d$lat,
+  xlab = "longitude",
+  ylab = "latitude",
+  col = rangi2, 
+  cex = psize,
+  pch = 16,
+  xlim = c(-50, 30)
+)
+
+labels <- as.character(d$culture)
+text(d$lon2, d$lat, labels = labels, cex = 0.7, 
+     pos = c(2, 4, 3, 3, 4, 1, 3, 2, 4, 2))
+
+# overlay lines shaded by Rho
+for (i in 1:10)
+  for (j in 1:10)
+    if (i < j)
+      lines(c(d$lon2[i], d$lon2[j]),
+            c(d$lat[i], d$lat[j]),
+            lwd = 2,
+            col = col.alpha("black", Rho[i,j]^2))
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-44-1.png)<!-- -->
+
+-   Darker connective lines indicate stronger correlations!
+-   We can also compare the log-pop and total tools with the shaded
+    correlations:
+
+``` r
+# compute posterior median relationship, ignoring distance
+logpop.seq <- seq(from = 6, to = 14, length.out = 30)
+lambda <- sapply(logpop.seq, function(lp) exp(post$a + post$b*lp))
+lambda.median <- apply(lambda, 2, median)
+lambda.PI80 <- apply(lambda, 2, PI, prob = 0.8)
+
+# plot raw data & labels
+plot(
+  d$logpop,
+  d$total_tools,
+  col = rangi2, 
+  cex = psize,
+  pch = 16,
+  xlab = "log population",
+  ylab = "total tools"
+)
+
+text(d$logpop, d$total_tools, labels = labels, cex = 0.7,
+     pos = c(4, 3, 4, 2, 2, 1, 4, 4, 4, 2))
+
+# display posterior predictions
+lines(logpop.seq, lambda.median, lty = 2)
+lines(logpop.seq, lambda.PI80[1,], lty = 2)
+lines(logpop.seq, lambda.PI80[2,], lty = 2)
+
+# overlay correlations
+for (i in 1:10)
+  for (j in 1:10)
+    if (i < j)
+      lines(c(d$logpop[i], d$logpop[j]),
+            c(d$total_tools[i], d$total_tools[j]),
+            lwd = 2, 
+            col = col.alpha("black", Rho[i,j]^2))
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-45-1.png)<!-- -->
+
+> Note this is a bit different than how it shows up in McElreaths text…
+
+-   Some **overthinking: Non-centered islands**. We can use a Cholesky
+    factor to get the non-centered version of a Gaussian process:
+
+``` r
+m14.8nc <-
+  ulam(
+    alist(
+      # model
+      T ~ dpois(lambda),
+      lambda <- (a*P^b)/g*exp(k[society]),
+      
+      # non-centered gaussian process prior
+      transpars> vector[10]: k <<- L_SIGMA*z,
+      vector[10]:z ~ normal(0, 1),
+      transpars> matrix[10,10]: L_SIGMA <<- cholesky_decompose(SIGMA),
+      transpars> matrix[10,10]: SIGMA <- cov_GPL2(Dmat, etasq, rhosq, 0.01),
+      
+      # priors
+      c(a, b, g) ~ dexp(1),
+      etasq ~ dexp(2),
+      rhosq ~ dexp(0.5)
+    ),
+    
+    data = dat_list,
+    chains = 4,
+    cores = 4,
+    iter = 2000
+  )
+```
+
+-   The noncentered version uses the Stan function
+    `cholesky_decompose()` to take a covariance (or correlation) matrix
+    & return the cholesky factor.
+
+### 14.5.2 Example: Phylogenetic distance
+
+-   
