@@ -1960,4 +1960,360 @@ m14.8nc <-
 
 ### 14.5.2 Example: Phylogenetic distance
 
--   
+-   Distance doesn’t have to be physical — it could also be temporal.
+    For example, given two species — how long since a common ancestor?
+-   Let’s consider the causal influence of group size $G$ on brain size
+    $B$. If we think that living in groups selects for larger brains in
+    the evolutionary cycle, then we can end up with a causal time series
+    graph:
+
+``` r
+brains <-
+  dagitty(
+    "dag{
+      G_1 [unobserved]
+      B_1 [unobserved]
+      U_1 [unobserved]
+      U_2 [unobserved]
+      G_1 -> G_2
+      G_1 -> B_2
+      B_1 -> B_2
+      U_1 -> G_2
+      U_1 -> B_2
+      U_1 -> U_2
+    }"
+  )
+
+coordinates(brains) <-
+  list(x = c(G_1 = 1, B_1 = 1, U_1 = 1, 
+             G_2 = 2, B_2 = 2, U_2 = 2),
+       y = c(G_1 = 1, B_1 = 2, U_1 = 3,
+             G_2 = 1, B_2 = 2, U_2 = 3))
+
+drawdag(brains)
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-47-1.png)<!-- -->
+
+-   We don’t have direct measurements of the past, but need a way to
+    estimate its influence. This is where the history of the species
+    might help.
+-   Recently diverged species in a branching history tend to be more
+    similar — phylogenetic relationships, then, expressed as a distance,
+    can be used to partially reconstruct confounds.
+-   Let’s build out a DAG for our model:
+
+``` r
+phylogenetics <-
+  dagitty(
+    "dag{
+      U [unobserved]
+      P -> U
+      U -> G 
+      U -> M
+      U -> B
+      M -> G
+      M -> B
+      G -> B
+    }"
+  )
+
+coordinates(phylogenetics) <-
+  list(x = c(G = 1, U = 2, M = 2, B = 3, P = 3),
+       y = c(G = 1, U = 3, M = 1.75, B = 1, P = 3))
+
+drawdag(phylogenetics)
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-48-1.png)<!-- -->
+
+-   Here, we’re mostly interested in $G \rightarrow B$. We want to
+    include one known confound for body mass $M$. Unobserved confounds
+    $U$ could influence all three variables. We let phylogenetic
+    relationships $P$ influence $U$ (since we expect that the
+    differences in unobserved traits is influenced by phylogenetic
+    distance).
+-   There are backdoors between $G$ and $B$ — conditioning on $M$ closes
+    one backdoor. We can’t, however, condition on $U$. But $P$ may be
+    able to reconstruct the covariation that $U$ induces between $G$ and
+    $B$.
+-   There is actually a specific name for this — *phylogenetic
+    regression*.
+
+``` r
+data("Primates301")
+data("Primates301_nex")
+
+# plot!
+plot(ape::ladderize(Primates301_nex), 
+     type = "fan",
+     font = 1, 
+     no.margin = TRUE,
+     label.offset = 1,
+     cex = 0.25)
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-49-1.png)<!-- -->
+
+-   See page 479 for a more robust view of the fan. We’ll use this tree
+    to model unobserved confounds & deal with the fact that some groups
+    of closely related species are overrepresented in nature (there’s a
+    lot of lemurs)!
+-   This overrepresentation produces an imbalance in sampling, similar
+    to ordinary multilevel models.
+-   Before we build the phylogenetic regression, let’s run an ordinary
+    linear regression where the (log) brain size is a function of the
+    (log) group size and (log) body size.
+-   We’ll build this ordinary regression in an un-ordinary style:
+
+$$
+\begin{align*}
+\text{B} & \sim \text{MVNormal}(\mu, \text{S}) \\
+\mu_i & = \alpha + \beta_G G_i + \beta_M M_i \\
+\text{S} & = \sigma^2 \text{I}
+\end{align*}
+$$
+
+-   Here, $\sigma$ is just the same standard deviation we’ve used since
+    chapter 4 and $\text{I}$ is an *identity matrix*. In essence, it’s a
+    correlation matrix where all the correlations are 0.
+-   This is just an ordinary linear regression, but thought of as having
+    a single multi-variate outcome.
+
+``` r
+# prep for stan
+d <- Primates301
+d$name <- as.character(d$name)
+dstan <- d[complete.cases(d$group_size, d$body, d$brain),]
+spp_obs <- dstan$name
+
+dat_list <-
+  list(
+    N_spp = nrow(dstan),
+    M = standardize(log(dstan$body)),
+    B = standardize(log(dstan$brain)),
+    G = standardize(log(dstan$group_size)),
+    Imat = diag(nrow(dstan))
+  )
+
+# model!
+m14.9 <-
+  ulam(
+    alist(
+      # model
+      B ~ multi_normal(mu, SIGMA),
+      mu <- a + bM*M + bG*G,
+      matrix[N_spp,N_spp]: SIGMA <- Imat * sigma_sq,
+      
+      # priors
+      a ~ normal(0, 1),
+      c(bM, bG) ~ normal(0, 0.5),
+      sigma_sq ~ exponential(1)
+    ),
+    
+    data = dat_list,
+    chains = 4,
+    cores = 4
+  )
+
+precis(m14.9)
+```
+
+    ##                  mean          sd        5.5%      94.5%    n_eff     Rhat4
+    ## a        9.248674e-05 0.018000433 -0.02883585 0.02949875 1597.073 0.9989689
+    ## bG       1.234147e-01 0.022534870  0.08777528 0.16050609 1265.001 1.0007382
+    ## bM       8.930620e-01 0.022825042  0.85675013 0.93186998 1212.511 0.9997735
+    ## sigma_sq 4.747841e-02 0.005632338  0.03926698 0.05708663 1928.970 0.9985354
+
+-   It looks like there is a reliably positive association between brain
+    size & group size, as well as brain size and body mass.
+-   Let’s do two types of phylogenetic regression — in both, all we need
+    to do is replace the covariance matrix $S$ with a different matrix
+    that encodes phylogenetic information.
+-   The first is one of the oldest & most conservative — a *Brownian
+    motion* interpretation.
+-   This just means Gaussian random walks. If species traits drift
+    randomly with respect to one another after branching, then the
+    covariance between a pair of species ends up being linearly related
+    to the phylogenetic branch distance between them.
+
+``` r
+# compute covariance/distance matrix
+tree_trimmed <- ape::keep.tip(Primates301_nex, spp_obs)
+Rbm <- ape::corBrownian(phy = tree_trimmed)
+V <- ape::vcv(Rbm)
+```
+
+    ## Warning in Initialize.corPhyl(phy, dummy.df): No covariate specified, species
+    ## will be taken as ordered in the data frame. To avoid this message, specify a
+    ## covariate containing the species names with the 'form' argument.
+
+``` r
+Dmat <- ape::cophenetic.phylo(tree_trimmed)
+plot(Dmat, V, xlab = "phylogenetic distance", ylab = "covariance")
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-51-1.png)<!-- -->
+
+``` r
+# V/Dmat are really just inverses of each other:
+image(V)
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-51-2.png)<!-- -->
+
+``` r
+image(Dmat)
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-51-3.png)<!-- -->
+
+``` r
+# put species in right order
+dat_list$V <- V[spp_obs, spp_obs]
+
+# convert to correlation matrix
+dat_list$R <- dat_list$V / max(V)
+
+# brownian motion model
+m14.10 <-
+  ulam(
+    alist(
+      # model
+      B ~ multi_normal(mu, SIGMA),
+      mu <- a + bM*M + bG*G,
+      matrix[N_spp, N_spp]: SIGMA <- R * sigma_sq,
+      
+      # priors
+      a ~ normal(0, 1),
+      c(bM, bG) ~ normal(0, 0.5),
+      sigma_sq ~ exponential(1)
+    ),
+    
+    data = dat_list,
+    chains = 4,
+    cores = 4
+  )
+
+precis(m14.10)
+```
+
+    ##                 mean         sd        5.5%      94.5%    n_eff     Rhat4
+    ## a        -0.19499351 0.16251661 -0.45423863 0.06882371 2633.849 0.9990323
+    ## bG       -0.01251634 0.01988985 -0.04480033 0.01929201 2650.801 0.9996994
+    ## bM        0.70016542 0.03755598  0.64319308 0.75796561 2297.907 1.0009128
+    ## sigma_sq  0.16151025 0.01973481  0.13204093 0.19517345 2554.294 0.9985509
+
+-   This model finds that group size has almost no effect on brain size.
+    This suggests that there is a lot of clustering of brain size in the
+    tree and this produces a spurious relationship with group size.
+-   Brownian motion is a special kind of Gaussian process in which
+    covariance declines in a very rigid way — there is no need to be so
+    rigid.
+-   One alternative is the *Ornstein-Uhlenbeck Process* (or OU process),
+    which damps Brownian motion down towards some mean.
+-   In practice, this constrains variation, making the relationship
+    between phylogenetic distance and covariance non-linear.
+-   More precisely, the OU process defines the covariance between two
+    species $i$ and $j$ as:
+
+$$
+\begin{gather}
+K(i, j) = \eta^2 \text{exp}(-\rho^2 D_{ij})
+\end{gather}
+$$
+
+-   This is an exponential distance kernel, so unlike the quadratic
+    kernel, covariance between points drops rapidly (see chart from
+    beforehand) — this results in less smooth, but harder to fit,
+    functions. In practice you’ll need to be very careful about priors.
+
+``` r
+# add scaled & reordered distance matrix
+dat_list$Dmat <- Dmat[spp_obs, spp_obs]/max(Dmat)
+
+# model!
+m14.11 <-
+  ulam(
+    alist(
+      # model
+      B ~ multi_normal(mu, SIGMA),
+      mu <- a + bM*M + bG*G,
+      matrix[N_spp,N_spp]: SIGMA <- cov_GPL1(Dmat, etasq, rhosq, 0.01),
+      
+      # priors
+      a ~ normal(0, 1),
+      c(bM, bG) ~ normal(0, 0.5),
+      etasq ~ half_normal(1, 0.25),
+      rhosq ~ half_normal(3, 0.25)
+    ),
+    
+    data = dat_list,
+    chains = 4, 
+    cores = 4
+  )
+
+precis(m14.11)
+```
+
+    ##              mean          sd        5.5%      94.5%    n_eff     Rhat4
+    ## a     -0.06499560 0.075692327 -0.18656121 0.05194807 2283.478 0.9987063
+    ## bG     0.04974175 0.024392564  0.01118995 0.08917158 2267.322 0.9993039
+    ## bM     0.83369000 0.028890277  0.78759221 0.88046998 1970.384 1.0004881
+    ## etasq  0.03505871 0.007011065  0.02534395 0.04768256 1663.397 1.0005316
+    ## rhosq  2.80033964 0.244831142  2.41452676 3.18104571 2090.311 0.9999394
+
+-   This now finds a small, but mostly positive, association between
+    group size and brain size — this is due to the difference between
+    the Brownian motion covariance and the OU process.
+-   Let’s look at the posterior covariance implied by `etasq` and
+    `rhosq` — we’ll need to push them through the Gaussian process
+    function to get a more clear idea:
+
+``` r
+post <- extract.samples(m14.11)
+plot(
+  NULL, 
+  xlim = c(0, max(dat_list$Dmat)),
+  ylim = c(0, 1.5),
+  xlab = "phylogenetic distance",
+  ylab = "covariance"
+)
+
+# posterior
+for (i in 1:30)
+  curve(post$etasq[i]*exp(-post$rhosq[i]*x), add = TRUE, col = rangi2)
+
+# prior mean & 89% interval
+eta <- abs(rnorm(1e3, 1, 0.25))
+rho <- abs(rnorm(1e3, 3, 0.25))
+d_seq <- seq(from = 0, to = 1, length.out = 50)
+K <- sapply(d_seq, function(x) eta*exp(-rho*x))
+lines(d_seq, colMeans(K), lwd = 2)
+shade(apply(K, 2, PI), d_seq)
+
+# labels
+text(0.5, 0.5, "prior")
+text(0.2, 0.1, "posterior", col = rangi2)
+```
+
+![](chapter_14_notes_files/figure-gfm/unnamed-chunk-53-1.png)<!-- -->
+
+-   Here, the posterior finds little covariance between species at
+    basically any distance. There just isn’t a lot of covariance for
+    brain sizes, so the distance doesn’t completely explain away the
+    association between group size and brain size as it did with the
+    Brownian motion model.
+
+## 14.6 Summary
+
+-   This chapter extended the basic multilevel strategy of partial
+    pooling to slopes as well as intercepts.
+-   We used *a lot* of covariance strategies to do so.
+-   The LKJcorr prior was introduced as a convenient family of priors
+    for correlation matrices.
+-   Gaussian processes extend the varying effects strategy to continuous
+    dimensions of similarity — be it spatial, network, phylogenetic, or
+    other abstract distances between entities.
+-   The next chapter will continue to exted multilevel strategies by
+    applying to common problems: measurement error and missing data.
