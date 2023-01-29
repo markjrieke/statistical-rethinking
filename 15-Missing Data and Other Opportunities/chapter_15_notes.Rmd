@@ -244,5 +244,486 @@ for (i in 1:nrow(d))
         c(dlist$D_obs[i], D_true[i]))
 ```
 
-> Hmmm this is really wonk...
+* The big take-home point is that when you have a distribution of values, don't reduce it down to a single value to use in a regression! Incorporate the entire uncertainty. 
+
+### 15.1.3 Measurement terrors
+
+* In the previous example, there are no new confounds introduced by the errors, but this isn't always the case!
+* consider the following DAG --- the errors on $D$ and $M$ are correlated through an influence by $P$:
+
+```{r}
+marriage <- 
+  dagitty(
+    "dag{
+      M [unobserved]
+      D [unobserved]
+      e_M [unobserved]
+      e_D [unobserved]
+      A -> M
+      A -> D
+      M -> D
+      M -> M_obs
+      D -> D_obs
+      e_M -> M_obs
+      e_D -> D_obs
+      P -> e_M
+      P -> e_D
+    }"
+  )
+
+coordinates(marriage) <-
+  list(x = c(A = 1, M = 2, D = 2, M_obs = 3, D_obs = 3, e_M = 4, e_D = 4, P = 5),
+       y = c(A = 1, M = 0, D = 2, M_obs = 0, D_obs = 2, e_M = 0, e_D = 2, P = 1))
+
+drawdag(marriage)
+```
+
+* Naively regressing $D_{obs}$ on $M_{obs}$ opens a non causal path through $P$. 
+* If we have information on the measurement process and can model the true variables $D$ and $M$, there's hope, but we need to consider the covariance between the errors. 
+* Another potential case:
+
+```{r}
+marriage <-
+  dagitty(
+    "dag{
+      M [unobserved]
+      D [unobserved]
+      e_M [unobserved]
+      e_D [unobserved]
+      A -> M
+      A -> D
+      M -> D
+      M -> e_D
+      M -> M_obs
+      D -> D_obs
+      e_M -> M_obs
+      e_D -> D_obs
+    }"
+  )
+
+coordinates(marriage) <-
+  list(x = c(A = 1, M = 2, M_obs = 3, e_M = 4, D = 2, D_obs = 3, e_D = 4),
+       y = c(A = 1, M = 0, M_obs = 0, e_M = 0, D = 2, D_obs = 2, e_D = 2))
+
+drawdag(marriage)
+```
+
+* This might occur if, say, marriages are rare. Then there aren't as many couples that could possibly get divorced, so the smaller sample size induces a larger error on the measurement of the divorce rate. 
+* If we can average over the uncertainty in the true $M$ and $D$ using information about the measurement process, we might do alright. 
+* Another worry is when a causal variable is measured less precisely than a non-causal one. 
+*Let's say for example that we know $D$ and $M$ very precisely but now $A$ is measured with error. Let's also assume $M$ has zero causal impact on $D$:
+
+```{r}
+marriage <-
+  dagitty(
+    "dag{
+      e_A [unobserved]
+      A [unobserved]
+      e_A -> A_obs
+      A -> A_obs
+      A -> M
+      A -> D
+    }"
+  )
+
+coordinates(marriage) <-
+  list(x = c(e_A = 1, A_obs = 2, A = 3, M = 4, D = 4),
+       y = c(e_A = 1, A_obs = 1, A = 1, M = 0, D = 2))
+
+drawdag(marriage)
+```
+
+* If we plop a regression of $D$ on $A_{obs}$ and $M$ it'll suggest that $M$ *strongly* influences $D$. This is because $M$ contains proxy information about the true $A$, but measured much more precisely than $A_{obs}$. 
+* Here's a simulation to show the example:
+
+```{r}
+N <- 500
+A <- rnorm(N)
+M <- rnorm(N, -A)
+D <- rnorm(N, A)
+A_obs <- rnorm(N, A)
+
+plot(M, D)
+```
+
+## 15.2 Missing Data
+
+* The insight from measurement error is to realize that any uncertain piece of data can be replaced with a distribution that reflects that uncertainty, but what about when data is simply missing?
+* So far, we've just been doing *complete case analysis*. 
+* Another common response to missing data is to replace with an assumed value --- like the mean, median, or some assumed value like 0. 
+* Neither is truly safe --- complete case throws away data & fixed imputation means the model will think it knows an unknown value with absolute certainty. 
+* If we think causally about missingness, we may be able to use the model to *impute* missing values. 
+* Some rethinking: missing data are still meaningful data. The fact that a variable has an unobserved value is still an observation. Thinking about the process that caused missingness can help solve big problems.
+
+### 15.2.1 DAG ate my homework
+
+* Let's consider a sample of students who own dogs. The students homework $H$ is influenced by how much each student studies $S$. 
+
+```{r}
+N <- 100
+S <- rnorm(N)
+
+# grade students on a 10-point scale, influenced by S
+H <- rbinom(N, size = 10, inv_logit(S))
+```
+
+* Then, oh-no! some dogs eat some homework. We'll encode the missingness as a 0/1 indicator $D$. 
+* When homework has been eaten, we cannot observe the true distribution of homework, but we do get to observe the incomplete case $H^*$.
+* In DAG form, $H \rightarrow H^* \leftarrow D$. 
+* If we want to learn the influence of $S$ on $H$ we have to rely on $H^*$ --- we're relying on $S \rightarrow H^*$ being a good approximation for $S \rightarrow H$. 
+* How good this assumption is depends on the cause of the missing values --- let's consider 4 scenarios considered as DAGs.
+
+```{r}
+# Case 1: missing completely at random (simplest case)
+case_1 <-
+  dagitty(
+    "dag{
+      H [unobserved]
+      S -> H
+      D -> Hm
+      H -> Hm
+    }"
+  )
+
+coordinates(case_1) <-
+  list(x = c(S = 1, D = 1, H = 2, Hm = 2),
+       y = c(S = 1, D = 2, H = 1, Hm = 2))
+
+drawdag(case_1)
+
+# simulate case 1
+D <- rbern(N)
+Hm <- H
+Hm[D == 1] <- NA
+
+Hm
+```
+
+* We now have `NA` scattered about the dataset --- is this a problem? We can decide by considering whether the outcome $H$ is independent of $D$. In this case, $H$ is independent of $D$ because $H^*$ is a collider.
+* Another way of thinking about it --- random missingness doesn't change the overall distribution of homework scores & therefore doesn't bias our estimate on the causal effect of studying. 
+
+```{r}
+# Case 2: Studying influences whether or not dog eats homework
+# (maybe studying a lot means less playtime with the dog, who gets restless)
+case_2 <-
+  dagitty(
+    "dag{
+      H [unobserved]
+      S -> H
+      S -> D
+      D -> Hm
+      H -> Hm
+    }"
+  )
+
+coordinates(case_2) <-
+  coordinates(case_1)
+
+drawdag(case_2)
+
+D <- ifelse(S > 0, 1, 0)
+Hm <- H
+Hm[D == 1] <- NA
+
+Hm
+```
+
+* In this second case the missingness is *not* random --- every student who studies more than average is missing homework!
+* There is now also a non-causal backdoor path from $H \rightarrow H^* \leftarrow D \leftarrow S$. We close this path by conditioning on $S$ (which we wanted to do anyway). 
+
+```{r}
+# Case 3: influence on both H and D
+# say X is noise in the student's house 
+# noisier houses produce worse homework and dogs more likely to misbehave
+case_3 <-
+  dagitty(
+    "dag{
+      H [unobserved]
+      X [unobserved]
+      S -> H
+      X -> H
+      X -> D
+      D -> Hm
+      H -> Hm
+    }"
+  )
+
+coordinates(case_3) <-
+  list(x = c(S = 1, D = 1, X = 2, H = 3, Hm = 3),
+       y = c(S = 1, D = 3, X = 2, H = 1, Hm = 3))
+
+drawdag(case_3)
+
+set.seed(501)
+N <- 1000
+X <- rnorm(N)
+S <- rnorm(N)
+H <- rbinom(N, size = 10, inv_logit(2 + S - 2*X))
+D <- ifelse(X > 1, 1, 0)
+Hm <- H
+Hm[D == 1] <- NA
+Hm
+```
+
+* Here, regressing $H^*$ on $S$ introduces a new non-causal path: $H^* \leftarrow D \leftarrow X \rightarrow H$.
+* Let's first see what we gt if we fully observe $H$. We haven't observed $X$ so we can't put it into the model. 
+
+```{r}
+dat_list <-
+  list(
+    H = H,
+    S = S
+  )
+
+m15.3 <-
+  ulam(
+    alist(
+      H ~ binomial(10 ,p),
+      logit(p) <- a + bS*S,
+      a ~ normal(0, 1),
+      bS ~ normal(0, 0.5)
+    ),
+    
+    data = dat_list,
+    chains = 4
+  )
+
+precis(m15.3)
+```
+
+* The true coefficient on $S$ should be 1 --- this estimate is way off! This used the complete data $H$ so it can't be the missingness --- this is a case of *omitted variable bias*. 
+* What impact does the missing data have?
+
+```{r}
+dat_list0 <-
+  list(
+    H = H[D == 0],
+    S = S[D == 0]
+  )
+
+m15.4 <-
+  ulam(
+    alist(
+      H ~ binomial(10, p),
+      logit(p) <- a + bS*S,
+      a ~ normal(0, 1),
+      bS ~ normal(0, 0.5)
+    ),
+    
+    data = dat_list0,
+    chains = 4
+  )
+
+precis(m15.4)
+```
+
+* The estimate here actually gets better (still not at 1)! But how? 
+* Since the missingness is caused in part by noise, the dataset with removed houses actually removes some of the omitted variable bias.
+* This is not a general property of missing data in a DAG of this type --- if the function for missingness is the following, the estimate gets worse:
+
+```{r}
+D <- ifelse(abs(X) < 1, 1, 0)
+
+dat_list0mod <- 
+  list(
+    H = H[D == 0],
+    S = S[D == 0]
+  )
+
+m15.4mod <- 
+  ulam(
+    alist(
+      H ~ binomial(10, p),
+      logit(p) <- a + bS*S,
+      a ~ normal(0, 1),
+      bS ~ normal(0, 1)
+    ),
+    
+    data = dat_list0mod,
+    chains = 4
+  )
+
+precis(m15.4mod)
+```
+
+```{r}
+# Case 4: Much ado about nothing
+# here, let's say the quality of homework influences whether or not a dog eats it
+# (just roll with it)
+case_4 <-
+  dagitty(
+    "dag{
+      H [unobserved]
+      S -> H
+      H -> D
+      D -> Hm
+      H -> Hm
+    }"
+  )
+
+coordinates(case_4) <-
+  coordinates(case_1)
+
+drawdag(case_4)
+
+N <- 100
+S <- rnorm(N)
+H <- rbinom(N, size = 10, inv_logit(S))
+D <- ifelse(H < 5, 1, 0)
+Hm <- H
+Hm[D == 1] <- NA
+Hm
+```
+
+* Here, there's not much at all we can do! There's nothing we can condition on to block the non-causal path $S \rightarrow H \rightarrow D \rightarrow H^*$.
+* The point here is to illustrate the diverse consequences of missing data and the importance of exploring our own scenarios.
+* Even when we cannot completely eliminate the impact of missing data, we may be able to show through simulation that the impact is small. 
+
+### 15.2.2 Imputing primates
+
+* *Imputation* allows us to (hopefully) avoid biased information and also use all the observed data. 
+* In any generative model, information about variables is explained by the model regardless of whether or not the data is observed. 
+* Let's return to the primate milk example from chapter 5, where we used a *complete case* analysis. 
+* Let's say $M$ is body mass, $B$ is neocortex percent, $K$ is milk energy, and $U$ is an unobserved variable:
+
+```{r}
+milk_basic <-
+  dagitty(
+    "dag{
+      U [unobserved]
+      U -> M
+      U -> B
+      M -> K
+      B -> K
+    }"
+  )
+
+coordinates(milk_basic) <-
+  list(x = c(M = 1, U = 2, K = 2, B = 3),
+       y = c(M = 1, U = 1, K = 2, B = 1))
+
+drawdag(milk_basic)
+```
+
+* Instead of having all these values directly, we have the observed $B^*$ that includes some missing values.
+* We don't know what process causes the missingness, so let's consider some different DAGs that model the process of $B^*$ based on $R_B$ --- a variable that indicates the species has missing values. 
+* First --- let's consider the hypothesis that $R_B$ is missing at random --- there are no variables that influence it. 
+
+```{r}
+milk_1 <- 
+  dagitty(
+    "dag{
+      U [unobserved]
+      B [unobserved]
+      U -> M
+      U -> B
+      M -> K
+      B -> K
+      B -> Bm
+      R_B -> Bm
+    }"
+  )
+
+coordinates(milk_1) <-
+  list(x = c(M = 1, R_B = 2, U = 2, K = 2, Bm = 3, B = 3),
+       y = c(M = 1, R_B = 0, U = 1, K = 2, Bm = 0, B = 1))
+
+drawdag(milk_1)
+```
+
+* Next, the body mass influences which species have missing values. This could happen if smaller primates are less often studied than larger ones.
+* This introduces a non-causal path $B^* \leftarrow R_B \leftarrow M \rightarrow K$, but conditioning on $M$ blocks this path. 
+
+```{r}
+milk_2 <- 
+  dagitty(
+    "dag{
+      U [unobserved]
+      B [unobserved]
+      U -> M
+      U -> B
+      M -> R_B
+      M -> K
+      B -> K
+      B -> Bm
+      R_B -> Bm
+    }"
+  )
+
+coordinates(milk_2) <-
+  coordinates(milk_1)
+
+drawdag(milk_2)
+```
+
+* Finally, let's consider that the brain size itself influences $R_B$. This could be because anthropologists are more interested in large-brained species. 
+* If this is true, we won't be able to test --- the influence of $B \rightarrow K$ will be biased via a non-causal path through $R_B$. 
+* The statistical trick with Bayesian imputation is to model the variable with missing values. Each missing value receives a unique parameter --- the observed data gives us a prior.
+* Here, for example, we might have:
+
+$$
+\begin{gather}
+B = [0.55, \ B_2, \ B_3, \ B_4, \ 0.65, \ 0.65, \ \dots, \ 0.76, \ 0.75]
+\end{gather}
+$$
+
+* The simplest model for missing $B$ values will just draw from its own normal distribution:
+
+$$
+\begin{align*}
+K_i & \sim \text{Normal}(\mu_i, \sigma) \\
+\mu_i & = \alpha + \beta_B B_i + \beta_M \ \text{log} \ M_i \\
+\color{orange}{B_i} & \color{orange}{\sim} \color{orange}{\text{Normal}(\nu, \sigma_B)} \\
+\alpha & \sim \text{Normal}(0, 0.5) \\
+\beta_B & \sim \text{Normal}(0, 0.5) \\
+\beta_M & \sim \text{Normal}(0, 0.5) \\
+\sigma & \sim \text{Exponential}(1) \\
+\nu & \sim \text{Normal}(0.5, 1) \\
+\sigma_B & \sim \text{Exponential}(1)
+\end{align*}
+$$
+
+* This model ignores that $B$ and $M$ are associated through $U$. But let's start with this just to keep things simple. 
+* The interpretation of $B_i \sim \text{Normal}(\nu, \sigma_B)$ is a bit weird. 
+* When $B_i$ is observed, this is a likelihood. When it's missing, it's a prior. 
+* In this case, $B$ is bound by 0 and 1, so a normal distribution might not be the best choice, but let's just roll with it. 
+* All implementations of imputation are a bit awkward --- since the locations of missing values have to be respected, it comes down to a lot of index management. `ulam()` handles a lot of this for us.
+
+```{r}
+# load & prep data for stan
+data(milk)
+d <- milk
+d$neocortex.prop <- d$neocortex.perc/100
+d$logmass <- log(d$mass)
+
+dat_list <-
+  list(
+    K = standardize(d$kcal.per.g),
+    B = standardize(d$neocortex.prop),
+    M = standardize(d$logmass)
+  )
+
+# model!
+m15.5 <-
+  ulam(
+    alist(
+      K ~ dnorm(mu, sigma),
+      mu <- a + bB*B + bM*M,
+      B ~ dnorm(nu, sigma_B),
+      c(a, nu) ~ dnorm(0, 0.5),
+      c(bB, bM) ~ dnorm(0, 0.5),
+      sigma_B ~ dexp(1),
+      sigma ~ dexp(1)
+    ),
+    
+    data = dat_list,
+    chains = 4,
+    cores = 4
+  )
+
+precis(m15.5, depth = 2)
+```
+
+
+
 
