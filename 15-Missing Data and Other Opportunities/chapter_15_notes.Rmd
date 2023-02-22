@@ -724,6 +724,470 @@ m15.5 <-
 precis(m15.5, depth = 2)
 ```
 
+* We get a parameter for each of the missing values! McElreath injects a function into the stan code to handle the accounting of keeping track of the indices:
+
+```{r}
+stancode(m15.5)
+```
+
+* Let's compare this to a model that drops the missing cases.
+
+```{r}
+obs_idx <- which(!is.na(d$neocortex.prop))
+
+dat_list_obs <-
+  list(
+    K = dat_list$K[obs_idx],
+    B = dat_list$B[obs_idx],
+    M = dat_list$M[obs_idx]
+  )
+
+m15.6 <-
+  ulam(
+    alist(
+      # model
+      K ~ dnorm(mu, sigma), 
+      mu <- a + bB*B + bM*M,
+      
+      # missing (but it's not!)
+      B ~ dnorm(nu, sigma_B),
+      
+      # priors
+      c(a, nu) ~ dnorm(0, 0.5),
+      c(bB, bM) ~ dnorm(0, 0.5),
+      sigma_B ~ dexp(1),
+      sigma ~ dexp(1)
+    ),
+    
+    data = dat_list_obs,
+    chains = 4,
+    cores = 4
+  )
+```
+
+* If we compare the parameter estimates --- the model that imputes missing values, `m15.5`, has a narrower marginal distribution than the model that just drops cases, `m15.6`. This is because it's using more data!
+
+```{r}
+plot(coeftab(m15.5, m15.6), pars = c("bB", "bM"))
+```
+
+* We can also compare the imputed values alongside the non-missing values:
+
+```{r}
+# get imputed values + ci
+post <- extract.samples(m15.5)
+B_impute_mu <- apply(post$B_impute, 2, mean)
+B_impute_ci <- apply(post$B_impute, 2, PI)
+
+# B vs K
+plot(dat_list$B,
+     dat_list$K,
+     pch = 16,
+     col = rangi2,
+     xlab = "neocortex percent (std)",
+     ylab = "kcal milk (std)")
+
+miss_idx <- which(is.na(dat_list$B))
+Ki <- dat_list$K[miss_idx]
+points(B_impute_mu, Ki)
+for (i in 1:12) lines(B_impute_ci[,i], rep(Ki[i], 2))
+
+# next one!
+plot(dat_list$M,
+     dat_list$B,
+     pch = 16,
+     col = rangi2,
+     ylab = "neocortex percent (std)",
+     xlab = "log body mass (std)")
+
+Mi <- dat_list$M[miss_idx]
+points(Mi, B_impute_mu)
+for (i in 1:12) lines(rep(Mi[i], 2), B_impute_ci[,i])
+```
+
+* Note that in the second plot, the imputed values do not show an upward slope. This is because the imputation model assumed no relationship between the predictors.
+* We can improve the model by changing the imputation model to estimate the relationship between the two predictors.
+* To do so, we just use the relationship between the predictors as indicated by the DAG --- this just involves changing the imputation step for $B_i$ from a normal to a multivariate normal:
+
+$$
+\begin{gather}
+(M_i, B_i) \sim \text{MVNormal}((\mu_M, \mu_B), S)
+\end{gather}
+$$
+
+* This is the simplest model we could have used to describe the association between $M$ & $B$ --- it assumes that the covariance is enough to describe the relationship. 
+* In `ulam()`, we have to construct a variable that includes both the observed $M$ values and the merged list of observed and imputed $B$ values. 
+
+```{r}
+m15.7 <-
+  ulam(
+    alist(
+      # K as a function of B and M
+      K ~ dnorm(mu, sigma),
+      mu <- a + bB*B_merge + bM*M,
+      
+      # M & B correlation
+      MB ~ multi_normal(c(muM, muB), Rho_BM, Sigma_BM),
+      matrix[29,2]:MB <<- append_col(M, B_merge),
+      
+      # define B_merge as a mix of observed and imputed values
+      vector[29]:B_merge <- merge_missing(B, B_impute),
+      
+      # priors
+      c(a, muB, muM) ~ dnorm(0, 0.5),
+      c(bB, bM) ~ dnorm(0, 0.5),
+      sigma ~ dexp(1),
+      Rho_BM ~ lkj_corr(2),
+      Sigma_BM ~ dexp(1)
+    ),
+    
+    data = dat_list,
+    chains = 4,
+    cores = 4
+  )
+
+precis(m15.7, depth = 3, pars = c("bM", "bB", "Rho_BM"))
+```
+
+* The slopes for `bM` and `bB` haven't changed too much, but if we look at the parameter comparison plot, we can see a positive association between the predictors (including the imputed ones):
+
+```{r}
+# get imputed values + ci
+post <- extract.samples(m15.7)
+B_impute_mu <- apply(post$B_impute, 2, mean)
+B_impute_ci <- apply(post$B_impute, 2, PI)
+
+miss_idx <- which(is.na(dat_list$B))
+Ki <- dat_list$K[miss_idx]
+
+# next one!
+plot(dat_list$M,
+     dat_list$B,
+     pch = 16,
+     col = rangi2,
+     ylab = "neocortex percent (std)",
+     xlab = "log body mass (std)")
+
+Mi <- dat_list$M[miss_idx]
+points(Mi, B_impute_mu)
+for (i in 1:12) lines(rep(Mi[i], 2), B_impute_ci[,i])
+```
+
+* This is clearly doing better and doing better is good!
+* Some rethinking, *multiple imputation* gets used a lot in frequentist settings and is a bit more limited than full on Bayesian imputation, but you'll still see it in the wild. 
+* Some overthinking with the stan code:
+
+```{r}
+stancode(m15.5)
+```
+
+* The function at the top merges a vector of observed values with a vector of parameters to stand in the place of missing values.
+* If you use `ulam()`, the `B_missidx` vector is built for you, but if you use stan directly you'll need to build it yourself and pass to Stan as data:
+
+```{r}
+B_missidx <- which(is.na(dat_list$B))
+B_missidx
+```
+
+### 15.2.3 Where is your god now?
+
+* Sometimes there aren't statistical solutions to scientific problems, but in these cases we can still use statistical thinking to tell us there is no statistical solution!
+* As an example, in some religions God punishes the wicked and rewards the just --- these are "moralizing gods." In others, gods behave independently from humans.
+* One question might be --- does such a difference in belief have any consequences for society? Say, do societies with moralizing gods grow faster/tend to replace societies with less moralizing gods?
+
+```{r}
+data("Moralizing_gods")
+str(Moralizing_gods)
+```
+
+* The `population` is on the log scale for different regions (`polity`) across different centuries (`year`). 
+* `moralizing_gods` can be 1 for yes, 0 for no, or `NA` for unknown.
+* Does belief in moralizing gods increase the rate of population growth? 
+* This is a tough causal cookie --- there are many unobserved confounds. But if we (incorrectly) assume that the year moralizing gods appear in a society, we can sort of treat the problem as a *regression disontinuity* one. 
+* There are *a lot* of missing values here:
+
+```{r}
+table(Moralizing_gods$moralizing_gods, useNA = "always")
+```
+
+* There's a lot of missing data, many 1s, and only a few 0s --- remember that the impact of missing data depends on the process that produced them. 
+* Plotting may help visualize the problem:
+
+```{r}
+symbol <- ifelse(Moralizing_gods$moralizing_gods == 1, 16, 1)
+symbol <- ifelse(is.na(Moralizing_gods$moralizing_gods), 4, symbol)
+color <- ifelse(is.na(Moralizing_gods$moralizing_gods), "black", rangi2)
+plot(Moralizing_gods$year,
+     Moralizing_gods$population,
+     pch = symbol,
+     col = color,
+     xlab = "Time (year)",
+     ylab = "Population size",
+     lwd = 1.5)
+```
+
+* Filled blue points are the presence of moralizing gods while open blue points are the presence of other types of gods. X's are missing!
+* This is highly non-random! Written records are usually needed to determine historical religious beliefs:
+
+```{r}
+with(Moralizing_gods,
+     table(gods = moralizing_gods, literacy = writing, useNA = "always"))
+```
+
+* The majority of the missing values are for non-literate polities --- no writing means no evidence of any kind, generally. 
+* This situation can't be saved by statistics, but it's useful to reason as to why. 
+* Could we just drop the missing values & use a *complete case analysis*? Probably not! This will bias our inference.
+* An optimistic DAG might be:
+
+```{r}
+gods <-
+  dagitty(
+    "dag{
+      G [unobserved]
+      G -> P
+      G -> Gm
+      P -> W
+      W -> R_G
+      R_G -> Gm
+    }"
+  )
+
+coordinates(gods) <-
+  list(x = c(P = 1, W = 1.5, G = 2, R_G = 2.5, Gm = 3),
+       y = c(P = 1, W = 2, G = 1, R_G = 2, Gm = 1))
+
+drawdag(gods)
+```
+
+* Here, $P$ is the rate of population growth (not population size shown in the dataset), $G$ is the presence of belief in moralizing gods, $Gm$ is the observed variable with missing values, $W$ is writing, and $R_G$ is the missing values indicator. 
+* This is optimistic because it assumes there are no unobserved confounds.
+* We want to know if the outcome, $P$, is independent of missingness, $R_G$. 
+* This is clearly not a dog-eats-homework at random scenario --- $R_G$ is not missing randomly. $R_G$ is assumed to be explained by $W$, which is (unfortunately) influenced by $P$. If we condition on $W$ it could make things worse (it'd be like conditioning on the outcome variable), since $P \rightarrow W$. Conditioning on $R_G$ would not help --- there's no structural reason to trust an estimate of $Gm \rightarrow P$. 
+* If we could somehow condition on $G$ instead of $Gm$, we'd be in the clear. But we need to have a good approximation of the generative model of the variable, for which there's no obvious answer.
+* For example, Hawaii was a large complex polity with moralizing gods by 1778 --- the year that James Cook & his crew finally made contact:
+
+```{r}
+haw <- which(Moralizing_gods$polity == "Big Island Hawaii")
+columns <- c("year", "writing", "moralizing_gods")
+t(Moralizing_gods[haw, columns])
+```
+
+* After contact, Hawaii is correctly coded with 1 for a belief in moralizing gods. But there's no direct evidence of when these gods came into Hawaii's society, since Hawaii had no writing system of its own. 
+* An imputation model would *have* to make very strong assumptions. 
+* One (unfortunately common) method might be to just assume that moralizing gods aren't present when the value is missing. This procedure results in biased estimates. 
+* In principle, we could perform model based imputation for the missing values, but we don't have any obviously correct way to do this. We can't just associate the presence/absence of moralizing gods with population size, because that's the very question under investigation!
+* Our statistical investigation leads us to the conclusion that more research is needed to replace the `NA`s with observations!
+* Another obstacle to imputing the `moralizing_gods` variable: it's discrete! This is computationally trickier than imputing continuous variables. 
+
+## 15.3 Categorical errors and discrete absences
+
+* Previous examples focused on nice continuous variables --- discrete variables are a bit more difficult.
+* Discrete variables don't produce a smooth surface for HMC to glide around on & discrete jumps are difficult to calibrate, so chains tend to get stuck for long periods.
+* To get around this, we can use a *weighted average* to remove discrete parameters from the model. We sample the other parameters, then use their samples to compute the posterior for the removed discrete parameter.
+
+### 15.3.1 Discrete cats
+
+* Imagine a neighborhood in which every house contains a songbird. Let's survey the neighborhood & count the number of notes each bird sings in one minute.
+* Some houses have cats, which may affect the amount each bird sings. In some cases, it's easy to tell if a house has a cat (because the cat is there) or not (because someone lets you know). In about 20%, though, you can't determine if there is or isn't a cat.
+
+```{r}
+cats <-
+  dagitty(
+    "dag{
+      C [unobserved]
+      R_C -> Cm
+      C -> Cm
+      C -> N
+    }"
+  )
+
+coordinates(cats) <-
+  list(x = c(R_C = 1, Cm = 2, C = 3, N = 4),
+       y = c(R_C = 0, Cm = 0, C = 0, N = 0))
+
+drawdag(cats)
+```
+
+* Here, the presence/absence of a cat $C$ influences the number of notes sung $N$. Because of missing values $R_C$, however, we only observe $C^*$. A generative model of the DAG might be:
+
+$$
+\begin{align*}
+N_i & \sim \text{Poisson}(\lambda_i) \\
+\text{log} \ \lambda_i & = \alpha + \beta C_i \\
+C_i & \sim \text{Bernoulli}(k) \\
+R_{C, i} & \sim \text{Bernoulli}(r)
+\end{align*}
+$$
+
+```{r}
+set.seed(9)
+
+# set true parameters
+N_houses <- 100L
+alpha <- 5
+beta <- -3
+k <- 0.5
+r <- 0.2
+
+# simulate observations
+cat <- rbern(N_houses, k)
+notes <- rpois(N_houses, alpha + beta*cat)
+R_C <- rbern(N_houses, r)
+cat_obs <- cat
+cat_obs[R_C == 1] <- -9L
+
+# prep for stan
+dat <-
+  list(
+    notes = notes,
+    cat = cat_obs,
+    RC = R_C,
+    N = as.integer(N_houses)
+  )
+```
+
+* Here, each unknown value of `cat_obs` is replaced with `-9`. The model should skip these anyway, but it's useful to set to some invalid value in case there's a bug & the model tries to sample them. In this case, `cat` is drawn from a Bernoulli distribution, so if the model ever asks for the probability of observing -9, there will be an error!
+* We can't declare a parameter for each unobserved cat, so we instead average over the uncertainty in whether the cat was there or not.
+
+$$
+\begin{align*}
+\Pr(N_i) & = \Pr(C_i = 1) \ \Pr(N_i | C_i = 1) + \Pr(C_i = 0) \ \Pr(N_i | C_i = 0) 
+\end{align*}
+$$
+
+* When we don't know $C_i$, we compute the likelihood of $N_i$ for each possible $C_i$ then average the likelihoods with the probabilities that $C_i$ takes on each value.
+
+```{r}
+m15.8 <-
+  ulam(
+    alist(
+      # singing bird model
+      ## cat known present/absent:
+      notes|RC==0 ~ poisson(lambda),
+      log(lambda) <- a + b*cat,
+      ## cat NA
+      notes|RC==1 ~ custom(log_sum_exp(
+        log(k) + poisson_lpmf(notes | exp(a + b)),
+        log(1 - k) + poisson_lpmf(notes | exp(a))
+      )),
+      
+      # priors
+      a ~ normal(0, 1),
+      b ~ normal(0, 0.5),
+      
+      # sneaking cat model
+      cat|RC==0 ~ bernoulli(k),
+      k ~ beta(2, 2)
+    ),
+    
+    data = dat,
+    chains = 4,
+    cores = 4
+  )
+
+precis(m15.8)
+```
+
+* The likelihood gets split --- `notes|RC==0` reads as "the probability of $N$ when $R_C = 0$. This is our normal model when we know the cat's presence/absence.
+* The next lines are for the average likelihood when the presence/absence isn't observed. It's basically just the previous line on the log scale.
+* The sneaking cat presence/absence model is at the bottom --- when we know the presence/absence of the cat $R_C = 0$, we want to use that observation to update $k$, the probability that a cat is present. 
+* Now let's see how we can check the presence/absence of any given cat, given that we know how many notes were sung:
+
+$$
+\begin{align*}
+\Pr(C_i=1|N_i) & = \frac{\Pr(N_i|C_i=1)\ \Pr(C_i=1)}{\Pr(N_i|C_i=1)\ \Pr(C_i=1)+\Pr(N_i|C_i=0)\ \Pr(C_i=0)}
+\end{align*}
+$$
+
+* Take a look closesly --- it's less threatening than it looks.
+* We can have Stan calculate this for us in the *generated quantities* block:
+
+```{r}
+m15.9 <-
+  ulam(
+    alist(
+      # singing bird model
+      notes|RC==0 ~ poisson(lambda),
+      notes|RC==1 ~ custom(log_sum_exp(
+        log(k) + poisson_lpmf(notes | exp(a + b)),
+        log(1 - k) + poisson_lpmf(notes | exp(a))
+      )),
+      log(lambda) <- a + b*cat,
+      
+      # priors
+      a ~ normal(0, 1),
+      b ~ normal(0, 0.5),
+      
+      # sneaking cat model
+      cat|RC==0 ~ bernoulli(k),
+      k ~ beta(2, 2),
+      
+      # imputed values
+      gq> vector[N]:PrC1 <- exp(lpC1)/(exp(lpC1) + exp(lpC0)),
+      gq> vector[N]:lpC1 <- log(k) + poisson_lpmf(notes[i] | exp(a + b)),
+      gq> vector[N]:lpC0 <- log(1 - k) + poisson_lpmf(notes[i] | exp(a))
+    ),
+    
+    data = dat,
+    chains = 4,
+    cores = 4
+  )
+
+# probability of the last few cats being present or nah
+precis(m15.9, depth = 2)[293:303,]
+```
+
+```{r}
+stancode(m15.9)
+```
+
+* The strategy extrapolates to discrete variables with more than two possible values --- you just need more than two terms in your average likelihood. For example, if houses can have up to two cats, the cats might be binomially distributed:
+
+```{r, eval=FALSE}
+notes|RC==1 ~ custom(log_sum_exp(
+  binomial_lpmf(2 | 2, k) + poisson_lpmf(notes | exp(a + b*2)),
+  binomial_lpmf(1 | 2, k) + poisson_lpmf(notes | exp(a + b*1)),
+  binomial_lpmf(0 | 2, k) + poisson_lpmf(notes | exp(a + b*0))
+))
+```
+
+* Unordered terms work the same way, but the leading terms would be from some simplex of probabilities. 
+* We can also extend this to more than one discrete variable with missing values --- say there's also a variable for dog $D_i$ presence/absence. In this case, we can have 4 possible cases: 
+  1. cat and dog
+  2. cat
+  3. dog
+  4. neither cat nor dog (sad)
+* If both the cat and dog variables are `NA`, we have to average over all four possibilities above, with prior terms for both cat and dog:
+
+$$
+\begin{align*}
+\Pr(N_i) & = \Pr(C_i=1)\ \Pr(D_i=1)\ \Pr(N_i|C_i=1,D_i=1) \\
+& \ + \Pr(C_i=1)\ \Pr(D_i=0)\ \Pr(N_i|C_i=1,D_i=0) \\
+& \ + \Pr(C_i=0)\ \Pr(D_i=1)\ \Pr(N_i|C_i=0,D_i=1) \\
+& \ + \Pr(C_i=0)\ \Pr(D_i=0)\ \Pr(N_i|C_i=0,D_i=0)
+\end{align*}
+$$
+
+* If only the cat is `NA` and the dog is known present $D_i = 1$, then we only have to average over possibilities 1/3. 
+* If only the dog is `NA` and the cat is known absent $C_i = 0$, then we only have to average over possibilities 3/4.
+* In principle, this is algorithmic and easy. In practice, it makes for complicated code, since you have to account for all combinations of missingness & assign each a different average likelihood.
+* We'll see this again in the next chapter when we encounter the *state space model*. State space models can have a large number of discrete or continuous unobserved variables.
+* We typically don't write out each possibility explicitly in code, but instead use an algorithm to compute the average likelihood. 
+* For example, in a *Hidden Markov Model*, an algorithm known as the *forward algorithm* does the averaging. You can read more in the Stan user manual.
+
+### 15.3.2 Discrete error
+
+* The example above concerned missing data, but when the data are measured with error, the procedure is very similar.
+
+>Suppose for example that in the example above each house is assigned a probability of a cat being present. Call this probability $k_i$. When we are sure there is a cat there, $k_i = 1$. When we are sure there is no cat, $k_i = 0$. When we think it's a coin flip, $k_i = 0.5$. These $k_i$ values replace the parameter $k$ in the previous model, becoming weights for averaging our uncertainty.
+
+## 15.4 Summary
+
+* This chapter introduced the design and implementation of measurement error and missing data models. 
+* Incorporating the cause of measurement error and missing data into a generative model helps decide how they impact inference & how we design a statistical procedure. 
+
+
+
 
 
 
