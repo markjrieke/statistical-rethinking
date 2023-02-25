@@ -198,7 +198,7 @@ m16.1 <-
     ##                  from stan/lib/stan_math/stan/math/rev.hpp:10,
     ##                  from stan/lib/stan_math/stan/math.hpp:19,
     ##                  from stan/src/stan/model/model_header.hpp:4,
-    ##                  from C:/Users/E1735399/AppData/Local/Temp/RtmpS06mJR/model-255c32e134f4.hpp:3:
+    ##                  from C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.hpp:3:
     ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:180:45: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
     ##   180 |         : public boost::functional::detail::unary_function<typename unary_traits<Predicate>::argument_type,bool>
     ##       |                                             ^~~~~~~~~~~~~~
@@ -299,17 +299,80 @@ m16.1 <-
     ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:557:74: warning: 'template<class _Arg1, class _Arg2, class _Result> struct std::binary_function' is deprecated [-Wdeprecated-declarations]
     ##   557 |     class pointer_to_binary_function : public boost::functional::detail::binary_function<Arg1,Arg2,Result>
     ##       |                                                                          ^~~~~~~~~~~~~~~
+
     ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:131:12: note: declared here
     ##   131 |     struct binary_function
     ##       |            ^~~~~~~~~~~~~~~
 
     ## Running MCMC with 4 parallel chains, with 1 thread(s) per chain...
     ## 
+    ## Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup)
+
+    ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 1 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+
+    ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 1
+
+    ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 1 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+
+    ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 1
+
+    ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 1 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+
+    ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 1
+
+    ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 1 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+
+    ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 1
+
+    ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 1 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+
+    ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 1
+
+    ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 1 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+
+    ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 1
+
     ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup)
 
     ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 2 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS06mJR/model-255c32e134f4.stan', line 23, column 4 to column 32)
+    ## Chain 2 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
 
     ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -319,7 +382,7 @@ m16.1 <-
 
     ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 2 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS06mJR/model-255c32e134f4.stan', line 23, column 4 to column 32)
+    ## Chain 2 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
 
     ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -329,7 +392,7 @@ m16.1 <-
 
     ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 2 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS06mJR/model-255c32e134f4.stan', line 23, column 4 to column 32)
+    ## Chain 2 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
 
     ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -339,7 +402,7 @@ m16.1 <-
 
     ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 2 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS06mJR/model-255c32e134f4.stan', line 23, column 4 to column 32)
+    ## Chain 2 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
 
     ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -349,7 +412,7 @@ m16.1 <-
 
     ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 2 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS06mJR/model-255c32e134f4.stan', line 23, column 4 to column 32)
+    ## Chain 2 Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
 
     ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -359,7 +422,17 @@ m16.1 <-
 
     ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 2 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS06mJR/model-255c32e134f4.stan', line 23, column 4 to column 32)
+    ## Chain 2 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+
+    ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 2 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 2
+
+    ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 2 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
 
     ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -371,7 +444,7 @@ m16.1 <-
 
     ## Chain 3 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 3 Exception: lognormal_lpdf: Location parameter[1] is inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS06mJR/model-255c32e134f4.stan', line 23, column 4 to column 32)
+    ## Chain 3 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
 
     ## Chain 3 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -379,22 +452,41 @@ m16.1 <-
 
     ## Chain 3
 
-    ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
-    ## Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup)
+    ## Chain 3 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+    ## Chain 3 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
 
-    ## Chain 1 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS06mJR/model-255c32e134f4.stan', line 23, column 4 to column 32)
+    ## Chain 3 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
-    ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+    ## Chain 3 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
 
-    ## Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+    ## Chain 3
 
-    ## Chain 1
+    ## Chain 3 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 3 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+
+    ## Chain 3 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 3 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 3
+
+    ## Chain 3 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 3 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+
+    ## Chain 3 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 3 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 3
+
+    ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup)
 
     ## Chain 4 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 4 Exception: lognormal_lpdf: Location parameter[1] is inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS06mJR/model-255c32e134f4.stan', line 23, column 4 to column 32)
+    ## Chain 4 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
 
     ## Chain 4 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -404,7 +496,7 @@ m16.1 <-
 
     ## Chain 4 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 4 Exception: lognormal_lpdf: Location parameter[1] is inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS06mJR/model-255c32e134f4.stan', line 23, column 4 to column 32)
+    ## Chain 4 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
 
     ## Chain 4 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -414,7 +506,7 @@ m16.1 <-
 
     ## Chain 4 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 4 Exception: lognormal_lpdf: Location parameter[1] is inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS06mJR/model-255c32e134f4.stan', line 23, column 4 to column 32)
+    ## Chain 4 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
 
     ## Chain 4 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -422,67 +514,77 @@ m16.1 <-
 
     ## Chain 4
 
-    ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
-    ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 4 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 4 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+
+    ## Chain 4 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 4 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 4
+
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
-    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
-    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
-    ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
-    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
-    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
     ## Chain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) 
     ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
-    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
-    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
-    ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
     ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
     ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
-    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
-    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
-    ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
-    ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
-    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
-    ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
-    ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
-    ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
-    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
-    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
-    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
-    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
-    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
-    ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
-    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 51.6 seconds.
+    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
-    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 54.7 seconds.
-    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 55.9 seconds.
+    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 57.9 seconds.
+    ## Chain 4 finished in 22.9 seconds.
+    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 finished in 23.2 seconds.
+    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 finished in 25.0 seconds.
+    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 3 finished in 26.8 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 55.0 seconds.
-    ## Total execution time: 59.1 seconds.
+    ## Mean chain execution time: 24.5 seconds.
+    ## Total execution time: 27.1 seconds.
 
 ``` r
 precis(m16.1)
 ```
 
     ##            mean          sd      5.5%      94.5%    n_eff    Rhat4
-    ## p     0.2509715 0.057905164 0.1717656  0.3557320 430.0335 1.006609
-    ## k     5.5784367 2.545885850 2.3797662 10.2578115 383.1959 1.010955
-    ## sigma 0.2067478 0.006085024 0.1973898  0.2165306 662.6208 1.001178
+    ## p     0.2435150 0.054835211 0.1659921  0.3401105 400.7883 1.005701
+    ## k     5.8903003 2.669356512 2.6112055 10.9251055 501.8811 1.004705
+    ## sigma 0.2063677 0.006515093 0.1966451  0.2172446 417.7769 1.003088
 
 - The non-identifiability of $p$ and $k$ means that we get a strong
   correlation in the parameters:
@@ -738,12 +840,12 @@ m16.2 <-
   )
 ```
 
-    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS06mJR/model-255c636f8bb.stan', line 4, column 4: Declaration
+    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42244bd61faa.stan', line 4, column 4: Declaration
     ##     of arrays by placing brackets after a variable name is deprecated and
     ##     will be removed in Stan 2.32.0. Instead use the array keyword before the
     ##     type. This can be changed automatically using the auto-format flag to
     ##     stanc
-    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS06mJR/model-255c636f8bb.stan', line 5, column 4: Declaration
+    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42244bd61faa.stan', line 5, column 4: Declaration
     ##     of arrays by placing brackets after a variable name is deprecated and
     ##     will be removed in Stan 2.32.0. Instead use the array keyword before the
     ##     type. This can be changed automatically using the auto-format flag to
@@ -758,8 +860,8 @@ m16.2 <-
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
-    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
@@ -774,8 +876,8 @@ m16.2 <-
     ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
     ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
-    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
@@ -785,15 +887,15 @@ m16.2 <-
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 14.3 seconds.
-    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 14.6 seconds.
+    ## Chain 1 finished in 8.2 seconds.
     ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 14.9 seconds.
+    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 finished in 8.5 seconds.
+    ## Chain 3 finished in 8.4 seconds.
     ## 
     ## All 3 chains finished successfully.
-    ## Mean chain execution time: 14.6 seconds.
-    ## Total execution time: 15.4 seconds.
+    ## Mean chain execution time: 8.3 seconds.
+    ## Total execution time: 8.7 seconds.
 
 ``` r
 # marginal posterior
@@ -890,3 +992,458 @@ cat(Boxes_model_age)
     ##         target += log_sum_exp( phi );
     ##     }
     ## }
+
+### 16.2.4
+
+- The model above represents a larger class of model called the *state
+  space model*, which assumes there are multiple hidden states that
+  produce observations.
+- If states are discrete categories, it’s sometimes called a *hidden
+  Markov model*.
+- Many time series models are state space models! Since the true state
+  of the time series is not observed, only noisy measures.
+
+## 16.3 Ordinary differential nut cracking
+
+- Panda nuts are have been opened by humans for millenia using
+  stone/steel tools. Other animals have a more difficult time, but
+  chimpanzees on the Ivory Coast also use tools!
+
+``` r
+data("Panda_nuts")
+str(Panda_nuts)
+```
+
+    ## 'data.frame':    84 obs. of  7 variables:
+    ##  $ chimpanzee : int  11 11 18 18 18 11 11 17 7 1 ...
+    ##  $ age        : int  3 3 4 4 4 4 4 5 5 5 ...
+    ##  $ sex        : Factor w/ 2 levels "f","m": 2 2 1 1 1 2 2 1 2 2 ...
+    ##  $ hammer     : Factor w/ 4 levels "G","L","Q","wood": 1 1 4 1 2 3 3 4 1 2 ...
+    ##  $ nuts_opened: int  0 0 0 0 0 0 0 0 3 0 ...
+    ##  $ seconds    : num  61 37 20 14 13 24 30.5 135 24 13 ...
+    ##  $ help       : Factor w/ 2 levels "N","y": 1 1 1 2 1 1 1 1 1 1 ...
+
+- Each row is an individual chimp/opening bout attempt. We’re interested
+  in the `nuts_opened`, the amount of time in the bout in `seconds`, and
+  the chimp’s `age`.
+
+### 16.3.1 Scientific model
+
+- The simplest model from the scientific literature is still smarter
+  than a GLM!
+- Let’s say the only factor that matters is the chimp strength (which
+  we’ll say increases as a chimp ages).
+- We can model the rate of change in body mass at any given time, $t$,
+  as a proportion of the maximum body mass $M_{\text{max}}$:
+
+$$
+\frac{\text{d}M}{\text{d}t} = k(M_{\text{max}} - M_t)
+$$
+
+- $k$ is the rate of skill gain with age, but now we need a formula for
+  how fast mass changes at any given age.
+- We’re not going to rehash differential equations, so here’s the
+  solution for this particular problem:
+
+$$
+M_t = M_{\text{max}}(1 - \exp(-kt))
+$$
+
+- This makes a decelerating curve that levels off at $M_{\text{max}}$.
+- We ultimately care about strength (not mass!). Let’s say that strength
+  is proportional to mass by a parameter $\beta$:
+
+$$
+S_t = \beta M_t
+$$
+
+- Finally, we need to relate strength to the rate of nut cracking.
+  Strength could be proportional, but let’s consider that it helps in
+  three ways:
+  1.  It lets the animal lift a heavier hammer, generating greater
+      momentum.
+  2.  It lets the animal accelerate the hammer faster than gravity.
+  3.  Stronger animals also have longer limbs, which gives them more
+      efficient levers.
+- Mathematically, this implies a function like:
+
+$$
+\begin{align*}
+\lambda & = \alpha S_t^{\theta} \\
+\lambda & = \alpha (\beta M_{\text{max}}(1 - \exp(-kt)))^{\theta}
+\end{align*}
+$$
+
+- $\theta$ is some exponent greater than 1 and $\alpha$ is the
+  proportionality of strength to nut opening.
+- We can simplify this down by scaling $M_{\text{max}}$ to 1
+  (measurement scales are arbitrary!):
+
+$$
+\lambda = \alpha \beta^{\theta} (1 - \exp(-kt))^{\theta}
+$$ \* Finally, $\alpha \beta^{\theta}$ can be replaced with a single
+parameter:
+
+$$
+\lambda = \phi (1 - \exp(-kt))^{\theta}
+$$
+
+- This is a lot easier to work with! But it hides some useful facts,
+  like the average adult mass differs for males and females.
+
+### 16.3.2 Statistical model
+
+- So long as the nut opening isn’t limited by nut availability, the
+  Poisson distribution gives the right constraints for our statistical
+  model:
+
+$$
+\begin{align*}
+n_i & \sim \text{Poisson}(\lambda_i) \\
+\lambda_i & = d_i \phi(1 - \exp(-kt_i))^{\theta}
+\end{align*}
+$$
+
+- Here, $n_i$ is the number of nuts opened, $d_i$ is the duration spent
+  openeing nuts, and $t_i$ is the individual’s age.
+- What about priors? Here’s some background:
+  - Chimpanzees tend to reach adult mass around 12 years old, so the
+    prior growth curves need to plateau around 12 (by $k$ and $\theta$)
+  - The prior for $\phi$ should have a mean around the maximum rate of
+    nut opening. Let’s just say thats about 1 nut per second.
+- Altogether now,
+
+$$
+\begin{align*}
+n_i & \sim \text{Poisson}(\lambda_i) \\
+\lambda_i & = d_i \phi (1 - \exp(-kt_i))^{\theta} \\
+\phi & \sim \text{Log-Normal}(\log(1), 0.1) \\
+k & \sim \text{Log-Normal}(\log(2), 0.25) \\
+\theta & \sim \text{Log-Normal}(\log(5), 0.25)
+\end{align*}
+$$
+
+``` r
+# simulate priors
+N <- 1e4
+phi <- rlnorm(N, log(1), 0.1)
+k <- rlnorm(N, log(2), 0.25)
+theta <- rlnorm(N, log(5), 0.25)
+
+# relative growth curve
+plot(NULL, 
+     xlim = c(0, 1.5),
+     ylim = c(0, 1),
+     xaxt = "n",
+     xlab = "age",
+     ylab = "body mass")
+
+at <- seq(from = 0, to = 1.5, by = 0.25)
+axis(1, at = at, labels = round(at * max(Panda_nuts$age)))
+for (i in 1:20) 
+  curve(1 - exp(-k[i]*x), add = TRUE, col = grau(), lwd = 1.5)
+```
+
+![](chapter_16_notes_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+``` r
+# implied rate of nut opening curve
+plot(NULL,
+     xlim = c(0, 1.5),
+     ylim = c(0, 1.2),
+     xaxt = "n",
+     xlab = "age",
+     ylab = "nuts per second")
+
+axis(1, at = at, labels = round(at * max(Panda_nuts$age)))
+for (i in 1:20) 
+  curve(phi[i]*(1-exp(-k[i]*x))^theta[i], add = TRUE, col = grau(), lwd = 1.5)
+```
+
+![](chapter_16_notes_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->
+
+- We can also inspect the parameter distributions:
+
+``` r
+dens(phi)
+```
+
+![](chapter_16_notes_files/figure-gfm/unnamed-chunk-15-1.png)<!-- -->
+
+``` r
+dens(k)
+```
+
+![](chapter_16_notes_files/figure-gfm/unnamed-chunk-15-2.png)<!-- -->
+
+``` r
+dens(theta)
+```
+
+![](chapter_16_notes_files/figure-gfm/unnamed-chunk-15-3.png)<!-- -->
+
+- Let’s model:
+
+``` r
+dat_list <-
+  list(
+    n = as.integer(Panda_nuts$nuts_opened),
+    age = Panda_nuts$age/max(Panda_nuts$age),
+    seconds = Panda_nuts$seconds
+  )
+
+m16.4 <-
+  ulam(
+    alist(
+      # model
+      n ~ poisson(lambda),
+      lambda <- seconds*phi*(1 - exp(-k*age))^theta,
+      
+      # priors
+      phi ~ lognormal(log(1), 0.1),
+      k ~ lognormal(log(2), 0.25),
+      theta ~ lognormal(log(5), 0.25)
+    ),
+    
+    data = dat_list,
+    chains = 4
+  )
+```
+
+    ## In file included from stan/lib/stan_math/lib/boost_1.78.0/boost/multi_array/multi_array_ref.hpp:32,
+    ##                  from stan/lib/stan_math/lib/boost_1.78.0/boost/multi_array.hpp:34,
+    ##                  from stan/lib/stan_math/lib/boost_1.78.0/boost/numeric/odeint/algebra/multi_array_algebra.hpp:22,
+    ##                  from stan/lib/stan_math/lib/boost_1.78.0/boost/numeric/odeint.hpp:63,
+    ##                  from stan/lib/stan_math/stan/math/prim/functor/ode_rk45.hpp:9,
+    ##                  from stan/lib/stan_math/stan/math/prim/functor/integrate_ode_rk45.hpp:6,
+    ##                  from stan/lib/stan_math/stan/math/prim/functor.hpp:14,
+    ##                  from stan/lib/stan_math/stan/math/rev/fun.hpp:198,
+    ##                  from stan/lib/stan_math/stan/math/rev.hpp:10,
+    ##                  from stan/lib/stan_math/stan/math.hpp:19,
+    ##                  from stan/src/stan/model/model_header.hpp:4,
+    ##                  from C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d7477d2.hpp:3:
+    ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:180:45: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+    ##   180 |         : public boost::functional::detail::unary_function<typename unary_traits<Predicate>::argument_type,bool>
+    ##       |                                             ^~~~~~~~~~~~~~
+
+    ## In file included from C:/rtools42/ucrt64/include/c++/12.2.0/string:48,
+    ##                  from C:/rtools42/ucrt64/include/c++/12.2.0/bits/locale_classes.h:40,
+    ##                  from C:/rtools42/ucrt64/include/c++/12.2.0/bits/ios_base.h:41,
+    ##                  from C:/rtools42/ucrt64/include/c++/12.2.0/ios:42,
+    ##                  from C:/rtools42/ucrt64/include/c++/12.2.0/istream:38,
+    ##                  from C:/rtools42/ucrt64/include/c++/12.2.0/sstream:38,
+    ##                  from C:/rtools42/ucrt64/include/c++/12.2.0/complex:45,
+    ##                  from stan/lib/stan_math/lib/eigen_3.3.9/Eigen/Core:96,
+    ##                  from stan/lib/stan_math/lib/eigen_3.3.9/Eigen/Dense:1,
+    ##                  from stan/lib/stan_math/stan/math/prim/fun/Eigen.hpp:22,
+    ##                  from stan/lib/stan_math/stan/math/rev.hpp:4:
+    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:117:12: note: declared here
+    ##   117 |     struct unary_function
+    ##       |            ^~~~~~~~~~~~~~
+    ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:214:45: warning: 'template<class _Arg1, class _Arg2, class _Result> struct std::binary_function' is deprecated [-Wdeprecated-declarations]
+    ##   214 |         : public boost::functional::detail::binary_function<
+    ##       |                                             ^~~~~~~~~~~~~~~
+    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:131:12: note: declared here
+    ##   131 |     struct binary_function
+    ##       |            ^~~~~~~~~~~~~~~
+    ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:252:45: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+    ##   252 |         : public boost::functional::detail::unary_function<
+    ##       |                                             ^~~~~~~~~~~~~~
+    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:117:12: note: declared here
+    ##   117 |     struct unary_function
+    ##       |            ^~~~~~~~~~~~~~
+    ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:299:45: warning: 'template<cl
+
+    ## ass _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+    ##   299 |         : public boost::functional::detail::unary_function<
+    ##       |                                             ^~~~~~~~~~~~~~
+    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:117:12: note: declared here
+    ##   117 |     struct unary_function
+    ##       |            ^~~~~~~~~~~~~~
+    ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:345:57: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+    ##   345 |     class mem_fun_t : public boost::functional::detail::unary_function<T*, S>
+    ##       |                                                         ^~~~~~~~~~~~~~
+    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:117:12: note: declared here
+    ##   117 |     struct unary_function
+    ##       |            ^~~~~~~~~~~~~~
+
+    ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:361:58: warning: 'template<class _Arg1, class _Arg2, class _Result> struct std::binary_function' is deprecated [-Wdeprecated-declarations]
+    ##   361 |     class mem_fun1_t : public boost::functional::detail::binary_function<T*, A, S>
+    ##       |                                                          ^~~~~~~~~~~~~~~
+    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:131:12: note: declared here
+    ##   131 |     struct binary_function
+    ##       |            ^~~~~~~~~~~~~~~
+    ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:377:63: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+    ##   377 |     class const_mem_fun_t : public boost::functional::detail::unary_function<const T*, S>
+    ##       |                                                               ^~~~~~~~~~~~~~
+    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:117:12: note: declared here
+    ##   117 |     struct unary_function
+    ##       |            ^~~~~~~~~~~~~~
+    ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:393:64: warning: 'template<class _Arg1, class _Arg2, class _Result> struct std::binary_function' is deprecated [-Wdeprecated-declarations]
+    ##   393 |     class const_mem_fun1_t : public boost::functional::detail::binary_function<const T*, A, S>
+    ##       |                                                                ^~~~~~~~~~~~~~~
+    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:131:12: note: declared here
+    ##   131 |     struct binary_function
+    ##       |            ^~~~~~~~~~~~~~~
+    ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:438:61: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+    ##   438 |     class mem_fun_ref_t : public boost::functional::detail::unary_function<T&, S>
+    ##       |                                                             ^~~~~~~~~~~~~~
+    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:117:
+
+    ## 12: note: declared here
+    ##   117 |     struct unary_function
+    ##       |            ^~~~~~~~~~~~~~
+    ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:454:62: warning: 'template<class _Arg1, class _Arg2, class _Result> struct std::binary_function' is deprecated [-Wdeprecated-declarations]
+    ##   454 |     class mem_fun1_ref_t : public boost::functional::detail::binary_function<T&, A, S>
+    ##       |                                                              ^~~~~~~~~~~~~~~
+    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:131:12: note: declared here
+    ##   131 |     struct binary_function
+    ##       |            ^~~~~~~~~~~~~~~
+    ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:470:67: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+    ##   470 |     class const_mem_fun_ref_t : public boost::functional::detail::unary_function<const T&, S>
+    ##       |                                                                   ^~~~~~~~~~~~~~
+    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:117:12: note: declared here
+    ##   117 |     struct unary_function
+    ##       |            ^~~~~~~~~~~~~~
+    ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:487:68: warning: 'template<class _Arg1, class _Arg2, class _Result> struct std::binary_function' is deprecated [-Wdeprecated-declarations]
+    ##   487 |     class const_mem_fun1_ref_t : public boost::functional::detail::binary_function<const T&, A, S>
+    ##       |                                                                    ^~~~~~~~~~~~~~~
+    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:131:12: note: declared here
+    ##   131 |     struct binary_function
+    ##       |            ^~~~~~~~~~~~~~~
+    ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:533:73: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+    ##   533 |     class pointer_to_unary_function : public boost::functional::detail::unary_function<Arg,Result>
+    ##       |
+
+    ##                                                                     ^~~~~~~~~~~~~~
+    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:117:12: note: declared here
+    ##   117 |     struct unary_function
+    ##       |            ^~~~~~~~~~~~~~
+    ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:557:74: warning: 'template<class _Arg1, class _Arg2, class _Result> struct std::binary_function' is deprecated [-Wdeprecated-declarations]
+    ##   557 |     class pointer_to_binary_function : public boost::functional::detail::binary_function<Arg1,Arg2,Result>
+    ##       |                                                                          ^~~~~~~~~~~~~~~
+    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:131:12: note: declared here
+    ##   131 |     struct binary_function
+    ##       |            ^~~~~~~~~~~~~~~
+
+    ## Running MCMC with 4 sequential chains, with 1 thread(s) per chain...
+    ## 
+    ## Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 finished in 0.5 seconds.
+    ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 finished in 0.5 seconds.
+    ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 3 finished in 0.5 seconds.
+    ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup) 
+    ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 4 finished in 0.5 seconds.
+    ## 
+    ## All 4 chains finished successfully.
+    ## Mean chain execution time: 0.5 seconds.
+    ## Total execution time: 2.6 seconds.
+
+``` r
+precis(m16.4)
+```
+
+    ##            mean         sd      5.5%      94.5%    n_eff    Rhat4
+    ## phi   0.8680203 0.04193043 0.8012109  0.9356208 618.1372 1.000643
+    ## k     5.9019393 0.55228010 5.0318401  6.7795463 572.2383 1.003013
+    ## theta 9.5977185 1.96029732 6.8070151 12.8980775 597.1028 1.004009
+
+``` r
+traceplot(m16.4)
+```
+
+![](chapter_16_notes_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
+
+``` r
+trankplot(m16.4)
+```
+
+![](chapter_16_notes_files/figure-gfm/unnamed-chunk-17-2.png)<!-- -->
+
+``` r
+post <- extract.samples(m16.4)
+plot(NULL, 
+     xlim = c(0, 1),
+     ylim = c(0, 1.5),
+     xlab = "age",
+     ylab = "nuts per second",
+     xaxt = "n")
+
+axis(1, at = at, labels = round(at*max(Panda_nuts$age)))
+
+# raw data
+pts <- dat_list$n/dat_list$seconds
+point_size <- normalize(dat_list$seconds)
+points(jitter(dat_list$age), pts, col = rangi2, lwd = 2, cex = point_size*3)
+
+# 30 posterior curves
+for (i in 1:30) {
+  with(
+    post,
+    curve(phi[i]*(1-exp(-k[i]*x))^theta[i], add = TRUE, col = grau())
+  )
+}
+```
+
+![](chapter_16_notes_files/figure-gfm/unnamed-chunk-18-1.png)<!-- -->
+
+- There’s still plenty of variation to explain, but it is leveling off
+  as expected around 12 in each posterior curve.
+
+### 16.3.3 Covariates and individual differences
+
+- This is a simple, but scientifically reasonable start of a model.
+- Extending additional covariates like sex, individual strength (repeat
+  observations for chimps), and even strength over time for an
+  individual could help.
+- Some model parameters make sense to scale by individual while others
+  do not. $\theta$, for example, is a feature of physics, not an
+  individual.
+
+## 16.4 Population dynamics

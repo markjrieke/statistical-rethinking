@@ -294,6 +294,212 @@ cat(Boxes_model_gender)
 cat(Boxes_model_age)
 ```
 
+### 16.2.4
+
+* The model above represents a larger class of model called the *state space model*, which assumes there are multiple hidden states that produce observations.
+* If states are discrete categories, it's sometimes called a *hidden Markov model*. 
+* Many time series models are state space models! Since the true state of the time series is not observed, only noisy measures.
+
+## 16.3 Ordinary differential nut cracking
+
+* Panda nuts are have been opened by humans for millenia using stone/steel tools. Other animals have a more difficult time, but chimpanzees on the Ivory Coast also use tools!
+
+```{r}
+data("Panda_nuts")
+str(Panda_nuts)
+```
+
+* Each row is an individual chimp/opening bout attempt. We're interested in the `nuts_opened`, the amount of time in the bout in `seconds`, and the chimp's `age`. 
+
+### 16.3.1 Scientific model
+
+* The simplest model from the scientific literature is still smarter than a GLM!
+* Let's say the only factor that matters is the chimp strength (which we'll say increases as a chimp ages).
+* We can model the rate of change in body mass at any given time, $t$, as a proportion of the maximum body mass $M_{\text{max}}$:
+
+$$
+\frac{\text{d}M}{\text{d}t} = k(M_{\text{max}} - M_t)
+$$
+
+* $k$ is the rate of skill gain with age, but now we need a formula for how fast mass changes at any given age.
+* We're not going to rehash differential equations, so here's the solution for this particular problem:
+
+$$
+M_t = M_{\text{max}}(1 - \exp(-kt))
+$$
+
+* This makes a decelerating curve that levels off at $M_{\text{max}}$.
+* We ultimately care about strength (not mass!). Let's say that strength is proportional to mass by a parameter $\beta$:
+
+$$
+S_t = \beta M_t
+$$
+
+* Finally, we need to relate strength to the rate of nut cracking. Strength could be proportional, but let's consider that it helps in three ways:
+  1. It lets the animal lift a heavier hammer, generating greater momentum.
+  2. It lets the animal accelerate the hammer faster than gravity.
+  3. Stronger animals also have longer limbs, which gives them more efficient levers.
+* Mathematically, this implies a function like:
+
+$$
+\begin{align*}
+\lambda & = \alpha S_t^{\theta} \\
+\lambda & = \alpha (\beta M_{\text{max}}(1 - \exp(-kt)))^{\theta}
+\end{align*}
+$$
+  
+* $\theta$ is some exponent greater than 1 and $\alpha$ is the proportionality of strength to nut opening. 
+* We can simplify this down by scaling $M_{\text{max}}$ to 1 (measurement scales are arbitrary!):
+
+$$
+\lambda = \alpha \beta^{\theta} (1 - \exp(-kt))^{\theta}
+$$
+* Finally, $\alpha \beta^{\theta}$ can be replaced with a single parameter:
+
+$$
+\lambda = \phi (1 - \exp(-kt))^{\theta}
+$$
+
+* This is a lot easier to work with! But it hides some useful facts, like the average adult mass differs for males and females.
+
+### 16.3.2 Statistical model
+
+* So long as the nut opening isn't limited by nut availability, the Poisson distribution gives the right constraints for our statistical model:
+
+$$
+\begin{align*}
+n_i & \sim \text{Poisson}(\lambda_i) \\
+\lambda_i & = d_i \phi(1 - \exp(-kt_i))^{\theta}
+\end{align*}
+$$
+
+* Here, $n_i$ is the number of nuts opened, $d_i$ is the duration spent openeing nuts, and $t_i$ is the individual's age.
+* What about priors? Here's some background:
+  * Chimpanzees tend to reach adult mass around 12 years old, so the prior growth curves need to plateau around 12 (by $k$ and $\theta$)
+  * The prior for $\phi$ should have a mean around the maximum rate of nut opening. Let's just say thats about 1 nut per second.
+* Altogether now,
+
+$$
+\begin{align*}
+n_i & \sim \text{Poisson}(\lambda_i) \\
+\lambda_i & = d_i \phi (1 - \exp(-kt_i))^{\theta} \\
+\phi & \sim \text{Log-Normal}(\log(1), 0.1) \\
+k & \sim \text{Log-Normal}(\log(2), 0.25) \\
+\theta & \sim \text{Log-Normal}(\log(5), 0.25)
+\end{align*}
+$$
+
+```{r}
+# simulate priors
+N <- 1e4
+phi <- rlnorm(N, log(1), 0.1)
+k <- rlnorm(N, log(2), 0.25)
+theta <- rlnorm(N, log(5), 0.25)
+
+# relative growth curve
+plot(NULL, 
+     xlim = c(0, 1.5),
+     ylim = c(0, 1),
+     xaxt = "n",
+     xlab = "age",
+     ylab = "body mass")
+
+at <- seq(from = 0, to = 1.5, by = 0.25)
+axis(1, at = at, labels = round(at * max(Panda_nuts$age)))
+for (i in 1:20) 
+  curve(1 - exp(-k[i]*x), add = TRUE, col = grau(), lwd = 1.5)
+
+# implied rate of nut opening curve
+plot(NULL,
+     xlim = c(0, 1.5),
+     ylim = c(0, 1.2),
+     xaxt = "n",
+     xlab = "age",
+     ylab = "nuts per second")
+
+axis(1, at = at, labels = round(at * max(Panda_nuts$age)))
+for (i in 1:20) 
+  curve(phi[i]*(1-exp(-k[i]*x))^theta[i], add = TRUE, col = grau(), lwd = 1.5)
+```
+
+* We can also inspect the parameter distributions:
+
+```{r}
+dens(phi)
+dens(k)
+dens(theta)
+```
+
+* Let's model:
+
+```{r}
+dat_list <-
+  list(
+    n = as.integer(Panda_nuts$nuts_opened),
+    age = Panda_nuts$age/max(Panda_nuts$age),
+    seconds = Panda_nuts$seconds
+  )
+
+m16.4 <-
+  ulam(
+    alist(
+      # model
+      n ~ poisson(lambda),
+      lambda <- seconds*phi*(1 - exp(-k*age))^theta,
+      
+      # priors
+      phi ~ lognormal(log(1), 0.1),
+      k ~ lognormal(log(2), 0.25),
+      theta ~ lognormal(log(5), 0.25)
+    ),
+    
+    data = dat_list,
+    chains = 4
+  )
+
+precis(m16.4)
+```
+
+```{r}
+traceplot(m16.4)
+trankplot(m16.4)
+```
+
+```{r}
+post <- extract.samples(m16.4)
+plot(NULL, 
+     xlim = c(0, 1),
+     ylim = c(0, 1.5),
+     xlab = "age",
+     ylab = "nuts per second",
+     xaxt = "n")
+
+axis(1, at = at, labels = round(at*max(Panda_nuts$age)))
+
+# raw data
+pts <- dat_list$n/dat_list$seconds
+point_size <- normalize(dat_list$seconds)
+points(jitter(dat_list$age), pts, col = rangi2, lwd = 2, cex = point_size*3)
+
+# 30 posterior curves
+for (i in 1:30) {
+  with(
+    post,
+    curve(phi[i]*(1-exp(-k[i]*x))^theta[i], add = TRUE, col = grau())
+  )
+}
+```
+
+* There's still plenty of variation to explain, but it is leveling off as expected around 12 in each posterior curve. 
+
+### 16.3.3 Covariates and individual differences
+
+* This is a simple, but scientifically reasonable start of a model.
+* Extending additional covariates like sex, individual strength (repeat observations for chimps), and even strength over time for an individual could help.
+* Some model parameters make sense to scale by individual while others do not. $\theta$, for example, is a feature of physics, not an individual. 
+
+## 16.4 Population dynamics
+
 
 
 
