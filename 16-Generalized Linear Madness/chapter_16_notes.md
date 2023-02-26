@@ -198,7 +198,7 @@ m16.1 <-
     ##                  from stan/lib/stan_math/stan/math/rev.hpp:10,
     ##                  from stan/lib/stan_math/stan/math.hpp:19,
     ##                  from stan/src/stan/model/model_header.hpp:4,
-    ##                  from C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.hpp:3:
+    ##                  from C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec46b17987.hpp:3:
     ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:180:45: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
     ##   180 |         : public boost::functional::detail::unary_function<typename unary_traits<Predicate>::argument_type,bool>
     ##       |                                             ^~~~~~~~~~~~~~
@@ -229,15 +229,13 @@ m16.1 <-
     ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:117:12: note: declared here
     ##   117 |     struct unary_function
     ##       |            ^~~~~~~~~~~~~~
-    ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:299:45: warning: 'template<cl
 
-    ## ass _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
+    ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:299:45: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
     ##   299 |         : public boost::functional::detail::unary_function<
     ##       |                                             ^~~~~~~~~~~~~~
     ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:117:12: note: declared here
     ##   117 |     struct unary_function
     ##       |            ^~~~~~~~~~~~~~
-
     ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:345:57: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
     ##   345 |     class mem_fun_t : public boost::functional::detail::unary_function<T*, S>
     ##       |                                                         ^~~~~~~~~~~~~~
@@ -255,15 +253,16 @@ m16.1 <-
     ##       |                                                               ^~~~~~~~~~~~~~
     ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:117:12: note: declared here
     ##   117 |     struct unary_function
-    ##       |            ^~~~~~~~~~~~~~
+    ##       |            ^~~
+
+    ## ~~~~~~~~~~~
     ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:393:64: warning: 'template<class _Arg1, class _Arg2, class _Result> struct std::binary_function' is deprecated [-Wdeprecated-declarations]
     ##   393 |     class const_mem_fun1_t : public boost::functional::detail::binary_function<const T*, A, S>
     ##       |                                                                ^~~~~~~~~~~~~~~
-    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:131:12: note:
-
-    ## declared here
+    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:131:12: note: declared here
     ##   131 |     struct binary_function
     ##       |            ^~~~~~~~~~~~~~~
+
     ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:438:61: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
     ##   438 |     class mem_fun_ref_t : public boost::functional::detail::unary_function<T&, S>
     ##       |                                                             ^~~~~~~~~~~~~~
@@ -284,10 +283,10 @@ m16.1 <-
     ##       |            ^~~~~~~~~~~~~~
     ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:487:68: warning: 'template<class _Arg1, class _Arg2, class _Result> struct std::binary_function' is deprecated [-Wdeprecated-declarations]
     ##   487 |     class const_mem_fun1_ref_t : public boost::functional::detail::binary_function<const T&, A, S>
-    ##       |
+    ##       |                                                                    ^~~~~~~~~~~~~~~
+    ## C:/rtools42/ucrt64/include/c++/12.2.0/bi
 
-    ##                             ^~~~~~~~~~~~~~~
-    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:131:12: note: declared here
+    ## ts/stl_function.h:131:12: note: declared here
     ##   131 |     struct binary_function
     ##       |            ^~~~~~~~~~~~~~~
     ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:533:73: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
@@ -299,7 +298,6 @@ m16.1 <-
     ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:557:74: warning: 'template<class _Arg1, class _Arg2, class _Result> struct std::binary_function' is deprecated [-Wdeprecated-declarations]
     ##   557 |     class pointer_to_binary_function : public boost::functional::detail::binary_function<Arg1,Arg2,Result>
     ##       |                                                                          ^~~~~~~~~~~~~~~
-
     ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:131:12: note: declared here
     ##   131 |     struct binary_function
     ##       |            ^~~~~~~~~~~~~~~
@@ -310,7 +308,7 @@ m16.1 <-
 
     ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 1 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+    ## Chain 1 Exception: lognormal_lpdf: Location parameter[1] is inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec46b17987.stan', line 23, column 4 to column 32)
 
     ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -320,7 +318,7 @@ m16.1 <-
 
     ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 1 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+    ## Chain 1 Exception: lognormal_lpdf: Location parameter[1] is inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec46b17987.stan', line 23, column 4 to column 32)
 
     ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -330,7 +328,7 @@ m16.1 <-
 
     ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 1 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+    ## Chain 1 Exception: lognormal_lpdf: Location parameter[1] is inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec46b17987.stan', line 23, column 4 to column 32)
 
     ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -340,7 +338,7 @@ m16.1 <-
 
     ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 1 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+    ## Chain 1 Exception: lognormal_lpdf: Location parameter[1] is inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec46b17987.stan', line 23, column 4 to column 32)
 
     ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -350,17 +348,7 @@ m16.1 <-
 
     ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 1 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
-
-    ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
-
-    ## Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
-
-    ## Chain 1
-
-    ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
-
-    ## Chain 1 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+    ## Chain 1 Exception: lognormal_lpdf: Location parameter[1] is inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec46b17987.stan', line 23, column 4 to column 32)
 
     ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -372,67 +360,7 @@ m16.1 <-
 
     ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 2 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
-
-    ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
-
-    ## Chain 2 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
-
-    ## Chain 2
-
-    ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
-
-    ## Chain 2 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
-
-    ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
-
-    ## Chain 2 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
-
-    ## Chain 2
-
-    ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
-
-    ## Chain 2 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
-
-    ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
-
-    ## Chain 2 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
-
-    ## Chain 2
-
-    ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
-
-    ## Chain 2 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
-
-    ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
-
-    ## Chain 2 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
-
-    ## Chain 2
-
-    ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
-
-    ## Chain 2 Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
-
-    ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
-
-    ## Chain 2 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
-
-    ## Chain 2
-
-    ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
-
-    ## Chain 2 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
-
-    ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
-
-    ## Chain 2 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
-
-    ## Chain 2
-
-    ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
-
-    ## Chain 2 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+    ## Chain 2 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec46b17987.stan', line 23, column 4 to column 32)
 
     ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -444,37 +372,7 @@ m16.1 <-
 
     ## Chain 3 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 3 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
-
-    ## Chain 3 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
-
-    ## Chain 3 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
-
-    ## Chain 3
-
-    ## Chain 3 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
-
-    ## Chain 3 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
-
-    ## Chain 3 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
-
-    ## Chain 3 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
-
-    ## Chain 3
-
-    ## Chain 3 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
-
-    ## Chain 3 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
-
-    ## Chain 3 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
-
-    ## Chain 3 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
-
-    ## Chain 3
-
-    ## Chain 3 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
-
-    ## Chain 3 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+    ## Chain 3 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec46b17987.stan', line 23, column 4 to column 32)
 
     ## Chain 3 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -486,7 +384,7 @@ m16.1 <-
 
     ## Chain 4 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 4 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+    ## Chain 4 Exception: lognormal_lpdf: Location parameter[1] is inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec46b17987.stan', line 23, column 4 to column 32)
 
     ## Chain 4 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -496,7 +394,7 @@ m16.1 <-
 
     ## Chain 4 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 4 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+    ## Chain 4 Exception: lognormal_lpdf: Location parameter[1] is inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec46b17987.stan', line 23, column 4 to column 32)
 
     ## Chain 4 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -506,7 +404,7 @@ m16.1 <-
 
     ## Chain 4 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 4 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+    ## Chain 4 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec46b17987.stan', line 23, column 4 to column 32)
 
     ## Chain 4 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -516,7 +414,7 @@ m16.1 <-
 
     ## Chain 4 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
 
-    ## Chain 4 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d1943af.stan', line 23, column 4 to column 32)
+    ## Chain 4 Exception: lognormal_lpdf: Location parameter[1] is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec46b17987.stan', line 23, column 4 to column 32)
 
     ## Chain 4 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
 
@@ -524,67 +422,67 @@ m16.1 <-
 
     ## Chain 4
 
-    ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
-    ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
-    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
-    ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
     ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
     ## Chain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) 
-    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
-    ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
     ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
     ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
     ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
     ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
-    ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
-    ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
-    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
-    ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
-    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
-    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
-    ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
-    ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
-    ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
-    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
-    ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
-    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
-    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
-    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
-    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
     ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
-    ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 4 finished in 22.9 seconds.
-    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 23.2 seconds.
-    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
     ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
-    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 25.0 seconds.
+    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 finished in 15.6 seconds.
+    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 3 finished in 26.8 seconds.
+    ## Chain 3 finished in 16.7 seconds.
+    ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 4 finished in 18.2 seconds.
+    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 finished in 18.5 seconds.
     ## 
     ## All 4 chains finished successfully.
-    ## Mean chain execution time: 24.5 seconds.
-    ## Total execution time: 27.1 seconds.
+    ## Mean chain execution time: 17.2 seconds.
+    ## Total execution time: 18.7 seconds.
 
 ``` r
 precis(m16.1)
 ```
 
-    ##            mean          sd      5.5%      94.5%    n_eff    Rhat4
-    ## p     0.2435150 0.054835211 0.1659921  0.3401105 400.7883 1.005701
-    ## k     5.8903003 2.669356512 2.6112055 10.9251055 501.8811 1.004705
-    ## sigma 0.2063677 0.006515093 0.1966451  0.2172446 417.7769 1.003088
+    ##            mean          sd      5.5%      94.5%    n_eff     Rhat4
+    ## p     0.2474007 0.058551240 0.1676814  0.3526888 374.5334 1.0131517
+    ## k     5.7557557 2.627144225 2.4271712 10.7201760 348.8055 1.0128950
+    ## sigma 0.2065371 0.006334802 0.1963671  0.2169438 743.4989 0.9989348
 
 - The non-identifiability of $p$ and $k$ means that we get a strong
   correlation in the parameters:
@@ -840,12 +738,12 @@ m16.2 <-
   )
 ```
 
-    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42244bd61faa.stan', line 4, column 4: Declaration
+    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ecc0ca88.stan', line 4, column 4: Declaration
     ##     of arrays by placing brackets after a variable name is deprecated and
     ##     will be removed in Stan 2.32.0. Instead use the array keyword before the
     ##     type. This can be changed automatically using the auto-format flag to
     ##     stanc
-    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42244bd61faa.stan', line 5, column 4: Declaration
+    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ecc0ca88.stan', line 5, column 4: Declaration
     ##     of arrays by placing brackets after a variable name is deprecated and
     ##     will be removed in Stan 2.32.0. Instead use the array keyword before the
     ##     type. This can be changed automatically using the auto-format flag to
@@ -860,8 +758,8 @@ m16.2 <-
     ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
     ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup) 
-    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
     ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
     ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
@@ -887,15 +785,15 @@ m16.2 <-
     ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
     ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 1 finished in 8.2 seconds.
-    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 finished in 7.1 seconds.
     ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
-    ## Chain 2 finished in 8.5 seconds.
-    ## Chain 3 finished in 8.4 seconds.
+    ## Chain 3 finished in 7.2 seconds.
+    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 finished in 7.4 seconds.
     ## 
     ## All 3 chains finished successfully.
-    ## Mean chain execution time: 8.3 seconds.
-    ## Total execution time: 8.7 seconds.
+    ## Mean chain execution time: 7.2 seconds.
+    ## Total execution time: 7.7 seconds.
 
 ``` r
 # marginal posterior
@@ -1221,7 +1119,7 @@ m16.4 <-
     ##                  from stan/lib/stan_math/stan/math/rev.hpp:10,
     ##                  from stan/lib/stan_math/stan/math.hpp:19,
     ##                  from stan/src/stan/model/model_header.hpp:4,
-    ##                  from C:/Users/E1735399/AppData/Local/Temp/RtmpS2rwHY/model-42246d7477d2.hpp:3:
+    ##                  from C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec3f4f2b6e.hpp:3:
     ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:180:45: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
     ##   180 |         : public boost::functional::detail::unary_function<typename unary_traits<Predicate>::argument_type,bool>
     ##       |                                             ^~~~~~~~~~~~~~
@@ -1260,13 +1158,13 @@ m16.4 <-
     ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:117:12: note: declared here
     ##   117 |     struct unary_function
     ##       |            ^~~~~~~~~~~~~~
+
     ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:345:57: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
     ##   345 |     class mem_fun_t : public boost::functional::detail::unary_function<T*, S>
     ##       |                                                         ^~~~~~~~~~~~~~
     ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:117:12: note: declared here
     ##   117 |     struct unary_function
     ##       |            ^~~~~~~~~~~~~~
-
     ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:361:58: warning: 'template<class _Arg1, class _Arg2, class _Result> struct std::binary_function' is deprecated [-Wdeprecated-declarations]
     ##   361 |     class mem_fun1_t : public boost::functional::detail::binary_function<T*, A, S>
     ##       |                                                          ^~~~~~~~~~~~~~~
@@ -1282,15 +1180,15 @@ m16.4 <-
     ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:393:64: warning: 'template<class _Arg1, class _Arg2, class _Result> struct std::binary_function' is deprecated [-Wdeprecated-declarations]
     ##   393 |     class const_mem_fun1_t : public boost::functional::detail::binary_function<const T*, A, S>
     ##       |                                                                ^~~~~~~~~~~~~~~
-    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:131:12: note: declared here
+    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:131:12: note:
+
+    ## declared here
     ##   131 |     struct binary_function
     ##       |            ^~~~~~~~~~~~~~~
     ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:438:61: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
     ##   438 |     class mem_fun_ref_t : public boost::functional::detail::unary_function<T&, S>
     ##       |                                                             ^~~~~~~~~~~~~~
-    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:117:
-
-    ## 12: note: declared here
+    ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:117:12: note: declared here
     ##   117 |     struct unary_function
     ##       |            ^~~~~~~~~~~~~~
     ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:454:62: warning: 'template<class _Arg1, class _Arg2, class _Result> struct std::binary_function' is deprecated [-Wdeprecated-declarations]
@@ -1307,15 +1205,15 @@ m16.4 <-
     ##       |            ^~~~~~~~~~~~~~
     ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:487:68: warning: 'template<class _Arg1, class _Arg2, class _Result> struct std::binary_function' is deprecated [-Wdeprecated-declarations]
     ##   487 |     class const_mem_fun1_ref_t : public boost::functional::detail::binary_function<const T&, A, S>
-    ##       |                                                                    ^~~~~~~~~~~~~~~
+    ##       |
+
+    ##                             ^~~~~~~~~~~~~~~
     ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:131:12: note: declared here
     ##   131 |     struct binary_function
     ##       |            ^~~~~~~~~~~~~~~
     ## stan/lib/stan_math/lib/boost_1.78.0/boost/functional.hpp:533:73: warning: 'template<class _Arg, class _Result> struct std::unary_function' is deprecated [-Wdeprecated-declarations]
     ##   533 |     class pointer_to_unary_function : public boost::functional::detail::unary_function<Arg,Result>
-    ##       |
-
-    ##                                                                     ^~~~~~~~~~~~~~
+    ##       |                                                                         ^~~~~~~~~~~~~~
     ## C:/rtools42/ucrt64/include/c++/12.2.0/bits/stl_function.h:117:12: note: declared here
     ##   117 |     struct unary_function
     ##       |            ^~~~~~~~~~~~~~
@@ -1383,7 +1281,7 @@ m16.4 <-
     ## 
     ## All 4 chains finished successfully.
     ## Mean chain execution time: 0.5 seconds.
-    ## Total execution time: 2.6 seconds.
+    ## Total execution time: 2.8 seconds.
 
 ``` r
 precis(m16.4)
@@ -1447,3 +1345,942 @@ for (i in 1:30) {
   individual.
 
 ## 16.4 Population dynamics
+
+- The population of lynx and hares in a shared environment fluctuate
+  over time. The number of each at any given point in time influence the
+  numbers in the near future.
+- Here, we’ll model a *time series* of hare and lynx populations.
+
+``` r
+data("Lynx_Hare")
+str(Lynx_Hare)
+```
+
+    ## 'data.frame':    21 obs. of  3 variables:
+    ##  $ Year: int  1900 1901 1902 1903 1904 1905 1906 1907 1908 1909 ...
+    ##  $ Lynx: num  4 6.1 9.8 35.2 59.4 41.7 19 13 8.3 9.1 ...
+    ##  $ Hare: num  30 47.2 70.2 77.4 36.3 20.6 18.1 21.4 22 25.4 ...
+
+``` r
+plot(1:21,
+     Lynx_Hare[,3],
+     ylim = c(0, 90),
+     xlab = "year",
+     ylab = "thousands of pelts",
+     xaxt = "n",
+     type = "l",
+     lwd = 1.5)
+
+at <- c(1, 11, 21)
+axis(1, at = at, labels = Lynx_Hare$Year[at])
+lines(1:21, Lynx_Hare[,2], lwd = 1.5, col = rangi2)
+points(1:21, Lynx_Hare[,3], bg = "black", col = "white", pch = 21, cex = 1.4)
+points(1:21, Lynx_Hare[,2], bg = rangi2, col = "white", pch = 21, cex = 1.4)
+text(17, 80, "Lepus", pos = 2)
+text(19, 50, "Lynx", pos = 2, col = rangi2)
+```
+
+![](chapter_16_notes_files/figure-gfm/unnamed-chunk-19-1.png)<!-- -->
+
+- A common (geocentric) way to model a time series would be to use
+  something like an *autoregressive model*.
+- In an autoregressive model, the value of the outcome is predicted by
+  the previous time step using a *lag variable* as a predictor.
+- For example, the average number of hares at time $t$ might be modeled
+  as:
+
+$$
+\text{E}(H_t) = \alpha + \beta_1 H_{t-1}
+$$
+
+- Here $H_t$ is the number of hares at time $t$ and if $\beta_1$ is less
+  than 1, the hares tend to regress towards some mean population
+  $\alpha$.
+- We can also add a lag variable for the predator in the previous time
+  period, $L_{t-1}$:
+
+$$
+\text{E}(H_t) = \alpha + \beta_1 H_{t-1} + \beta_2 L_{t-1}
+$$
+
+- Some folks even add deeper lags, e.g.:
+
+$$
+\text{E}(H_t) = \alpha + \beta_1 H_{t-1} + \beta_2 L_{t-1} + \beta_3 H_{t-2} + \beta_4 L_{t-2} + \dots
+$$
+
+- Here, the most recent population predicts the present, but so too does
+  the population size two time periods ago!
+- Autoregressive models get used often, but there are some famous
+  problems with them (McElreath says they are “surely generalized linear
+  madness”).
+- Firstly, nothing that happened two time periods ago can influence the
+  present directly, so a lag beyond one time period doesn’t really make
+  causal sense. Even if there are causal influences that are slow to
+  act, this means you need a different predictor, not that you should
+  allow the distant past to influence the present.
+- Secondly, if the state of the system $H_t$ and $L_t$ are measured with
+  error, then the model is propagating that error. We really want to
+  estimate the real, unobserved $H_{t-1}$ that influences $H_t$, not the
+  observed $H_{t-1}$. What we really need is a *state space model*.
+- Thirdly, in most cases, there is no biological, economic, or physical
+  interpretation of the parameters. It implies that when there are no
+  hares, $H_{t-1} = 0$, that there can still be $\alpha$ hares in the
+  next period!
+- If all you care about is forecasting, then these sometimes do okay.
+  But often these models don’t even make good forecasts, because getting
+  the future right depends on a decent causal model.
+- If we use a little science and incorporate the ecological model of
+  population dynamics into a set of *ordinary differential equations*,
+  we may be able to fit something sensible.
+
+### 16.4.1 The scientific model
+
+- The hare population reproduces at a rate that depends upon the plants
+  and shrinks at a rate dependent on the predators. The rate of change
+  of the hares could then be:
+
+$$
+\frac{\text{d}H}{\text{d}t} = H_t \times \text{(birth rate)} - H_t \times \text{(death rate)}
+$$
+
+- Everything is multiplied by $H_t$ because if there are no hares then
+  there can be no births or deaths!
+- Let’s call the *per capita* birth and death (mortality) rates $b_H$
+  and $m_H$:
+
+$$
+\frac{\text{d}H}{\text{d}t} = H_tb_H - H_tm_H = H_t(b_H - m_H)
+$$
+
+- The *per capita* growth rate is the difference between the birth and
+  death rate — this is a basic “first law” of ecology.
+- We can also modify the mortality rate to depend on the number of lynx
+  at time $t$, $L_t$. Similar (but inverse) logic can give us an
+  equation for the rate of change of the lynx population:
+
+$$
+\begin{align*}
+\frac{\text{d}H}{\text{d}t} & = H_t(b_H - L_tm_H) \\
+\frac{\text{d}L}{\text{d}t} & = L_t(H_tb_L - m_L)
+\end{align*}
+$$
+
+- Now we have a model of population dynamics, where the species are
+  coupled by a pair of ODEs! This model is too simple to be realistic,
+  but let’s see how far we can get with this simple, yet famous
+  *Lotka-Volterra model*.
+- In the previous section, we could have explicitly solved the ODE, but
+  here, we *have* to use simulation as there is no explicit solution for
+  $H_t$/$L_t$.
+- Our model for $H_t$ can update itself based on the differential
+  equation and a small timestep $\text{d}t$:
+
+$$
+\begin{align*}
+H_{t+\text{d}t} & = H_t + \text{d}t\frac{\text{d}H}{\text{d}t} \\
+& = H_t + \text{d}t H_t(b_H - L_tm_H)
+\end{align*}
+$$
+
+- We need to be careful and choose $\text{d}t$ to be small enough to
+  approximate continuous time (otherwise our computer will have trouble
+  estimating).
+- Let’s simulate some population dynamics prior to fitting a model:
+
+``` r
+sim_lynx_hare <- function(n_steps = 1e4, init = as.numeric(Lynx_Hare[1, 2:3]), theta, dt = 0.002) {
+  
+  L <- rep(NA, n_steps)
+  H <- rep(NA, n_steps)
+  L[1] <- init[1]
+  H[1] <- init[2]
+  for (i in 2:n_steps) {
+    H[i] <- H[i-1] + dt*H[i-1]*(theta[1] - theta[2]*L[i-1])
+    L[i] <- L[i-1] + dt*L[i-1]*(theta[3]*H[i-1] - theta[4])
+  }
+  
+  z <- cbind(L,H)
+  plot(z[,2],
+       type = "l",
+       ylim = c(0, max(z[,2])),
+       lwd = 2, 
+       xaxt = "n")
+  lines(z[,1], col = rangi2, lwd = 2)
+  mtext("time", 1)
+  
+}
+
+theta <- c(0.5, 0.05, 0.025, 0.5)
+sim_lynx_hare(theta = theta)
+```
+
+![](chapter_16_notes_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+
+``` r
+sim_lynx_hare(theta = c(1, 1, 1, 1))
+```
+
+![](chapter_16_notes_files/figure-gfm/unnamed-chunk-20-2.png)<!-- -->
+
+``` r
+sim_lynx_hare(theta = c(0.5, 0.01, 0.01, 0.25))
+```
+
+![](chapter_16_notes_files/figure-gfm/unnamed-chunk-20-3.png)<!-- -->
+
+- This model produces cycles similar to what we see in the data.
+  Importantly, the populations can decline to 0!
+
+### 16.4.2 The statistical model
+
+- Now, we need to connect the ecological model to observed data.
+- We never actually observe *all* hares and lynx(es?), we just have
+  partial samples.
+- If $H_t$ and $L_t$ are the *actual* number of hares and lynx, then
+  lets say $h_t$ and $l_t$ are the *observed* number of hares and lynx.
+- $H_t$ and $L_t$ *cause* things, but $h_t$ and $l_t$ *do not*.
+- We’ll also need to define an error distribution for the observation
+  process. Let’s try to think about the process that generates the
+  observational data.
+- Firstly, hares are trapped.
+- Secondly, Let’s say each hare is trapped with a probability that can
+  vary over time $p_t$.
+- Thirdly, in this dataset, the *actual* number of pelts were rounded to
+  the nearest 100 and divided by 1000, so they’re not exact counts.
+  Messy.
+- Let’s simulate an example of $H_t = 10^4$, with a trapping rate of
+  $p_t \sim \text{Beta}(2, 18)$ (about 10% on average). Our
+  observational data might look like:
+
+``` r
+N <- 1e4
+Ht <- 1e4
+p <- rbeta(N, 2, 18)
+h <- rbinom(N, size = Ht, prob = p)
+h <- round(h/1000, 2)
+dens(h, xlab = "thousands of pelts", lwd = 2)
+```
+
+![](chapter_16_notes_files/figure-gfm/unnamed-chunk-21-1.png)<!-- -->
+
+- There are several reasonable ways to approximate this distribution,
+  though the log-normal gets the right skew:
+
+$$
+h_t \sim \text{Log-Normal}(\log(pH_t), \sigma_H)
+$$
+
+- McElreath notes that there’s not a good way to estimate $p$ without
+  lots and lots of data, so we’ll just fix it using a strong prior.
+- We’ll also ignore the rounding error for now, since it’s at most
+  50/4000 pelts (or 1.25%).
+- All together, the full statistical model:
+
+$$
+\begin{align*}
+h_t & \sim \text{Log-Normal}(\log(p_HH_t), \sigma_H) \\
+l_t & \sim \text{Log-Normal}(\log(p_LL_t), \sigma_L) \\
+H_1 & \sim \text{Log-Normal}(\log 10, 1) \\
+L_1 & \sim \text{Log-Normal}(\log 10, 1) \\
+H_{T > 1} & = H_1 + \int_1^T H_t(b_H - m_HL_t)\text{d}t \\
+L_{T > 1} & = L_1 + \int_1^T L_t(b_LH_t - m_L)\text{d}t \\
+\sigma_H & \sim \text{Exponential}(1) \\
+\sigma_L & \sim \text{Exponential}(1) \\
+p_H & \sim \text{Beta}(\alpha_H, \beta_H) \\
+p_L & \sim \text{Beta}(\alpha_L, \beta_L) \\
+b_H & \sim \text{Half-Normal}(1, 0.5) \\
+b_L & \sim \text{Half-Normal}(0.05, 0.05) \\
+m_H & \sim \text{Half-Normal}(0.05, 0.05) \\
+m_L & \sim \text{Half-Normal}(1, 0.5)
+\end{align*}
+$$
+
+- Now we’re ready to start putting together the code — the obstacle is
+  computing $H_t$ and $L_t$ for each time $t$. The differential equation
+  defines these variables, but the sampler needs to solve them on each
+  iteration, so we need to write integration into the model.
+- Fortunately, Stan has functions for solving differential equations.
+
+``` r
+data("Lynx_Hare_model")
+cat(Lynx_Hare_model)
+```
+
+    ## functions {
+    ##   real[] dpop_dt( real t,                 // time
+    ##                 real[] pop_init,          // initial state {lynx, hares}
+    ##                 real[] theta,             // parameters
+    ##                 real[] x_r, int[] x_i) {  // unused
+    ##     real L = pop_init[1];
+    ##     real H = pop_init[2];
+    ##     real bh = theta[1];
+    ##     real mh = theta[2];
+    ##     real ml = theta[3];
+    ##     real bl = theta[4];
+    ##     // differential equations
+    ##     real dH_dt = (bh - mh * L) * H;
+    ##     real dL_dt = (bl * H - ml) * L;
+    ##     return { dL_dt , dH_dt };
+    ##   }
+    ## }
+    ## data {
+    ##   int<lower=0> N;              // number of measurement times
+    ##   real<lower=0> pelts[N,2];    // measured populations
+    ## }
+    ## transformed data{
+    ##   real times_measured[N-1];    // N-1 because first time is initial state
+    ##   for ( i in 2:N ) times_measured[i-1] = i;
+    ## }
+    ## parameters {
+    ##   real<lower=0> theta[4];      // { bh, mh, ml, bl }
+    ##   real<lower=0> pop_init[2];   // initial population state
+    ##   real<lower=0> sigma[2];      // measurement errors
+    ##   real<lower=0,upper=1> p[2];  // trap rate
+    ## }
+    ## transformed parameters {
+    ##   real pop[N, 2];
+    ##   pop[1,1] = pop_init[1];
+    ##   pop[1,2] = pop_init[2];
+    ##   pop[2:N,1:2] = integrate_ode_rk45(
+    ##     dpop_dt, pop_init, 0, times_measured, theta,
+    ##     rep_array(0.0, 0), rep_array(0, 0),
+    ##     1e-5, 1e-3, 5e2);
+    ## }
+    ## model {
+    ##   // priors
+    ##   theta[{1,3}] ~ normal( 1 , 0.5 );    // bh,ml
+    ##   theta[{2,4}] ~ normal( 0.05, 0.05 ); // mh,bl
+    ##   sigma ~ exponential( 1 );
+    ##   pop_init ~ lognormal( log(10) , 1 );
+    ##   p ~ beta(40,200);
+    ##   // observation model
+    ##   // connect latent population state to observed pelts
+    ##   for ( t in 1:N )
+    ##     for ( k in 1:2 )
+    ##       pelts[t,k] ~ lognormal( log(pop[t,k]*p[k]) , sigma[k] );
+    ## }
+    ## generated quantities {
+    ##   real pelts_pred[N,2];
+    ##   for ( t in 1:N )
+    ##     for ( k in 1:2 )
+    ##       pelts_pred[t,k] = lognormal_rng( log(pop[t,k]*p[k]) , sigma[k] );
+    ## }
+
+- McElreath prewrote the full Stan model — note the `functions` block.
+  This is where he’s place the function to compute the values of the
+  differential equations.
+- The actual solving takes place in the `transformed parameters` block,
+  where the stan function `integrate_ode_rk45` gets put to work and
+  stores the results in a matrix `pop`. Find more detail in the Stan
+  maunal
+  [here](https://mc-stan.org/docs/functions-reference/functions-old-ode-solver.html#non-stiff-solver-1).
+- The rest of the model is pretty ordinary (el-oh-el) and we get
+  posterior predictive simulations from the `generated quantities`
+  block.
+
+``` r
+dat_list <-
+  list(
+    N = nrow(Lynx_Hare),
+    pelts = Lynx_Hare[,2:3]
+  )
+
+m16.5 <-
+  stan(
+    model_code = Lynx_Hare_model,
+    data = dat_list,
+    chains = 4,
+    cores = 4,
+    control = list(adapt_delta = 0.95)
+  )
+```
+
+    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 2, column 2: Declaration
+    ##     of arrays by placing brackets after a type is deprecated and will be
+    ##     removed in Stan 2.32.0. Instead use the array keyword before the type.
+    ##     This can be changed automatically using the auto-format flag to stanc
+    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 3, column 16: Declaration
+    ##     of arrays by placing brackets after a type is deprecated and will be
+    ##     removed in Stan 2.32.0. Instead use the array keyword before the type.
+    ##     This can be changed automatically using the auto-format flag to stanc
+    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 4, column 16: Declaration
+    ##     of arrays by placing brackets after a type is deprecated and will be
+    ##     removed in Stan 2.32.0. Instead use the array keyword before the type.
+    ##     This can be changed automatically using the auto-format flag to stanc
+    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 5, column 16: Declaration
+    ##     of arrays by placing brackets after a type is deprecated and will be
+    ##     removed in Stan 2.32.0. Instead use the array keyword before the type.
+    ##     This can be changed automatically using the auto-format flag to stanc
+    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 5, column 28: Declaration
+    ##     of arrays by placing brackets after a type is deprecated and will be
+    ##     removed in Stan 2.32.0. Instead use the array keyword before the type.
+    ##     This can be changed automatically using the auto-format flag to stanc
+    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 20, column 2: Declaration
+    ##     of arrays by placing brackets after a variable name is deprecated and
+    ##     will be removed in Stan 2.32.0. Instead use the array keyword before the
+    ##     type. This can be
+
+    ##  changed automatically using the auto-format flag to
+    ##     stanc
+    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 23, column 2: Declaration
+    ##     of arrays by placing brackets after a variable name is deprecated and
+    ##     will be removed in Stan 2.32.0. Instead use the array keyword before the
+    ##     type. This can be changed automatically using the auto-format flag to
+    ##     stanc
+    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 27, column 2: Declaration
+    ##     of arrays by placing brackets after a variable name is deprecated and
+    ##     will be removed in Stan 2.32.0. Instead use the array keyword before the
+    ##     type. This can be changed automatically using the auto-format flag to
+    ##     stanc
+    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 28, column 2: Declaration
+    ##     of arrays by placing brackets after a variable name is deprecated and
+    ##     will be removed in Stan 2.32.0. Instead use the array keyword before the
+    ##     type. This can be changed automatically using the auto-format flag to
+    ##     stanc
+    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 29, column 2: Declaration
+    ##     of arrays by placing brackets after a variable name is deprecated and
+    ##     will be removed in Stan 2.32.0. Instead use the array keyword before the
+    ##     type. This can be changed automatically using the auto-format flag to
+    ##     stanc
+    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 30, column 2: Declaration
+    ##     of arrays by placing brackets after a variable name is deprecated and
+    ##     will be removed in Stan 2.32.0. Instead use the array keyword before the
+    ##     type. This can be changed automatically using the auto-format flag to
+    ##     stanc
+    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 33, column 2: Declaration
+    ##     of arrays by placing brackets afte
+
+    ## r a variable name is deprecated and
+    ##     will be removed in Stan 2.32.0. Instead use the array keyword before the
+    ##     type. This can be changed automatically using the auto-format flag to
+    ##     stanc
+    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 55, column 2: Declaration
+    ##     of arrays by placing brackets after a variable name is deprecated and
+    ##     will be removed in Stan 2.32.0. Instead use the array keyword before the
+    ##     type. This can be changed automatically using the auto-format flag to
+    ##     stanc
+    ## Warning in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 36, column 17: integrate_ode_rk45
+    ##     is deprecated and will be removed in Stan 3.0. Use ode_rk45 instead. 
+    ##     The new interface is slightly different, see:
+    ##     https://mc-stan.org/users/documentation/case-studies/convert_odes.html
+
+    ## Running MCMC with 4 parallel chains...
+
+    ## Chain 1 Rejecting initial value:
+
+    ## Chain 1   Error evaluating the log probability at the initial value.
+
+    ## Chain 1 Exception: lognormal_lpdf: Location parameter is nan, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+    ## Chain 1 Exception: lognormal_lpdf: Location parameter is nan, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 1 Iteration:   1 / 1000 [  0%]  (Warmup)
+
+    ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 1 Exception: integrate_ode_rk45: initial state[2] is inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 36, column 2 to line 39, column 21)
+
+    ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 1
+
+    ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 1 Exception: integrate_ode_rk45: initial state[2] is inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 36, column 2 to line 39, column 21)
+
+    ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 1
+
+    ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 1 Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 1
+
+    ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 1 Exception: lognormal_lpdf: Location parameter is nan, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 1
+
+    ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 1 Exception: lognormal_lpdf: Location parameter is nan, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 1
+
+    ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 1 Exception: integrate_ode_rk45:  Failed to integrate to next output time (2) in less than max_num_steps steps (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 36, column 2 to line 39, column 21)
+
+    ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 1
+
+    ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 1 Exception: integrate_ode_rk45: initial state[1] is inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 36, column 2 to line 39, column 21)
+
+    ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 1
+
+    ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 1 Exception: integrate_ode_rk45:  Failed to integrate to next output time (2) in less than max_num_steps steps (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 36, column 2 to line 39, column 21)
+
+    ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 1
+
+    ## Chain 2 Rejecting initial value:
+
+    ## Chain 2   Error evaluating the log probability at the initial value.
+
+    ## Chain 2 Exception: lognormal_lpdf: Location parameter is nan, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+    ## Chain 2 Exception: lognormal_lpdf: Location parameter is nan, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 1 Exception: lognormal_lpdf: Location parameter is nan, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 1
+
+    ## Chain 2 Iteration:   1 / 1000 [  0%]  (Warmup)
+
+    ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 2 Exception: integrate_ode_rk45:  Failed to integrate to next output time (2) in less than max_num_steps steps (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 36, column 2 to line 39, column 21)
+
+    ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 2 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 2
+
+    ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 2 Exception: integrate_ode_rk45:  Failed to integrate to next output time (2) in less than max_num_steps steps (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 36, column 2 to line 39, column 21)
+
+    ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 2 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 2
+
+    ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 2 Exception: lognormal_lpdf: Location parameter is nan, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 2 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 2
+
+    ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 2 Exception: lognormal_lpdf: Location parameter is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 2 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 2
+
+    ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 2 Exception: lognormal_lpdf: Location parameter is nan, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 2 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 2
+
+    ## Chain 3 Rejecting initial value:
+
+    ## Chain 3   Error evaluating the log probability at the initial value.
+
+    ## Chain 3 Exception: lognormal_lpdf: Location parameter is nan, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+    ## Chain 3 Exception: lognormal_lpdf: Location parameter is nan, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 3 Iteration:   1 / 1000 [  0%]  (Warmup)
+
+    ## Chain 3 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 3 Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 3 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 3 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 3
+
+    ## Chain 3 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 3 Exception: lognormal_lpdf: Scale parameter is inf, but must be positive finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 3 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 3 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 3
+
+    ## Chain 3 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 3 Exception: lognormal_lpdf: Location parameter is nan, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 3 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 3 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 3
+
+    ## Chain 3 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 3 Exception: integrate_ode_rk45:  Failed to integrate to next output time (2) in less than max_num_steps steps (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 36, column 2 to line 39, column 21)
+
+    ## Chain 3 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 3 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 3
+
+    ## Chain 3 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 3 Exception: integrate_ode_rk45:  Failed to integrate to next output time (2) in less than max_num_steps steps (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 36, column 2 to line 39, column 21)
+
+    ## Chain 3 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 3 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 3
+
+    ## Chain 3 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 3 Exception: lognormal_lpdf: Location parameter is nan, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 3 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 3 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 3
+
+    ## Chain 3 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 3 Exception: lognormal_lpdf: Location parameter is nan, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 3 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 3 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 3
+
+    ## Chain 3 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 3 Exception: lognormal_lpdf: Location parameter is -inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 3 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 3 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 3
+
+    ## Chain 4 Iteration:   1 / 1000 [  0%]  (Warmup)
+
+    ## Chain 4 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 4 Exception: integrate_ode_rk45: ode parameters and data[1] is inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 36, column 2 to line 39, column 21)
+
+    ## Chain 4 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 4 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 4
+
+    ## Chain 4 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 4 Exception: integrate_ode_rk45: ode parameters and data[1] is inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 36, column 2 to line 39, column 21)
+
+    ## Chain 4 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 4 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 4
+
+    ## Chain 4 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 4 Exception: integrate_ode_rk45: ode parameters and data[3] is inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 36, column 2 to line 39, column 21)
+
+    ## Chain 4 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 4 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 4
+
+    ## Chain 4 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 4 Exception: lognormal_lpdf: Location parameter is nan, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 4 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 4 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 4
+
+    ## Chain 4 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 4 Exception: integrate_ode_rk45:  Failed to integrate to next output time (2) in less than max_num_steps steps (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 36, column 2 to line 39, column 21)
+
+    ## Chain 4 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 4 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 4
+
+    ## Chain 4 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 4 Exception: integrate_ode_rk45:  Failed to integrate to next output time (2) in less than max_num_steps steps (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 36, column 2 to line 39, column 21)
+
+    ## Chain 4 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 4 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 4
+
+    ## Chain 4 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 4 Exception: lognormal_lpdf: Location parameter is nan, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 4 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 4 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 4
+
+    ## Chain 4 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 4 Exception: integrate_ode_rk45: initial state[1] is inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 36, column 2 to line 39, column 21)
+
+    ## Chain 4 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 4 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 4
+
+    ## Chain 4 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 4 Exception: integrate_ode_rk45: ode parameters and data[1] is inf, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 36, column 2 to line 39, column 21)
+
+    ## Chain 4 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 4 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 4
+
+    ## Chain 2 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 4 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 1 Iteration: 100 / 1000 [ 10%]  (Warmup)
+
+    ## Chain 2 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 2 Exception: lognormal_lpdf: Location parameter is nan, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 2 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 2 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 2
+
+    ## Chain 3 Iteration: 100 / 1000 [ 10%]  (Warmup) 
+    ## Chain 4 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 2 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration: 200 / 1000 [ 20%]  (Warmup)
+
+    ## Chain 1 Informational Message: The current Metropolis proposal is about to be rejected because of the following issue:
+
+    ## Chain 1 Exception: lognormal_lpdf: Location parameter is nan, but must be finite! (in 'C:/Users/E1735399/AppData/Local/Temp/RtmpKW4jzY/model-27ec50c9a0c.stan', line 52, column 6 to column 62)
+
+    ## Chain 1 If this warning occurs sporadically, such as for highly constrained variable types like covariance matrices, then the sampler is fine,
+
+    ## Chain 1 but if this warning occurs often then your model may be either severely ill-conditioned or misspecified.
+
+    ## Chain 1
+
+    ## Chain 2 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 4 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 3 Iteration: 200 / 1000 [ 20%]  (Warmup) 
+    ## Chain 1 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 4 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 2 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 1 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 4 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 3 Iteration: 300 / 1000 [ 30%]  (Warmup) 
+    ## Chain 4 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 4 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 1 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 2 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 2 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 3 Iteration: 400 / 1000 [ 40%]  (Warmup) 
+    ## Chain 4 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 3 Iteration: 500 / 1000 [ 50%]  (Warmup) 
+    ## Chain 3 Iteration: 501 / 1000 [ 50%]  (Sampling) 
+    ## Chain 4 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 2 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 1 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 3 Iteration: 600 / 1000 [ 60%]  (Sampling) 
+    ## Chain 4 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 3 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 1 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 4 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 4 finished in 24.8 seconds.
+    ## Chain 2 Iteration: 700 / 1000 [ 70%]  (Sampling) 
+    ## Chain 3 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 1 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 3 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration: 800 / 1000 [ 80%]  (Sampling) 
+    ## Chain 1 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 1 finished in 29.1 seconds.
+    ## Chain 3 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 3 finished in 29.5 seconds.
+    ## Chain 2 Iteration: 900 / 1000 [ 90%]  (Sampling) 
+    ## Chain 2 Iteration: 1000 / 1000 [100%]  (Sampling) 
+    ## Chain 2 finished in 32.9 seconds.
+    ## 
+    ## All 4 chains finished successfully.
+    ## Mean chain execution time: 29.1 seconds.
+    ## Total execution time: 33.2 seconds.
+
+``` r
+precis(m16.5, depth = 2)
+```
+
+    ## 84 matrix parameters hidden. Use depth=3 to show them.
+
+    ##                     mean           sd         5.5%        94.5%     n_eff
+    ## theta[1]    5.248374e-01 6.463336e-02 4.267400e-01 6.328790e-01  729.1935
+    ## theta[2]    4.661533e-03 1.053760e-03 3.179476e-03 6.547047e-03  653.6077
+    ## theta[3]    8.209280e-01 9.968572e-02 6.743747e-01 9.939678e-01  703.1034
+    ## theta[4]    4.438350e-03 9.595985e-04 3.087935e-03 6.108231e-03  549.9708
+    ## pop_init[1] 3.671158e+01 6.241535e+00 2.780620e+01 4.757995e+01 1233.6428
+    ## pop_init[2] 1.407984e+02 2.370898e+01 1.072573e+02 1.838203e+02  707.3451
+    ## sigma[1]    2.640941e-01 4.698386e-02 2.003838e-01 3.484470e-01 1493.0383
+    ## sigma[2]    2.544297e-01 4.780139e-02 1.894785e-01 3.370221e-01 1578.0981
+    ## p[1]        1.736492e-01 2.416100e-02 1.380837e-01 2.142760e-01 1104.3615
+    ## p[2]        1.808714e-01 2.526431e-02 1.420741e-01 2.238713e-01  642.4979
+    ##                 Rhat4
+    ## theta[1]    1.0027680
+    ## theta[2]    1.0031360
+    ## theta[3]    1.0042678
+    ## theta[4]    1.0030326
+    ## pop_init[1] 1.0011322
+    ## pop_init[2] 1.0026196
+    ## sigma[1]    0.9990568
+    ## sigma[2]    1.0009262
+    ## p[1]        1.0011178
+    ## p[2]        1.0013462
+
+``` r
+post <- extract.samples(m16.5)
+pelts <- dat_list$pelts
+
+# plot the pelts/pelt estimations
+plot(1:21,
+     pelts[,2],
+     pch = 16, 
+     ylim = c(0, 120),
+     xlab = "year",
+     ylab = "thousands of pelts",
+     xaxt = "n")
+at <- c(1, 11, 21)
+axis(1, at = at, labels = Lynx_Hare$Year[at])
+points(1:21, pelts[,1], col = rangi2, pch = 16)
+for (s in 1:21) {
+  lines(1:21, post$pelts_pred[s,,2], col = col.alpha("black", 0.2), lwd = 2)
+  lines(1:21, post$pelts_pred[s,,1], col = col.alpha(rangi2, 0.3), lwd = 2)
+}
+text(17, 90, "Lepus", pos = 2)
+text(19, 50, "Lynx", pos = 2, col = rangi2)
+```
+
+![](chapter_16_notes_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+
+- Note the jaggedness here — the underlying populations might be smooth
+  but the measurements might not be! This is a result of uncorrelated
+  measurement errors across time points.
+
+> \*This is why it is almost always a mistake to model a time series as
+> if observed data cause observed data in the next step. This is what is
+> often done in autoregressive models. But if there is measurement
+> error, and there always is, the data are emissions of some unseen
+> state. The hidden states are the causes. The measurements don’t cause
+> anything.
+
+``` r
+# plot estimated population dynamics
+plot(NULL,
+     pch = 16,
+     xlim = c(1, 21),
+     ylim = c(0, 500),
+     xlab = "year",
+     ylab = "thousands of animals",
+     xaxt = "n")
+at <- c(1, 11, 21)
+axis(1, at = at, labels = Lynx_Hare$Year[at])
+for (s in 1:21) {
+  lines(1:21, post$pop[s,,2], col = col.alpha("black", 0.2), lwd = 2)
+  lines(1:21, post$pop[s,,1], col = col.alpha(rangi2, 0.4), lwd = 2)
+}
+```
+
+![](chapter_16_notes_files/figure-gfm/unnamed-chunk-25-1.png)<!-- -->
+
+- There is a lot of uncertainty about population size here, but the
+  dynamics are smooth. This is because there isn’t measurement error at
+  this level!
+
+### 16.4.3 Lynx lessons
+
+- This is not necessarily a good model of lynx and hares. Hares are prey
+  to far more predators than just the lynx, and there are other
+  ecological concerns (food supply for the hares) missing!
+
+## 16.5 Summary
+
+- This chapter looked at examples where a scientific model informed a
+  statistical model.
+- This is altogether a different approach than starting with a vague
+  scientific model (either a DAG or just a “bowl of variables”) &
+  plopping them into a GLM.
+- The goal of this chapter was not to discourage use of GLMs, but to
+  show that the use of a GLM is a decision itself, not an obligation.

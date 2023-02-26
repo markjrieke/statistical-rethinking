@@ -500,6 +500,264 @@ for (i in 1:30) {
 
 ## 16.4 Population dynamics
 
+* The population of lynx and hares in a shared environment fluctuate over time. The number of each at any given point in time influence the numbers in the near future.
+* Here, we'll model a *time series* of hare and lynx populations.
 
+```{r}
+data("Lynx_Hare")
+str(Lynx_Hare)
 
+plot(1:21,
+     Lynx_Hare[,3],
+     ylim = c(0, 90),
+     xlab = "year",
+     ylab = "thousands of pelts",
+     xaxt = "n",
+     type = "l",
+     lwd = 1.5)
+
+at <- c(1, 11, 21)
+axis(1, at = at, labels = Lynx_Hare$Year[at])
+lines(1:21, Lynx_Hare[,2], lwd = 1.5, col = rangi2)
+points(1:21, Lynx_Hare[,3], bg = "black", col = "white", pch = 21, cex = 1.4)
+points(1:21, Lynx_Hare[,2], bg = rangi2, col = "white", pch = 21, cex = 1.4)
+text(17, 80, "Lepus", pos = 2)
+text(19, 50, "Lynx", pos = 2, col = rangi2)
+```
+
+* A common (geocentric) way to model a time series would be to use something like an *autoregressive model*. 
+* In an autoregressive model, the value of the outcome is predicted by the previous time step using a *lag variable* as a predictor. 
+* For example, the average number of hares at time $t$ might be modeled as:
+
+$$
+\text{E}(H_t) = \alpha + \beta_1 H_{t-1}
+$$
+
+* Here $H_t$ is the number of hares at time $t$ and if $\beta_1$ is less than 1, the hares tend to regress towards some mean population $\alpha$. 
+* We can also add a lag variable for the predator in the previous time period, $L_{t-1}$:
+
+$$
+\text{E}(H_t) = \alpha + \beta_1 H_{t-1} + \beta_2 L_{t-1}
+$$
+
+* Some folks even add deeper lags, e.g.:
+
+$$
+\text{E}(H_t) = \alpha + \beta_1 H_{t-1} + \beta_2 L_{t-1} + \beta_3 H_{t-2} + \beta_4 L_{t-2} + \dots
+$$
+
+* Here, the most recent population predicts the present, but so too does the population size two time periods ago!
+* Autoregressive models get used often, but there are some famous problems with them (McElreath says they are "surely generalized linear madness"). 
+* Firstly, nothing that happened two time periods ago can influence the present directly, so a lag beyond one time period doesn't really make causal sense. Even if there are causal influences that are slow to act, this means you need a different predictor, not that you should allow the distant past to influence the present. 
+* Secondly, if the state of the system $H_t$ and $L_t$ are measured with error, then the model is propagating that error. We really want to estimate the real, unobserved $H_{t-1}$ that influences $H_t$, not the observed $H_{t-1}$. What we really need is a *state space model*.
+* Thirdly, in most cases, there is no biological, economic, or physical interpretation of the parameters. It implies that when there are no hares, $H_{t-1} = 0$, that there can still be $\alpha$ hares in the next period!
+* If all you care about is forecasting, then these sometimes do okay. But often these models don't even make good forecasts, because getting the future right depends on a decent causal model.
+* If we use a little science and incorporate the ecological model of population dynamics into a set of *ordinary differential equations*, we may be able to fit something sensible.
+
+### 16.4.1 The scientific model
+
+* The hare population reproduces at a rate that depends upon the plants and shrinks at a rate dependent on the predators. The rate of change of the hares could then be:
+
+$$
+\frac{\text{d}H}{\text{d}t} = H_t \times \text{(birth rate)} - H_t \times \text{(death rate)}
+$$
+
+* Everything is multiplied by $H_t$ because if there are no hares then there can be no births or deaths!
+* Let's call the *per capita* birth and death (mortality) rates $b_H$ and $m_H$:
+
+$$
+\frac{\text{d}H}{\text{d}t} = H_tb_H - H_tm_H = H_t(b_H - m_H)
+$$
+
+* The *per capita* growth rate is the difference between the birth and death rate --- this is a basic "first law" of ecology.
+* We can also modify the mortality rate to depend on the number of lynx at time $t$, $L_t$. Similar (but inverse) logic can give us an equation for the rate of change of the lynx population:
+
+$$
+\begin{align*}
+\frac{\text{d}H}{\text{d}t} & = H_t(b_H - L_tm_H) \\
+\frac{\text{d}L}{\text{d}t} & = L_t(H_tb_L - m_L)
+\end{align*}
+$$
+
+* Now we have a model of population dynamics, where the species are coupled by a pair of ODEs! This model is too simple to be realistic, but let's see how far we can get with this simple, yet famous *Lotka-Volterra model*. 
+* In the previous section, we could have explicitly solved the ODE, but here, we *have* to use simulation as there is no explicit solution for $H_t$/$L_t$. 
+* Our model for $H_t$ can update itself based on the differential equation and a small timestep $\text{d}t$: 
+
+$$
+\begin{align*}
+H_{t+\text{d}t} & = H_t + \text{d}t\frac{\text{d}H}{\text{d}t} \\
+& = H_t + \text{d}t H_t(b_H - L_tm_H)
+\end{align*}
+$$
+
+* We need to be careful and choose $\text{d}t$ to be small enough to approximate continuous time (otherwise our computer will have trouble estimating). 
+* Let's simulate some population dynamics prior to fitting a model:
+
+```{r}
+sim_lynx_hare <- function(n_steps = 1e4, init = as.numeric(Lynx_Hare[1, 2:3]), theta, dt = 0.002) {
+  
+  L <- rep(NA, n_steps)
+  H <- rep(NA, n_steps)
+  L[1] <- init[1]
+  H[1] <- init[2]
+  for (i in 2:n_steps) {
+    H[i] <- H[i-1] + dt*H[i-1]*(theta[1] - theta[2]*L[i-1])
+    L[i] <- L[i-1] + dt*L[i-1]*(theta[3]*H[i-1] - theta[4])
+  }
+  
+  z <- cbind(L,H)
+  plot(z[,2],
+       type = "l",
+       ylim = c(0, max(z[,2])),
+       lwd = 2, 
+       xaxt = "n")
+  lines(z[,1], col = rangi2, lwd = 2)
+  mtext("time", 1)
+  
+}
+
+theta <- c(0.5, 0.05, 0.025, 0.5)
+sim_lynx_hare(theta = theta)
+sim_lynx_hare(theta = c(1, 1, 1, 1))
+sim_lynx_hare(theta = c(0.5, 0.01, 0.01, 0.25))
+```
+
+* This model produces cycles similar to what we see in the data. Importantly, the populations can decline to 0!
+
+### 16.4.2 The statistical model
+
+* Now, we need to connect the ecological model to observed data.
+* We never actually observe *all* hares and lynx(es?), we just have partial samples.
+* If $H_t$ and $L_t$ are the *actual* number of hares and lynx, then lets say $h_t$ and $l_t$ are the *observed* number of hares and lynx. 
+* $H_t$ and $L_t$ *cause* things, but $h_t$ and $l_t$ *do not*. 
+* We'll also need to define an error distribution for the observation process. Let's try to think about the process that generates the observational data.
+* Firstly, hares are trapped. 
+* Secondly, Let's say each hare is trapped with a probability that can vary over time $p_t$. 
+* Thirdly, in this dataset, the *actual* number of pelts were rounded to the nearest 100 and divided by 1000, so they're not exact counts. Messy.
+* Let's simulate an example of $H_t = 10^4$, with a trapping rate of $p_t \sim \text{Beta}(2, 18)$ (about 10% on average). Our observational data might look like:
+
+```{r}
+N <- 1e4
+Ht <- 1e4
+p <- rbeta(N, 2, 18)
+h <- rbinom(N, size = Ht, prob = p)
+h <- round(h/1000, 2)
+dens(h, xlab = "thousands of pelts", lwd = 2)
+```
+
+* There are several reasonable ways to approximate this distribution, though the log-normal gets the right skew:
+
+$$
+h_t \sim \text{Log-Normal}(\log(pH_t), \sigma_H)
+$$
+
+* McElreath notes that there's not a good way to estimate $p$ without lots and lots of data, so we'll just fix it using a strong prior. 
+* We'll also ignore the rounding error for now, since it's at most 50/4000 pelts (or 1.25%).
+* All together, the full statistical model:
+
+$$
+\begin{align*}
+h_t & \sim \text{Log-Normal}(\log(p_HH_t), \sigma_H) \\
+l_t & \sim \text{Log-Normal}(\log(p_LL_t), \sigma_L) \\
+H_1 & \sim \text{Log-Normal}(\log 10, 1) \\
+L_1 & \sim \text{Log-Normal}(\log 10, 1) \\
+H_{T > 1} & = H_1 + \int_1^T H_t(b_H - m_HL_t)\text{d}t \\
+L_{T > 1} & = L_1 + \int_1^T L_t(b_LH_t - m_L)\text{d}t \\
+\sigma_H & \sim \text{Exponential}(1) \\
+\sigma_L & \sim \text{Exponential}(1) \\
+p_H & \sim \text{Beta}(\alpha_H, \beta_H) \\
+p_L & \sim \text{Beta}(\alpha_L, \beta_L) \\
+b_H & \sim \text{Half-Normal}(1, 0.5) \\
+b_L & \sim \text{Half-Normal}(0.05, 0.05) \\
+m_H & \sim \text{Half-Normal}(0.05, 0.05) \\
+m_L & \sim \text{Half-Normal}(1, 0.5)
+\end{align*}
+$$
+
+* Now we're ready to start putting together the code --- the obstacle is computing $H_t$ and $L_t$ for each time $t$. The differential equation defines these variables, but the sampler needs to solve them on each iteration, so we need to write integration into the model.
+* Fortunately, Stan has functions for solving differential equations.
+
+```{r}
+data("Lynx_Hare_model")
+cat(Lynx_Hare_model)
+```
+
+* McElreath prewrote the full Stan model --- note the `functions` block. This is where he's place the function to compute the values of the differential equations.
+* The actual solving takes place in the `transformed parameters` block, where the stan function `integrate_ode_rk45` gets put to work and stores the results in a matrix `pop`. Find more detail in the Stan maunal [here](https://mc-stan.org/docs/functions-reference/functions-old-ode-solver.html#non-stiff-solver-1). 
+* The rest of the model is pretty ordinary (el-oh-el) and we get posterior predictive simulations from the `generated quantities` block.
+
+```{r}
+dat_list <-
+  list(
+    N = nrow(Lynx_Hare),
+    pelts = Lynx_Hare[,2:3]
+  )
+
+m16.5 <-
+  stan(
+    model_code = Lynx_Hare_model,
+    data = dat_list,
+    chains = 4,
+    cores = 4,
+    control = list(adapt_delta = 0.95)
+  )
+
+precis(m16.5, depth = 2)
+```
+
+```{r}
+post <- extract.samples(m16.5)
+pelts <- dat_list$pelts
+
+# plot the pelts/pelt estimations
+plot(1:21,
+     pelts[,2],
+     pch = 16, 
+     ylim = c(0, 120),
+     xlab = "year",
+     ylab = "thousands of pelts",
+     xaxt = "n")
+at <- c(1, 11, 21)
+axis(1, at = at, labels = Lynx_Hare$Year[at])
+points(1:21, pelts[,1], col = rangi2, pch = 16)
+for (s in 1:21) {
+  lines(1:21, post$pelts_pred[s,,2], col = col.alpha("black", 0.2), lwd = 2)
+  lines(1:21, post$pelts_pred[s,,1], col = col.alpha(rangi2, 0.3), lwd = 2)
+}
+text(17, 90, "Lepus", pos = 2)
+text(19, 50, "Lynx", pos = 2, col = rangi2)
+```
+
+* Note the jaggedness here --- the underlying populations might be smooth but the measurements might not be! This is a result of uncorrelated measurement errors across time points. 
+
+>*This is why it is almost always a mistake to model a time series as if observed data cause observed data in the next step. This is what is often done in autoregressive models. But if there is measurement error, and there always is, the data are emissions of some unseen state. The hidden states are the causes. The measurements don't cause anything.
+
+```{r}
+# plot estimated population dynamics
+plot(NULL,
+     pch = 16,
+     xlim = c(1, 21),
+     ylim = c(0, 500),
+     xlab = "year",
+     ylab = "thousands of animals",
+     xaxt = "n")
+at <- c(1, 11, 21)
+axis(1, at = at, labels = Lynx_Hare$Year[at])
+for (s in 1:21) {
+  lines(1:21, post$pop[s,,2], col = col.alpha("black", 0.2), lwd = 2)
+  lines(1:21, post$pop[s,,1], col = col.alpha(rangi2, 0.4), lwd = 2)
+}
+```
+
+* There is a lot of uncertainty about population size here, but the dynamics are smooth. This is because there isn't measurement error at this level!
+
+### 16.4.3 Lynx lessons
+
+* This is not necessarily a good model of lynx and hares. Hares are prey to far more predators than just the lynx, and there are other ecological concerns (food supply for the hares) missing!
+
+## 16.5 Summary
+
+* This chapter looked at examples where a scientific model informed a statistical model.
+* This is altogether a different approach than starting with a vague scientific model (either a DAG or just a "bowl of variables") & plopping them into a GLM. 
+* The goal of this chapter was not to discourage use of GLMs, but to show that the use of a GLM is a decision itself, not an obligation.
 
